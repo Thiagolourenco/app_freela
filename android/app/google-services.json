@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "155089571805",
+    "firebase_url": "https://app-freela-8ea72.firebaseio.com",
+    "project_id": "app-freela-8ea72",
+    "storage_bucket": "app-freela-8ea72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155089571805:android:578c8818704024b9ff3034",
+        "android_client_info": {
+          "package_name": "com.app_freela"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155089571805-oqva5vtlhb0k03hg3m605j100sia6ta4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app_freela",
+            "certificate_hash": "c06142f6d92ccedfd9f8c4cf001106acc1093a18"
+          }
+        },
+        {
+          "client_id": "155089571805-mhp3r3n57kvbdqdt3lb41bgra5s5rpdd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzr-THu1edpji2ifhhEU9bCXpCabik6d8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "155089571805-mhp3r3n57kvbdqdt3lb41bgra5s5rpdd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "155089571805-hh0j23phpdoc5sv6ahrpdlej365kj97g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tll.projeto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
