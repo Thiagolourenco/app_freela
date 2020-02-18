@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {RectButton} from 'react-native-gesture-handler';
+import RNPickerSelect from 'react-native-picker-select';
 
 export const Container = styled.KeyboardAvoidingView`
   flex: 1;
@@ -9,7 +10,7 @@ export const Container = styled.KeyboardAvoidingView`
 export const Title = styled.Text`
   font-size: 20px;
   color: #fff;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   text-align: center;
 `;
 
@@ -28,7 +29,7 @@ export const ImageProfile = styled(RectButton)`
   border-radius: 50px;
   background: #ccc;
   align-self: center;
-  margin-top: 30px;
+  /* margin-top: 30px; */
 `;
 
 export const ImageView = styled.Image`
@@ -89,4 +90,13 @@ export const ButtonRegisterText = styled.Text`
   font-size: 18px;
   color: #fff;
   font-weight: bold;
+`;
+
+export const ButtonContentRNPicker = styled(RNPickerSelect)`
+  margin-top: 30px;
+  background: rgba(255, 255, 255, 0.5);
+  height: 50px;
+  width: 100%;
+  flex: 1;
+  border-radius: 5px;
 `;

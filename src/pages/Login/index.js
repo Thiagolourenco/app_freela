@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, AsyncStorage, Alert} from 'react-native';
-import {GoogleSignin} from '@react-native-community/google-signin';
 import {useNavigation} from '@react-navigation/native';
+import {GoogleSignin} from '@react-native-community/google-signin';
 
 import {
   Container,
@@ -17,6 +17,29 @@ import logoGoogle from '../../assets/google-icon.png';
 
 export default function Login() {
   const navigation = useNavigation();
+
+  const [error, setError] = useState('');
+  const [userInfo, setUserInfo] = useState('');
+
+  useEffect(() => {
+    _configureGoogleSignIn();
+  });
+
+  function _configureGoogleSignIn() {
+    GoogleSignin.configure({
+      webClientId: 'AIzaSyAqGGoxUpiSOzqYWEiVOpHBJvP85QP5o8Q',
+      offlineAccess: false,
+    });
+  }
+
+  async function _getCurrentUser() {
+    try {
+      const user = await GoogleSignin.signInSilently();
+      setUserInfo(user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   // useEffect(() => {
   //   bootstrap();
   // }, []);
@@ -56,7 +79,7 @@ export default function Login() {
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView />
-      <ButtonSignIn onPress={handleNavigate}>
+      <ButtonSignIn onPress={_getCurrentUser}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>155089571805-u22j30ngk4r49h90heu2st3929bu6fno.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.155089571805-u22j30ngk4r49h90heu2st3929bu6fno</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>155089571805-oqva5vtlhb0k03hg3m605j100sia6ta4.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyASuIBnErXJnxlQgwBVuP4AIL0jipCy6Bs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>155089571805</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.tll.freela</string>
+	<key>PROJECT_ID</key>
+	<string>app-freela-8ea72</string>
+	<key>STORAGE_BUCKET</key>
+	<string>app-freela-8ea72.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:155089571805:ios:90f31b0bd5623fa9ff3034</string>
+	<key>DATABASE_URL</key>
+	<string>https://app-freela-8ea72.firebaseio.com</string>
+</dict>
+</plist>
