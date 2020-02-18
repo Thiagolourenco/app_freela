@@ -23,7 +23,7 @@ export default function Routes() {
         headerTintColor: 'white',
         headerStyle: {backgroundColor: 'tomato'},
       }}>
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Login" component={DashboardDrawer} />
       <Stack.Screen name="Dashboard" component={DashboardDrawer} />
       <Stack.Screen name="RequestProfile" component={RequestProfile} />
     </Stack.Navigator>

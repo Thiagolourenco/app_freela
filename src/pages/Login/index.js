@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Text, AsyncStorage, Alert} from 'react-native';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import {firebase} from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
 
 import {
   Container,
@@ -15,7 +15,8 @@ import {
 // images
 import logoGoogle from '../../assets/google-icon.png';
 
-export default function Login({navigation}) {
+export default function Login() {
+  const navigation = useNavigation();
   // useEffect(() => {
   //   bootstrap();
   // }, []);
@@ -47,11 +48,15 @@ export default function Login({navigation}) {
   //   }
   // }
 
+  function handleNavigate() {
+    navigation('Dashboard');
+  }
+
   return (
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView />
-      <ButtonSignIn onPress={() => {}}>
+      <ButtonSignIn onPress={handleNavigate}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>

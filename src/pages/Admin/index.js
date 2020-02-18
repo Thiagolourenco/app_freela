@@ -7,6 +7,7 @@ import {
   Image,
   Picker,
 } from 'react-native';
+import ImagePicker from 'react-native-image-picker';
 
 import {
   Container,
@@ -39,6 +40,15 @@ export default function Admin({navigation}) {
   const [country, setCountry] = useState('');
   const [sports, setSports] = useState('');
   // const [selectSports, setSelectSports] = useState("");
+
+  const options = {
+    title: 'Select Avatar',
+    customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
 
   const dataSports = [
     'Fútbol',
@@ -85,6 +95,21 @@ export default function Admin({navigation}) {
     'Uruguay',
     'Venezuela',
     ,
+  ];
+
+  const sdsports = [
+    {
+      label: 'Football',
+      value: 'football',
+    },
+    {
+      label: 'Baseball',
+      value: 'baseball',
+    },
+    {
+      label: 'Hockey',
+      value: 'hockey',
+    },
   ];
 
   // async function uploadPhoto(uri) {
@@ -173,6 +198,28 @@ export default function Admin({navigation}) {
   //   //   });
   // }
 
+  function handleImagePicker() {
+    ImagePicker.showImagePicker(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {uri: response.uri};
+        console.log('SOURCE => ', source);
+
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        setImage(source);
+      }
+    });
+  }
+
   async function handleRegister() {
     console.log('afadsf');
   }
@@ -188,9 +235,10 @@ export default function Admin({navigation}) {
 
       <Content>
         <Title>ADD USER</Title>
-        <ImageProfile>
-          {/* {image && <ImageView source={{uri: image}} />} */}
+        <ImageProfile onPress={handleImagePicker}>
+          {image && <ImageView source={image} />}
         </ImageProfile>
+        <ImageView source={image} />
         <ContentInput>
           <Input
             placeholder="name of the profile"
@@ -214,14 +262,14 @@ export default function Admin({navigation}) {
           />
         </ContentInput>
 
-        <PickerCountry
+        {/* <PickerCountry
           selectedValue={country}
           onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
           <Picker.Item label="Select Country" />
           {dataCountry.map(item => (
             <Picker.Item key={item} label={item} value={item} />
           ))}
-        </PickerCountry>
+        </PickerCountry> */}
 
         <PickerCountry
           selectedValue={sports}
