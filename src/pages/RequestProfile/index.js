@@ -3,6 +3,8 @@ import {FlatList, Text} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 // import CircleCheckBox from "react-native-circle-checkbox";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useRoute} from '@react-navigation/native';
+import api from '../../services/api';
 
 import {
   Container,
@@ -36,7 +38,6 @@ import {
   ButtonCheckCircle,
   CircleCheck,
 } from './styles';
-// import api from "../../services/api";
 
 // // import Header from "../;../components/Header";
 // import ModalFilterProfile from "../../components/ModalFilterProfile";
@@ -45,6 +46,9 @@ import {
 export default function RequestProfile({navigation}) {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
+  const routes = useRoute();
+
+  const id = routes.params.id;
 
   const [visible, setVisible] = useState(false);
   const [visibleRele, setVisibleRele] = useState(false);
@@ -53,6 +57,19 @@ export default function RequestProfile({navigation}) {
 
   const [dataComment, setDataComment] = useState([]);
 
+  useEffect(() => {
+    loadProfile();
+  });
+
+  async function loadProfile() {
+    const ref = api
+      .firestore()
+      .collection('dados')
+      .doc(id);
+    ref.get().then(doc => {
+      setName(doc.data().name);
+    });
+  }
   // function loadProfile() {
   //   // .child("-Lzt7y7V0INJctWxebKn")
   //   const exemplo = "-Lzt7y7V0INJctWxebKn";
@@ -107,12 +124,11 @@ export default function RequestProfile({navigation}) {
   //   navigation.navigate("ReviewStar", { chaves });
   // }
 
+  console.log('NAME => ', name);
   return (
     <Container>
       {/* <Header navigation={navigation} title="Request Profile" /> */}
-      {dataProfile.map(i => (
-        <Text>{JSON.stringify(i)}</Text>
-      ))}
+
       <Header>
         <ButtonArrowLeft onPress={handleGoBack}>
           <Icon name="arrow-back" size={30} color="#fff" />
@@ -120,7 +136,7 @@ export default function RequestProfile({navigation}) {
       </Header>
       <Content>
         <HeaderView>
-          <Title>Thiago</Title>
+          <Title>{name}</Title>
         </HeaderView>
         <ContetnListImage />
         <StarView />

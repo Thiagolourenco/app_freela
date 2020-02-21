@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, AsyncStorage, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {GoogleSignin} from '@react-native-community/google-signin';
+import api from '../../services/api';
 
 import {
   Container,
@@ -20,6 +21,7 @@ export default function Login() {
 
   const [error, setError] = useState('');
   const [userInfo, setUserInfo] = useState('');
+  const [user, setUser] = useState('');
 
   useEffect(() => {
     _configureGoogleSignIn();
@@ -72,14 +74,42 @@ export default function Login() {
   // }
 
   function handleNavigate() {
-    navigation('Dashboard');
+    GoogleSignin.configure({}).then(() => {
+      GoogleSignin.hasPlayServices({autoResolve: true})
+        .then(() => {
+          GoogleSignin.signIn()
+            .then(user => {
+              console.log(user);
+              const credential = api.auth.GoogleAuthProvider.credential(
+                user.idToken,
+                user.accessToken,
+              );
+
+              api
+                .auth()
+                .signInWithCredential(credential)
+                .then(user => {
+                  console.log('user', user);
+                  if (user._authObj.authenticated);
+                });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+    // api.auth.GoogleAuthProvider
+    // navigation('Dashboard');
   }
 
   return (
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView />
-      <ButtonSignIn onPress={_getCurrentUser}>
+      <ButtonSignIn onPress={handleNavigate}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>

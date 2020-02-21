@@ -18,7 +18,7 @@ export const Title = styled.Text`
   color: #000;
   font-weight: bold;
   text-align: center;
-  margin-left: 120px;
+  margin-left: 20px;
 `;
 
 export const ContetnListImage = styled.View`
@@ -112,7 +112,7 @@ export const HeaderView = styled.View`
 `;
 
 export const Header = styled.SafeAreaView`
-  margin-top: 30px;
+  margin-top: 10px;
   margin-left: 20px;
   margin-bottom: 10px;
   /* margin: 0px; */

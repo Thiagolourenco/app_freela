@@ -10,14 +10,16 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNPickerSelect from 'react-native-picker-select';
-import firebase from '@react-native-firebase/app';
+
+// Firebase API
+import api from '../../services/api';
 
 import {
   imagePickerOptions,
-  FireBaseStorage,
-  getFileLocalPath,
-  createStorageReferenceToFile,
-  uploadFileToFireBase,
+  // FireBaseStorage,
+  // getFileLocalPath,
+  // createStorageReferenceToFile,
+  // uploadFileToFireBase,
 } from '../../utils';
 
 import {
@@ -69,83 +71,6 @@ export default function Admin({navigation}) {
     chooseFromLibraryButtonTitle: 'Choose a photo from the Gallery',
   };
 
-  const dataSports = [
-    'Fútbol',
-    'Baloncesto',
-    'Tenis',
-    'Balonmano',
-    'Fútbol americano',
-    'Rugby',
-    'Fútbol sala',
-    'Boxeo',
-    'UFC',
-    'Béisbol',
-    'Hockey',
-    'Golf',
-    'Caballos',
-    'Ciclismo',
-    'Motor',
-    'Dardos',
-    'Voleibol',
-    'Waterpolo',
-    'eSports',
-    ,
-  ];
-
-  const dataCountry = [
-    'Argentina',
-    'Bolivia',
-    'Chile',
-    'Colombia',
-    'Costa Rica',
-    'Cuba',
-    'Ecuador',
-    'El salvador',
-    'España',
-    'Guatemala',
-    'Guinea Ecuatorial',
-    'Honduras',
-    'México',
-    'Nicaragua',
-    'Panamá',
-    'Paraguay',
-    'Perú',
-    'República dominicana',
-    'Uruguay',
-    'Venezuela',
-    ,
-  ];
-
-  const sdsports = [
-    {
-      label: 'Football',
-      value: 'football',
-    },
-    {
-      label: 'Baseball',
-      value: 'baseball',
-    },
-    {
-      label: 'Hockey',
-      value: 'hockey',
-    },
-  ];
-
-  const countryCode = [
-    {
-      label: '+91',
-      value: '+91',
-    },
-    {
-      label: '+1',
-      value: '+1',
-    },
-    {
-      label: '+2',
-      value: '+2',
-    },
-  ];
-
   // async function handleRegisterInfo() {
   //   const response = await firestore().collection('users').doc('users').get()
   // }
@@ -163,28 +88,46 @@ export default function Admin({navigation}) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {uri: response.uri};
-        console.log(getFileLocalPath(response));
-        console.log('My file', createStorageReferenceToFile(response));
-        Promise.resolve(uploadFileToFireBase(response));
         // this.setState({
         //   avatarSource: source,
         // });
         setImage(source);
+        handleImageUpload(response.uri)
+          .then(res => console.log(res))
+          .catch(err => console.log(err));
       }
     });
   }
 
+  async function handleImageUpload(uri) {
+    try {
+      console.log(uri);
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const ref = api
+        .storage()
+        .ref()
+        .child('dados/');
+      return ref.put(blob);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   async function handleRegister() {
-    const documentRef = await firebase
-      .firestore()
-      .collection('users')
-      .add({
-        name,
-        email,
-        desc,
-      });
-
-    console.log(documentRef);
+    try {
+      api
+        .firestore()
+        .collection('dados')
+        .add({
+          name,
+          email,
+          desc,
+          country,
+          sports,
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -225,7 +168,7 @@ export default function Admin({navigation}) {
 
         <RNPickerSelect
           style={pickerSelectStyles}
-          onValueChange={value => console.log(value)}
+          onValueChange={value => setCountry(value)}
           items={[
             {label: 'Fútbol', value: 'Fútbol'},
             {label: 'Baloncesto', value: 'Baloncesto'},
@@ -248,29 +191,45 @@ export default function Admin({navigation}) {
             {label: 'eSports', value: 'eSports'},
           ]}
           placeholder={{
-            label: 'Selecione a Visita',
+            label: 'Select Country',
             value: null,
-            color: '#9EA0A4',
+            color: '#000000',
           }}
           useNativeAndroidPickerStyle={false}
         />
-        {/* <PickerCountry
-          selectedValue={country}
-          onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
-          <Picker.Item label="Select Country" />
-          {dataCountry.map(item => (
-            <Picker.Item key={item} label={item} value={item} />
-          ))}
-        </PickerCountry> */}
 
-        <PickerCountry
-          selectedValue={sports}
-          onValueChange={(itemValue, itemIndex) => setSports(itemValue)}>
-          <Picker.Item label="Select Sports" />
-          {dataSports.map(item => (
-            <Picker.Item key={item} label={item} value={item} />
-          ))}
-        </PickerCountry>
+        <RNPickerSelect
+          style={pickerSelectStyles}
+          onValueChange={value => setSports(value)}
+          items={[
+            {label: 'Argentina', value: 'Argentina'},
+            {label: 'Bolivia', value: 'Bolivia'},
+            {label: 'Chile', value: 'Chile'},
+            {label: 'Colombia', value: 'Colombia'},
+            {label: 'Costa Rica', value: 'Costa Rica'},
+            {label: 'Cuba', value: 'Cuba'},
+            {label: 'Ecuador', value: 'Ecuador'},
+            {label: 'El salvador', value: 'El salvador'},
+            {label: 'España', value: 'España'},
+            {label: 'Guatemala', value: 'Guatemala'},
+            {label: 'Guinea Ecuatorial', value: 'Guinea Ecuatorial'},
+            {label: 'Honduras', value: 'Honduras'},
+            {label: 'México', value: 'México'},
+            {label: 'Nicaragua', value: 'Nicaragua'},
+            {label: 'Panamá', value: 'Panamá'},
+            {label: 'Paraguay', value: 'Paraguay'},
+            {label: 'Perú', value: 'Perú'},
+            {label: 'República dominicana', value: 'República dominicana'},
+            {label: 'Uruguay', value: 'Uruguay'},
+            {label: 'Venezuela', value: 'Venezuela'},
+          ]}
+          placeholder={{
+            label: 'Select Sports',
+            value: null,
+            color: '#000000',
+          }}
+          useNativeAndroidPickerStyle={false}
+        />
 
         <ButtonRegister onPress={handleRegister}>
           {loading ? (

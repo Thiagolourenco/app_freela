@@ -17,12 +17,10 @@ import {
   InputSearch,
 } from './styles';
 
-// import api from '../../services/api';
+import api from '../../services/api';
 import Header from '../../components/Header';
 
-export default function Dashboard() {
-  const navigation = useNavigation();
-
+export default function Dashboard({navigation}) {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
 
@@ -32,6 +30,29 @@ export default function Dashboard() {
   const [image, setImage] = useState('');
   const [chaves, setChaves] = useState('');
 
+  const ref = api.firestore().collection('dados');
+
+  useEffect(() => {
+    loadDados();
+  }, []);
+
+  async function loadDados() {
+    return ref.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        const {country, desc, email, name, sports} = doc.data();
+        list.push({
+          id: doc.id,
+          country,
+          desc,
+          email,
+          name,
+          sports,
+        });
+      });
+      setDataUsers(list);
+    });
+  }
   // async function dataUser() {
   //   const username = await AsyncStorage.getItem("@login:username");
   //   const email = await AsyncStorage.getItem("@login:email");
@@ -46,9 +67,11 @@ export default function Dashboard() {
   //   dataUser();
   // }, []);
 
-  async function handleRequestProfile() {
-    navigation('RequestProfile');
+  async function handleRequestProfile(id) {
+    navigation.navigate('RequestProfile', {id});
   }
+
+  console.log(dataUsers);
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -62,15 +85,14 @@ export default function Dashboard() {
       <InputSearch visible={visibleInput} />
       <Content>
         <FlatList
-          data={dataList}
+          data={dataUsers}
           showsVerticalScrollIndicator={false}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <ContentListView onPress={handleRequestProfile}>
+            <ContentListView onPress={() => handleRequestProfile(item.id)}>
               <ContetnListImage />
               <ContentView>
-                <Title> Thiago </Title>
-
+                <Title> {item.name} </Title>
                 <ContentFooter>
                   <ContentFooterTextValue>9.6/10</ContentFooterTextValue>
                   <ContentFooterReviews>365 Reviews</ContentFooterReviews>
