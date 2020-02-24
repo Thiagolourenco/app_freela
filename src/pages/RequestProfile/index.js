@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text} from 'react-native';
+import {FlatList, Text, Modal} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 // import CircleCheckBox from "react-native-circle-checkbox";
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useRoute} from '@react-navigation/native';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
+import Stars from 'react-native-stars';
+import Iconss from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
   Container,
@@ -39,6 +41,7 @@ import {
   CircleCheck,
 } from './styles';
 
+import ModalFilterProfile from '../../components/ModalFileProfile';
 // // import Header from "../;../components/Header";
 // import ModalFilterProfile from "../../components/ModalFilterProfile";
 // import ModalFilterProfileComment from "../../components/ModalFilterProfileComment";
@@ -47,6 +50,7 @@ export default function RequestProfile({navigation}) {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
   const routes = useRoute();
+  // const navigation = useNavigation();
 
   const id = routes.params.id;
 
@@ -70,6 +74,32 @@ export default function RequestProfile({navigation}) {
       setName(doc.data().name);
     });
   }
+
+  useEffect(() => {
+    loadComment();
+  }, []);
+
+  async function loadComment() {
+    try {
+      const refe = api.firestore().collection('comments');
+
+      return refe.onSnapshot(querySnapshot => {
+        const list = [];
+        querySnapshot.forEach(doc => {
+          const {comment, rating} = doc.data();
+          list.push({
+            id: doc.id,
+            comment,
+            rating,
+          });
+        });
+        setDataComment(list);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   // function loadProfile() {
   //   // .child("-Lzt7y7V0INJctWxebKn")
   //   const exemplo = "-Lzt7y7V0INJctWxebKn";
@@ -115,16 +145,17 @@ export default function RequestProfile({navigation}) {
   function handleFilter() {
     setVisibleRele(true);
   }
-
+  //
   function closeModalFilter() {
     setVisibleRele(false);
   }
 
-  // function handleNavigateReviewStar() {
-  //   navigation.navigate("ReviewStar", { chaves });
-  // }
+  function handleNavigateReviewStar() {
+    navigation.navigate('ReviewsStar', {id});
+    setVisible(false);
+  }
 
-  console.log('NAME => ', name);
+  console.log('NAME => ', dataComment);
   return (
     <Container>
       {/* <Header navigation={navigation} title="Request Profile" /> */}
@@ -137,32 +168,100 @@ export default function RequestProfile({navigation}) {
       <Content>
         <HeaderView>
           <Title>{name}</Title>
+          <Icons
+            name="more-vert"
+            size={30}
+            color="#000"
+            onPress={handleInfoModal}
+          />
+          <ModalFilterProfile visible={visible}>
+            <ButtonInfo>
+              <ButtonInfoText>Informaciõn</ButtonInfoText>
+            </ButtonInfo>
+            <ButtonInfo>
+              <ButtonInfoText onPress={handleNavigateReviewStar}>
+                Dar valoración
+              </ButtonInfoText>
+            </ButtonInfo>
+            <ButtonInfo onPress={handleCloseModal}>
+              <ButtonInfoText>Ir al canal</ButtonInfoText>
+            </ButtonInfo>
+          </ModalFilterProfile>
         </HeaderView>
         <ContetnListImage />
-        <StarView />
+        <Stars
+          default={5}
+          count={5}
+          half={true}
+          // update={val => setRating(val)}
+          // starSize={50}
+          fullStar={<Iconss name={'star'} size={35} color="#D3CD38" />}
+          emptyStar={
+            <Iconss
+              name={'star-outline'}
+              size={35}
+              color="#D3CD38"
+              // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
+            />
+          }
+          halfStar={
+            <Iconss
+              name={'star-half'}
+              color="#D3CD38"
+              size={35}
+              // style={[styles.myStarStyle]}
+            />
+          }
+        />
         <ContentFooter>
           <ValueNote>9.6/10</ValueNote>
           <ReviewsText>5.425 reviews</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Text>asd</Text>
           </RectButton>
-
-          {/* Modal Filter */}
         </ContentFooter>
         <FlatList
-          data={dataList}
+          data={dataComment}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <ListProfile>
+            <ListProfile key={item._id}>
               <ListProfileImage />
               <ListProfileView>
                 <ViewList>
-                  <ListProfileStar />
+                  <ListProfileStar>
+                    <Stars
+                      default={item.rating}
+                      count={5}
+                      half={true}
+                      // update={val => setRating(val)}
+                      // starSize={50}
+                      fullStar={
+                        <Iconss name={'star'} size={35} color="#D3CD38" />
+                      }
+                      emptyStar={
+                        <Iconss
+                          name={'star-outline'}
+                          size={35}
+                          color="#D3CD38"
+                          // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
+                        />
+                      }
+                      halfStar={
+                        <Iconss
+                          name={'star-half'}
+                          color="#D3CD38"
+                          size={35}
+                          // style={[styles.myStarStyle]}
+                        />
+                      }
+                    />
+                  </ListProfileStar>
 
                   <ListProfileName> Thiago </ListProfileName>
-                  <ListProfileComent> Vai da certo</ListProfileComent>
+                  <ListProfileComent> {item.comment}</ListProfileComent>
                 </ViewList>
                 <LikeView>
+                  <Icon name="thumb-up" size={25} color="#ccc" />
                   <LikesText>25</LikesText>
                 </LikeView>
               </ListProfileView>

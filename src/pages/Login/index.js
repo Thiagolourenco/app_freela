@@ -74,35 +74,34 @@ export default function Login() {
   // }
 
   function handleNavigate() {
-    GoogleSignin.configure({}).then(() => {
-      GoogleSignin.hasPlayServices({autoResolve: true})
-        .then(() => {
-          GoogleSignin.signIn()
-            .then(user => {
-              console.log(user);
-              const credential = api.auth.GoogleAuthProvider.credential(
-                user.idToken,
-                user.accessToken,
-              );
-
-              api
-                .auth()
-                .signInWithCredential(credential)
-                .then(user => {
-                  console.log('user', user);
-                  if (user._authObj.authenticated);
-                });
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    });
-    // api.auth.GoogleAuthProvider
-    // navigation('Dashboard');
+    // GoogleSignin.configure({}).then(() => {
+    //   GoogleSignin.hasPlayServices({autoResolve: true})
+    //     .then(() => {
+    //       GoogleSignin.signIn()
+    //         .then(user => {
+    //           console.log(user);
+    //           const credential = api.auth.GoogleAuthProvider.credential(
+    //             user.idToken,
+    //             user.accessToken,
+    //           );
+    //           api
+    //             .auth()
+    //             .signInWithCredential(credential)
+    //             .then(user => {
+    //               console.log('user', user);
+    //               if (user._authObj.authenticated);
+    //             });
+    //         })
+    //         .catch(err => {
+    //           console.log(err);
+    //         });
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // });
+    // // api.auth.GoogleAuthProvider
+    // // navigation('Dashboard');
   }
 
   return (

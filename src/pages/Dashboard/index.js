@@ -34,24 +34,28 @@ export default function Dashboard({navigation}) {
 
   useEffect(() => {
     loadDados();
-  }, []);
+  });
 
   async function loadDados() {
-    return ref.onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        const {country, desc, email, name, sports} = doc.data();
-        list.push({
-          id: doc.id,
-          country,
-          desc,
-          email,
-          name,
-          sports,
+    try {
+      return ref.onSnapshot(querySnapshot => {
+        const list = [];
+        querySnapshot.forEach(doc => {
+          const {country, desc, email, name, sports} = doc.data();
+          list.push({
+            id: doc.id,
+            country,
+            desc,
+            email,
+            name,
+            sports,
+          });
         });
+        setDataUsers(list);
       });
-      setDataUsers(list);
-    });
+    } catch (err) {
+      console.log(err);
+    }
   }
   // async function dataUser() {
   //   const username = await AsyncStorage.getItem("@login:username");

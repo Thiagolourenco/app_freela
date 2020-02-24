@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import {RectButton} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
@@ -18,7 +19,7 @@ export const Title = styled.Text`
   color: #000;
   font-weight: bold;
   text-align: center;
-  margin-left: 20px;
+  margin-left: 110px;
 `;
 
 export const ContetnListImage = styled.View`
@@ -168,4 +169,11 @@ export const ButtonAppli = styled(RectButton)`
 export const ButtonCheckCircle = styled.View`
   flex-direction: row;
   margin-left: 20px;
+`;
+
+export const Icons = styled(Icon)`
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-self: flex-start;
+  margin-left: 40px;
 `;
