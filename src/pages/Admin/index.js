@@ -88,26 +88,45 @@ export default function Admin({navigation}) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {uri: response.uri};
-        // this.setState({
-        //   avatarSource: source,
-        // });
         setImage(source);
+
         handleImageUpload(response.uri)
-          .then(res => console.log(res))
-          .catch(err => console.log(err));
+          .then(res => console.log('DEU BOM', res))
+          .catch(err => console.log('DEU RUIM', err));
       }
     });
   }
 
   async function handleImageUpload(uri) {
+    console.log('URI => ', uri);
+
+    const uid = '1234';
+
+    // export const FireBaseStorage = storage();
+
+    // export const getFileLocalPath = response => {
+    //   const {path, uri} = response;
+    //   return Platform.OS === 'android' ? path : uri;
+    // };
+
+    // export const createStorageReferenceToFile = response => {
+    //   const {fileName} = response;
+    //   return FireBaseStorage.ref(fileName);
+    // };
+
+    // export const uploadFileToFireBase = imagePickerResponse => {
+    //   const fileSource = getFileLocalPath(imagePickerResponse);
+    //   const storageRef = createStorageReferenceToFile(imagePickerResponse);
+    //   return storageRef.putFile(fileSource);
+    // };
     try {
-      console.log(uri);
+      const imagePath = response.path;
       const response = await fetch(uri);
       const blob = await response.blob();
       const ref = api
         .storage()
         .ref()
-        .child('dados/');
+        .child('images/');
       return ref.put(blob);
     } catch (err) {
       console.log(err);

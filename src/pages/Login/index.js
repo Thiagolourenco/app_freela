@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Text, AsyncStorage, Alert} from 'react-native';
+import {Text, AsyncStorage, Alert, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {GoogleSignin} from '@react-native-community/google-signin';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-community/google-signin';
 import api from '../../services/api';
 
 import {
@@ -29,89 +33,84 @@ export default function Login() {
 
   function _configureGoogleSignIn() {
     GoogleSignin.configure({
-      webClientId: 'AIzaSyAqGGoxUpiSOzqYWEiVOpHBJvP85QP5o8Q',
-      offlineAccess: false,
+      scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+      webClientId:
+        '155089571805-mhp3r3n57kvbdqdt3lb41bgra5s5rpdd.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+      offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     });
   }
 
-  async function _getCurrentUser() {
+  useEffect(() => {
+    _getCurrentUserInfo();
+  });
+
+  async function isSignedIn() {
+    const isSignedIn = await GoogleSignin.isSignedIn();
+    console.log('IsSignedIn => ', isSignedIn);
+    if (isSignedIn) {
+      console.log('User is already signed in');
+      _getCurrentUserInfo();
+    } else {
+      console.log('eror');
+    }
+  }
+
+  async function _getCurrentUserInfo() {
     try {
-      const user = await GoogleSignin.signInSilently();
-      setUserInfo(user);
+      const userInfo = await GoogleSignin.signInSilently();
+      console.log('User Info => ', userInfo);
+      setUserInfo(userInfo);
     } catch (err) {
+      if (err.code === statusCodes.SIGN_IN_REQUIRED) {
+        console.log('User has not signed in yet');
+      } else {
+        console.log("Something went wrong. Unable to get user's  info");
+      }
       console.log(err);
     }
   }
-  // useEffect(() => {
-  //   bootstrap();
-  // }, []);
 
-  // function handleNavigateDashboard() {
-  //   // navigation.navigate('Dashboard');
-  // }
+  async function signIn() {
+    try {
+      await GoogleSignin.hasPlayServices();
 
-  // async function googleLogin() {
-  //   try {
-  //     // add any configuration settings here:
-  //     await GoogleSignin.configure();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('USER INFO => ', userInfo);
+      const credential = api.auth.GoogleAuthProvider.credential(
+        userInfo.idToken,
+        userInfo.accessToken,
+      );
 
-  //     const data = await GoogleSignin.signIn();
+      const firebaseAuth = await api.auth().signInWithCredential(credential);
 
-  //     // create a new firebase credential with the token
-  //     const credential = firebase.auth.GoogleAuthProvider.credential(
-  //       data.idToken,
-  //       data.accessToken,
-  //     );
-  //     // login with credential
-  //     const firebaseUserCredential = await firebase
-  //       .auth()
-  //       .signInWithCredential(credential);
-
-  //     console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-
-  function handleNavigate() {
-    // GoogleSignin.configure({}).then(() => {
-    //   GoogleSignin.hasPlayServices({autoResolve: true})
-    //     .then(() => {
-    //       GoogleSignin.signIn()
-    //         .then(user => {
-    //           console.log(user);
-    //           const credential = api.auth.GoogleAuthProvider.credential(
-    //             user.idToken,
-    //             user.accessToken,
-    //           );
-    //           api
-    //             .auth()
-    //             .signInWithCredential(credential)
-    //             .then(user => {
-    //               console.log('user', user);
-    //               if (user._authObj.authenticated);
-    //             });
-    //         })
-    //         .catch(err => {
-    //           console.log(err);
-    //         });
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //     });
-    // });
-    // // api.auth.GoogleAuthProvider
-    // // navigation('Dashboard');
+      navigation.navigate('Dashboard');
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('Cancelled the login Flow');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log('Signing In');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('Play services Not Available or Outdated');
+      } else {
+        console.log('Some other Error Happened', error.code, error.message);
+      }
+    }
   }
 
   return (
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView />
-      <ButtonSignIn onPress={handleNavigate}>
+      <ButtonSignIn onPress={signIn}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>
     </Container>
   );
 }
+
+// const styles = StyleSheet.create({
+//   buttonGoogleSignIn: {
+
+//   }
+// })
