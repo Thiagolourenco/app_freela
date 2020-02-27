@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {FlatList, Text, AsyncStorage} from 'react-native';
 // import Icon from '@expo/vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import {
   Container,
@@ -32,9 +32,17 @@ export default function Dashboard({navigation}) {
 
   const ref = api.firestore().collection('dados');
 
+  // useEffect(() => {
+  //   async function loadData() {
+  //     // const username = await AsyncStorage.getItem('@login:username');
+  //     console.log('USER => ', username);
+  //   }
+
+  //   loadData();
+  // });
   useEffect(() => {
     loadDados();
-  });
+  }, []);
 
   async function loadDados() {
     try {

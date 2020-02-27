@@ -36,7 +36,7 @@ export const ButtonImage = styled.Image`
   border-radius: 10px;
 `;
 
-export const ImageView = styled.View`
+export const ImageView = styled.Image`
   height: 300px;
   width: 300px;
 `;
