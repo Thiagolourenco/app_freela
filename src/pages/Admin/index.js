@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import RNPickerSelect from 'react-native-picker-select';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 // Firebase API
 import api from '../../services/api';
@@ -41,7 +42,7 @@ import Header from '../../components/Header';
 // window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 // window.Blob = RNFetchBlob.polyfill.Blob;
 
-export default function Admin({navigation}) {
+export default function Admin() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [desc, setDesc] = useState('');
@@ -55,6 +56,8 @@ export default function Admin({navigation}) {
   const [sports, setSports] = useState('');
   const [example, setExample] = useState([]);
   // const [selectSports, setSelectSports] = useState("");
+
+  const navigation = useNavigation();
 
   // const options = {
   //   title: 'Select Avatar',

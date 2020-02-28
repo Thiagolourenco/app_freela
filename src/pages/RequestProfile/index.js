@@ -46,11 +46,11 @@ import ModalFilterProfile from '../../components/ModalFileProfile';
 // import ModalFilterProfile from "../../components/ModalFilterProfile";
 // import ModalFilterProfileComment from "../../components/ModalFilterProfileComment";
 
-export default function RequestProfile({navigation}) {
+export default function RequestProfile() {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
   const routes = useRoute();
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const id = routes.params.id;
 
@@ -63,7 +63,7 @@ export default function RequestProfile({navigation}) {
 
   useEffect(() => {
     loadProfile();
-  });
+  }, []);
 
   async function loadProfile() {
     const ref = api

@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
 
+import {useNavigation, useRoute} from '@react-navigation/native';
+
 import {Container} from './styles';
 
-export default function Logout({navigation}) {
+export default function Logout() {
   const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     function loadingLogout() {

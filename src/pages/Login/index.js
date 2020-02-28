@@ -85,7 +85,11 @@ export default function Login() {
       console.log(credential);
       // const firebaseAuth = api.auth().signInWithCredential(credential);
       setUserInfo(userInfo);
-      console.log('NAME =>', user);
+
+      await AsyncStorage.setItem('@login:name', userInfo.user.name);
+      await AsyncStorage.setItem('@login:email', userInfo.user.email);
+      await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+
       navigation.navigate('DashboardDrawer');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {

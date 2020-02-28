@@ -20,7 +20,7 @@ import {
 import api from '../../services/api';
 import Header from '../../components/Header';
 
-export default function Dashboard({navigation}) {
+export default function Dashboard() {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
 
@@ -30,7 +30,21 @@ export default function Dashboard({navigation}) {
   const [image, setImage] = useState('');
   const [chaves, setChaves] = useState('');
 
+  const navigation = useNavigation();
+
   const ref = api.firestore().collection('dados');
+
+  useEffect(() => {
+    async function loadDados() {
+      const name = await AsyncStorage.getItem('@login:name');
+      const email = await AsyncStorage.getItem('@login:email');
+      const photo = await AsyncStorage.getItem('@login:photo');
+
+      console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
+    }
+
+    loadDados();
+  }, []);
 
   // useEffect(() => {
   //   async function loadData() {
