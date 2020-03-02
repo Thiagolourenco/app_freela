@@ -16,7 +16,7 @@ import {
   TextInit,
   ImageView,
 } from './styles';
-
+import ContextNavigator from '../../components/ContextNavigator';
 // images
 import logoGoogle from '../../assets/google-icon.png';
 import logotipo from '../../assets/icon.png';
