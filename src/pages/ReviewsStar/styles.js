@@ -38,7 +38,7 @@ export const ProfileView = styled.View`
   margin-left: 10px;
 `;
 
-export const ViewProfileE = styled.View`
+export const ViewProfileE = styled.Image`
   height: 40px;
   width: 40px;
   background: #ccc;

@@ -8,6 +8,7 @@ import Login from '../pages/Login';
 import RequestProfile from '../pages/RequestProfile';
 import ReviewsStar from '../pages/ReviewsStar';
 import SignIn from '../pages/SignIn';
+import ReplyRespoder from '../pages/ReplyRespoder';
 
 import DashboardDrawer from './dashboard.routes';
 
@@ -79,6 +80,7 @@ export default function Routes() {
       </Stack.Screen>
       <Stack.Screen name="RequestProfile" component={RequestProfile} />
       <Stack.Screen name="ReviewsStar" component={ReviewsStar} />
+      <Stack.Screen name="ReplyRespoder" component={ReplyRespoder} />
     </Stack.Navigator>
   );
 }

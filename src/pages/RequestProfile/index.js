@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {FlatList, Text, Modal} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 // import CircleCheckBox from "react-native-circle-checkbox";
@@ -39,9 +39,11 @@ import {
   ButtonText,
   ButtonCheckCircle,
   CircleCheck,
+  Iconsss,
 } from './styles';
 
 import ModalFilterProfile from '../../components/ModalFileProfile';
+import ModalReply from '../../components/ModalReply';
 // // import Header from "../;../components/Header";
 // import ModalFilterProfile from "../../components/ModalFilterProfile";
 // import ModalFilterProfileComment from "../../components/ModalFilterProfileComment";
@@ -63,7 +65,7 @@ export default function RequestProfile() {
 
   useEffect(() => {
     loadProfile();
-  }, []);
+  });
 
   async function loadProfile() {
     const ref = api
@@ -86,11 +88,13 @@ export default function RequestProfile() {
       return refe.onSnapshot(querySnapshot => {
         const list = [];
         querySnapshot.forEach(doc => {
-          const {comment, rating} = doc.data();
+          const {comment, rating, name, photo} = doc.data();
           list.push({
             id: doc.id,
             comment,
             rating,
+            name,
+            photo,
           });
         });
         setDataComment(list);
@@ -225,7 +229,7 @@ export default function RequestProfile() {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <ListProfile key={item._id}>
-              <ListProfileImage />
+              <ListProfileImage source={{uri: item.photo}} />
               <ListProfileView>
                 <ViewList>
                   <ListProfileStar>
@@ -257,13 +261,22 @@ export default function RequestProfile() {
                     />
                   </ListProfileStar>
 
-                  <ListProfileName> Thiago </ListProfileName>
+                  <ListProfileName> {item.name} </ListProfileName>
                   <ListProfileComent> {item.comment}</ListProfileComent>
                 </ViewList>
                 <LikeView>
+                  <Iconsss
+                    name="more-vert"
+                    size={25}
+                    color="#000"
+                    onPress={handleInfoModal}
+                  />
                   <Icon name="thumb-up" size={25} color="#ccc" />
                   <LikesText>25</LikesText>
                 </LikeView>
+                <ModalReply visible={true}>
+                  <Text style={{marginTop: 40}}>sdfds</Text>
+                </ModalReply>
               </ListProfileView>
             </ListProfile>
           )}

@@ -177,3 +177,11 @@ export const Icons = styled(Icon)`
   align-self: flex-start;
   margin-left: 40px;
 `;
+
+export const Iconsss = styled(Icon)`
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-self: flex-start;
+  margin-left: 10px;
+  margin-bottom: 8px;
+`;

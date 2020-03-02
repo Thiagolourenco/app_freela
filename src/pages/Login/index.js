@@ -86,9 +86,13 @@ export default function Login() {
       // const firebaseAuth = api.auth().signInWithCredential(credential);
       setUserInfo(userInfo);
 
-      await AsyncStorage.setItem('@login:name', userInfo.user.name);
-      await AsyncStorage.setItem('@login:email', userInfo.user.email);
-      await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+      try {
+        await AsyncStorage.setItem('@login:name', userInfo.user.name);
+        await AsyncStorage.setItem('@login:email', userInfo.user.email);
+        await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+      } catch (err) {
+        console.log(err);
+      }
 
       navigation.navigate('DashboardDrawer');
     } catch (error) {
