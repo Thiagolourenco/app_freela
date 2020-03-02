@@ -4,11 +4,19 @@ import {RectButton} from 'react-native-gesture-handler';
 export const Container = styled.View``;
 
 export const Header = styled.View`
+  /* flex-direction: row;
+  /* justify-content: space-around;
+  align-items: center; */
+  /* margin-top: 20px; */
+  /* margin-bottom: 20px; */
+`;
+
+export const HeaderView = styled.View`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 export const ButtonDrawer = styled(RectButton)``;
@@ -58,4 +66,17 @@ export const SelectText = styled.Text`
   background: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   padding: 5px;
+`;
+
+export const InputSearch = styled.TextInput`
+  height: 50px;
+  width: ${({visible}) => (visible ? '90' : '0')}%;
+  border-radius: 5px;
+  /* background-color: rgba(255, 255, 255, 0.90); */
+  background-color: ${({visible}) =>
+    visible ? 'rgba(255, 255, 255, 0.70)' : 'rgba(255, 255, 255, 0.0)'};
+  padding: 10px;
+  align-self: center;
+  margin-top: -50px;
+  margin-bottom: 10px;
 `;

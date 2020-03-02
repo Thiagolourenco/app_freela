@@ -108,7 +108,7 @@ export default function Dashboard() {
         buttonSerc={true}
       />
 
-      <InputSearch visible={visibleInput} />
+      {/* <InputSearch visible={visibleInput} /> */}
       <Content>
         <FlatList
           data={dataUsers}
