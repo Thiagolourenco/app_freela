@@ -93,9 +93,9 @@ export default function Admin() {
         const source = {uri: response.uri};
         setImage(source);
 
-        handleImageUpload(response.uri)
-          .then(res => console.log('DEU BOM', res))
-          .catch(err => console.log('DEU RUIM', err));
+        // handleImageUpload(response.uri)
+        //   .then(res => console.log('DEU BOM', res))
+        //   .catch(err => console.log('DEU RUIM', err));
       }
     });
   }
@@ -146,6 +146,7 @@ export default function Admin() {
           desc,
           country,
           sports,
+          image,
         });
     } catch (err) {
       console.log(err);

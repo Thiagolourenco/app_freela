@@ -71,6 +71,7 @@ export default function Dashboard() {
             email,
             name,
             sports,
+            image,
           });
         });
         setDataUsers(list);
@@ -116,7 +117,7 @@ export default function Dashboard() {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <ContentListView onPress={() => handleRequestProfile(item.id)}>
-              <ContetnListImage />
+              <ContetnListImage source={{uri: item.image}} />
               <ContentView>
                 <Title> {item.name} </Title>
                 <ContentFooter>

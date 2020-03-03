@@ -85,7 +85,8 @@ export default function Login() {
       console.log(credential);
       // const firebaseAuth = api.auth().signInWithCredential(credential);
       setUserInfo(userInfo);
-
+      navigation.navigate('DashboardDrawer');
+      alert('DASg');
       try {
         await AsyncStorage.setItem('@login:name', userInfo.user.name);
         await AsyncStorage.setItem('@login:email', userInfo.user.email);
@@ -93,8 +94,7 @@ export default function Login() {
       } catch (err) {
         console.log(err);
       }
-
-      navigation.navigate('DashboardDrawer');
+      console.log('CHEGA AQUI -> ');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
