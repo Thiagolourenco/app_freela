@@ -274,9 +274,6 @@ export default function RequestProfile() {
                   <Icon name="thumb-up" size={25} color="#ccc" />
                   <LikesText>25</LikesText>
                 </LikeView>
-                <ModalReply visible={true}>
-                  <Text style={{marginTop: 40}}>sdfds</Text>
-                </ModalReply>
               </ListProfileView>
             </ListProfile>
           )}

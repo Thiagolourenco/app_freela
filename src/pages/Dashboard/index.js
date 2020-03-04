@@ -56,14 +56,14 @@ export default function Dashboard() {
   // });
   useEffect(() => {
     loadDados();
-  }, []);
+  });
 
   async function loadDados() {
     try {
       return ref.onSnapshot(querySnapshot => {
         const list = [];
         querySnapshot.forEach(doc => {
-          const {country, desc, email, name, sports} = doc.data();
+          const {country, desc, email, name, sports, image} = doc.data();
           list.push({
             id: doc.id,
             country,
@@ -71,6 +71,7 @@ export default function Dashboard() {
             email,
             name,
             sports,
+            image,
           });
         });
         setDataUsers(list);
@@ -116,7 +117,7 @@ export default function Dashboard() {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <ContentListView onPress={() => handleRequestProfile(item.id)}>
-              <ContetnListImage />
+              <ContetnListImage source={{uri: item.images}} />
               <ContentView>
                 <Title> {item.name} </Title>
                 <ContentFooter>

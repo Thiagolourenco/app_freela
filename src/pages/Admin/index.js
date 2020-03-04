@@ -50,6 +50,7 @@ export default function Admin() {
   const [image, setImage] = useState(null);
   const [chaves, setChave] = useState(0);
   const [stars, setStars] = useState(null);
+  const [images, setImages] = useState('');
   const [comment, setComment] = useState(null);
   // select
   const [country, setCountry] = useState('');
@@ -92,10 +93,11 @@ export default function Admin() {
       } else {
         const source = {uri: response.uri};
         setImage(source);
+        setImages(response.uri);
 
-        handleImageUpload(response.uri)
-          .then(res => console.log('DEU BOM', res))
-          .catch(err => console.log('DEU RUIM', err));
+        // handleImageUpload(response.uri)
+        //   .then(res => console.log('DEU BOM', res))
+        //   .catch(err => console.log('DEU RUIM', err));
       }
     });
   }
@@ -146,6 +148,7 @@ export default function Admin() {
           desc,
           country,
           sports,
+          image,
         });
     } catch (err) {
       console.log(err);
