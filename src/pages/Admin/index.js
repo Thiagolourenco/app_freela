@@ -11,6 +11,7 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // Firebase API
 import api from '../../services/api';
@@ -36,9 +37,11 @@ import {
   PickerCountry,
   ContentPicker,
   ButtonContentRNPicker,
+  ButtonArrowLeft,
+  Header,
 } from './styles';
 
-import Header from '../../components/Header';
+// import Header from '../../components/Header';
 // window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 // window.Blob = RNFetchBlob.polyfill.Blob;
 
@@ -51,6 +54,7 @@ export default function Admin() {
   const [chaves, setChave] = useState(0);
   const [stars, setStars] = useState(null);
   const [comment, setComment] = useState(null);
+  const [images, setImages] = useState('');
   // select
   const [country, setCountry] = useState('');
   const [sports, setSports] = useState('');
@@ -68,10 +72,12 @@ export default function Admin() {
   //   },
   // };
 
-  const options = {
-    title: 'FREELA',
-    takePhotoButtonTitle: 'Use your camera to take a photo',
-    chooseFromLibraryButtonTitle: 'Choose a photo from the Gallery',
+  const optionsImage = {
+    title: 'Select Photo',
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
   };
 
   // async function handleRegisterInfo() {
@@ -79,7 +85,7 @@ export default function Admin() {
   // }
 
   function handleImagePicker() {
-    ImagePicker.showImagePicker(imagePickerOptions, response => {
+    ImagePicker.showImagePicker(optionsImage, response => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -92,10 +98,11 @@ export default function Admin() {
       } else {
         const source = {uri: response.uri};
         setImage(source);
+        setImages(response.uri);
 
-        handleImageUpload(response.uri)
-          .then(res => console.log('DEU BOM', res))
-          .catch(err => console.log('DEU RUIM', err));
+        // handleImageUpload(response.uri)
+        //   .then(res => console.log('DEU BOM', res))
+        //   .catch(err => console.log('DEU RUIM', err));
       }
     });
   }
@@ -146,20 +153,30 @@ export default function Admin() {
           desc,
           country,
           sports,
+          images,
         });
     } catch (err) {
       console.log(err);
     }
   }
 
+  function handleGoBack() {
+    navigation.openDrawer();
+  }
+
   return (
     <Container>
-      <Header
+      {/* <Header
         navigation={navigation}
         title="ADD USER"
         buttonFil={false}
         buttonSerc={false}
-      />
+      /> */}
+      <Header>
+        <ButtonArrowLeft onPress={handleGoBack}>
+          <Icon name="menu" size={32} color="#fff" />
+        </ButtonArrowLeft>
+      </Header>
       <Content>
         {/* <Title>ADD USER</Title> */}
         <ImageProfile onPress={handleImagePicker}>

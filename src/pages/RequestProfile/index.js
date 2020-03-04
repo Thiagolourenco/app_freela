@@ -86,11 +86,13 @@ export default function RequestProfile() {
       return refe.onSnapshot(querySnapshot => {
         const list = [];
         querySnapshot.forEach(doc => {
-          const {comment, rating} = doc.data();
+          const {comment, rating, photo, name} = doc.data();
           list.push({
             id: doc.id,
             comment,
             rating,
+            photo,
+            name,
           });
         });
         setDataComment(list);
@@ -131,7 +133,7 @@ export default function RequestProfile() {
   // });
 
   function handleGoBack() {
-    navigation.navigate('Dashboard');
+    navigation.goBack();
   }
 
   function handleInfoModal() {
@@ -225,7 +227,7 @@ export default function RequestProfile() {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <ListProfile key={item._id}>
-              <ListProfileImage />
+              <ListProfileImage source={{uri: item.photo}} />
               <ListProfileView>
                 <ViewList>
                   <ListProfileStar>
@@ -257,7 +259,7 @@ export default function RequestProfile() {
                     />
                   </ListProfileStar>
 
-                  <ListProfileName> Thiago </ListProfileName>
+                  <ListProfileName> {item.name} </ListProfileName>
                   <ListProfileComent> {item.comment}</ListProfileComent>
                 </ViewList>
                 <LikeView>

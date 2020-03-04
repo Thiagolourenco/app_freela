@@ -23,3 +23,12 @@ export const TextSubTitle = styled.Text`
   text-align: center;
   margin-top: 20px;
 `;
+
+export const ButtonArrowLeft = styled(RectButton)``;
+
+export const Header = styled.SafeAreaView`
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  /* margin: 0px; */
+`;

@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Text, AsyncStorage, Alert, StyleSheet} from 'react-native';
+import {
+  Text,
+  AsyncStorage,
+  Alert,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
   GoogleSignin,
@@ -27,6 +33,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [userInfo, setUserInfo] = useState('');
   const [user, setUser] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -91,6 +98,9 @@ export default function Login() {
       await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
 
       navigation.navigate('DashboardDrawer');
+      setTimeout(() => {
+        setLoading(true);
+      }, 3000);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow

@@ -100,3 +100,12 @@ export const ButtonContentRNPicker = styled(RNPickerSelect)`
   flex: 1;
   border-radius: 5px;
 `;
+
+export const ButtonArrowLeft = styled(RectButton)``;
+
+export const Header = styled.SafeAreaView`
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  /* margin: 0px; */
+`;

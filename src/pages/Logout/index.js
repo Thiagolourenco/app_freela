@@ -4,6 +4,7 @@ import {ActivityIndicator} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import {Container} from './styles';
+import ModalSpinner from '../../components/ModalSpinner';
 
 export default function Logout() {
   const [loading, setLoading] = useState(false);
@@ -22,9 +23,5 @@ export default function Logout() {
 
     loadingLogout();
   }, [navigation]);
-  return (
-    <Container>
-      {loading ? null : <ActivityIndicator size={40} color="#000" />}
-    </Container>
-  );
+  return <ModalSpinner visible={loading} />;
 }

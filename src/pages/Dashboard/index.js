@@ -63,7 +63,7 @@ export default function Dashboard() {
       return ref.onSnapshot(querySnapshot => {
         const list = [];
         querySnapshot.forEach(doc => {
-          const {country, desc, email, name, sports} = doc.data();
+          const {country, desc, email, name, sports, images} = doc.data();
           list.push({
             id: doc.id,
             country,
@@ -71,6 +71,7 @@ export default function Dashboard() {
             email,
             name,
             sports,
+            images,
           });
         });
         setDataUsers(list);
@@ -116,7 +117,8 @@ export default function Dashboard() {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <ContentListView onPress={() => handleRequestProfile(item.id)}>
-              <ContetnListImage />
+              {/* <Text>{JSON.stringify(item)}</Text> */}
+              <ContetnListImage source={{uri: item.images}} />
               <ContentView>
                 <Title> {item.name} </Title>
                 <ContentFooter>

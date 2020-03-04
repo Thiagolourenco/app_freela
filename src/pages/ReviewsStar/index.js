@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, AsyncStorage} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Stars from 'react-native-stars';
@@ -25,10 +25,29 @@ import api from '../../services/api';
 
 export default function ReviewsStar({navigation}) {
   const [comment, setComment] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [photo, setPhoto] = useState('');
+
   const [rating, setRating] = useState(0);
   const routes = useRoute();
 
   const chaves = routes.params.id;
+
+  useEffect(() => {
+    async function loadDados() {
+      const name = await AsyncStorage.getItem('@login:name');
+      const email = await AsyncStorage.getItem('@login:email');
+      const photo = await AsyncStorage.getItem('@login:photo');
+
+      console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
+      setName(name);
+      setEmail(email);
+      setPhoto(photo);
+    }
+
+    loadDados();
+  }, []);
 
   function handleSubmitComment() {
     try {
@@ -39,6 +58,9 @@ export default function ReviewsStar({navigation}) {
           rating,
           comment,
           chaves,
+          name,
+          email,
+          photo,
         });
       navigation.navigate('RequestProfile');
     } catch (err) {
