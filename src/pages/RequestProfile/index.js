@@ -133,7 +133,7 @@ export default function RequestProfile() {
   // });
 
   function handleGoBack() {
-    navigation.goBack();
+    navigation.navigate('DashboardDrawer');
   }
 
   function handleInfoModal() {
