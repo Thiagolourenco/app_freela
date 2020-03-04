@@ -85,7 +85,7 @@ export default function Login() {
       console.log(credential);
       // const firebaseAuth = api.auth().signInWithCredential(credential);
       setUserInfo(userInfo);
-      navigation.navigate('DashboardDrawer');
+      navigation.navigate('Dashboard');
       alert('DASg');
       try {
         await AsyncStorage.setItem('@login:name', userInfo.user.name);
