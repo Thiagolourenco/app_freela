@@ -34,6 +34,9 @@ export default function Login() {
   const [userInfo, setUserInfo] = useState('');
   const [user, setUser] = useState('');
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [photo, setPhoto] = useState('');
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -87,20 +90,27 @@ export default function Login() {
         userInfo.idToken,
         userInfo.accessToken,
       );
+
+      alert('Chegou');
       //   this.setState({userInfo});
       // console.log(userInfo);
       console.log(credential);
       // const firebaseAuth = api.auth().signInWithCredential(credential);
       setUserInfo(userInfo);
-
-      await AsyncStorage.setItem('@login:name', userInfo.user.name);
-      await AsyncStorage.setItem('@login:email', userInfo.user.email);
-      await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
-
       navigation.navigate('DashboardDrawer');
-      setTimeout(() => {
-        setLoading(true);
-      }, 3000);
+
+      try {
+        await AsyncStorage.setItem('@login:name', userInfo.user.name);
+        await AsyncStorage.setItem('@login:email', userInfo.user.email);
+        await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+      } catch (err) {
+        console.log(err);
+      }
+
+      return userInfo.accessToken;
+      // await AsyncStorage.setItem('@login:name', userInfo.user.name);
+      // await AsyncStorage.setItem('@login:email', userInfo.user.email);
+      // await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -115,15 +125,30 @@ export default function Login() {
     }
   }
 
-  function handleNavigate() {
+  async function handleNavigate() {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+
+    setName(userInfo.user.name);
+    setEmail(userInfo.user.email);
+    setEmail(userInfo.user.photo);
+
     navigation.navigate('DashboardDrawer');
+
+    try {
+      await AsyncStorage.setItem('@login:name', userInfo.user.name);
+      await AsyncStorage.setItem('@login:email', userInfo.user.email);
+      await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView source={logotipo} />
-      <ButtonSignIn onPress={signIn}>
+      <ButtonSignIn onPress={handleNavigate}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>

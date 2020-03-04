@@ -14,7 +14,9 @@ export const TextInit = styled.Text`
   font-weight: bold;
 `;
 
-export const ButtonSignIn = styled(RectButton)`
+export const ButtonSignIn = styled.TouchableOpacity.attrs({
+  opacity: 0.5,
+})`
   margin-top: 50px;
   height: 50px;
   width: 90%;
