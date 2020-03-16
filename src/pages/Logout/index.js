@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {ActivityIndicator} from 'react-native';
+import {ActivityIndicator, AsyncStorage} from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
 
@@ -12,11 +12,15 @@ export default function Logout() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    function loadingLogout() {
+    async function loadingLogout() {
       setTimeout(() => {
         setLoading(true);
         navigation.navigate('Login');
       }, 3000);
+
+      await AsyncStorage.removeItem('@login:name');
+      await AsyncStorage.removeItem('@login:email');
+      await AsyncStorage.removeItem('@login:photo');
 
       setLoading(false);
     }

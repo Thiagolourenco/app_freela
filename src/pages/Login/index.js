@@ -27,8 +27,8 @@ import ContextNavigator from '../../components/ContextNavigator';
 import logoGoogle from '../../assets/google-icon.png';
 import logotipo from '../../assets/icon.png';
 
-export default function Login() {
-  const navigation = useNavigation();
+export default function Login({navigation}) {
+  // const navigation = useNavigation();
 
   const [error, setError] = useState('');
   const [userInfo, setUserInfo] = useState('');
@@ -37,20 +37,29 @@ export default function Login() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState('');
+  const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
-    GoogleSignin.configure({
-      scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
-      webClientId:
-        '94821132195-p2m1606s1j0un9uk614d9mhkk0p6praj.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-      //   hostedDomain: '', // specifies a hosted domain restriction
-      //   loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
-      forceConsentPrompt: true, // [Android] if you want to show the authorization prompt at each login.
-      //   accountName: '', // [Android] specifies an account name on the device that should be used
-      //   iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-    });
-  }, []);
+    async function loadGoogle() {
+      GoogleSignin.hasPlayServices();
+      GoogleSignin.configure({
+        scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+        webClientId:
+          '94821132195-p2m1606s1j0un9uk614d9mhkk0p6praj.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+        offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+        //   hostedDomain: '', // specifies a hosted domain restriction
+        //   loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
+        forceConsentPrompt: true, // [Android] if you want to show the authorization prompt at each login.
+        //   accountName: '', // [Android] specifies an account name on the device that should be used
+        //   iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+      });
+
+      if (userLoading) {
+        navigation.navigate('DashboardDrawer');
+      }
+    }
+    loadGoogle();
+  });
 
   // useEffect(() => {
   //   _getCurrentUserInfo();
@@ -82,7 +91,7 @@ export default function Login() {
   //   }
   // }
 
-  async function signIn() {
+  async function signIns() {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -91,26 +100,10 @@ export default function Login() {
         userInfo.accessToken,
       );
 
-      alert('Chegou');
-      //   this.setState({userInfo});
-      // console.log(userInfo);
-      console.log(credential);
-      // const firebaseAuth = api.auth().signInWithCredential(credential);
       setUserInfo(userInfo);
       navigation.navigate('DashboardDrawer');
 
-      try {
-        await AsyncStorage.setItem('@login:name', userInfo.user.name);
-        await AsyncStorage.setItem('@login:email', userInfo.user.email);
-        await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
-      } catch (err) {
-        console.log(err);
-      }
-
       return userInfo.accessToken;
-      // await AsyncStorage.setItem('@login:name', userInfo.user.name);
-      // await AsyncStorage.setItem('@login:email', userInfo.user.email);
-      // await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -126,29 +119,70 @@ export default function Login() {
   }
 
   async function handleNavigate() {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
+    // await GoogleSignin.hasPlayServices();
+    // const userInfo = await GoogleSignin.signIn();
 
-    setName(userInfo.user.name);
-    setEmail(userInfo.user.email);
-    setEmail(userInfo.user.photo);
+    // setName(userInfo.user.name);
+    // setEmail(userInfo.user.email);
+    // setEmail(userInfo.user.photo);
+
+    // navigation.navigate('DashboardDrawer');
+
+    // try {
+    //   await AsyncStorage.setItem('@login:name', userInfo.user.name);
+    //   await AsyncStorage.setItem('@login:email', userInfo.user.email);
+    //   await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    GoogleSignin.hasPlayServices();
+    GoogleSignin.signIn()
+      .then(response => {
+        setName(response.user.name);
+        setEmail(response.user.email);
+        setPhoto(response.user.photo);
+      })
+      .catch(err => console.log(err));
 
     navigation.navigate('DashboardDrawer');
+  }
 
-    try {
-      await AsyncStorage.setItem('@login:name', userInfo.user.name);
-      await AsyncStorage.setItem('@login:email', userInfo.user.email);
-      await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
-    } catch (err) {
-      console.log(err);
-    }
+  async function signIn() {
+    navigation.navigate('DashboardDrawer');
+    // try {
+    //   GoogleSignin.signIn()
+    //     .then(res => {
+    //       setName(res.user.name);
+    //       setEmail(res.user.email);
+    //       setPhoto(res.user.photo);
+    //       setUserLoading(true);
+    //       // navigation.navigate('DashboardDrawer');
+    //     })
+    //     .catch(err => console.log(err));
+    //   // this.setState({ userInfo });
+    //   // setName(userInfo.user.name);
+    //   // setEmail(userInfo.user.email);
+    //   // setPhoto(userInfo.user.photo);
+    //   // navigation.navigate('DashboardDrawer');
+    // } catch (error) {
+    //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //     // user cancelled the login flow
+    //   } else if (error.code === statusCodes.IN_PROGRESS) {
+    //     // operation (e.g. sign in) is in progress already
+    //   } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+    //     // play services not available or outdated
+    //   } else {
+    //     // some other error happened
+    //     console.log(error);
+    //   }
+    // }
   }
 
   return (
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView source={logotipo} />
-      <ButtonSignIn onPress={handleNavigate}>
+      <ButtonSignIn onPress={signIn}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>

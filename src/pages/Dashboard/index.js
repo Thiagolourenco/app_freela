@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {FlatList, Text, AsyncStorage} from 'react-native';
 // import Icon from '@expo/vector-icons/MaterialIcons';
+import {RadioButton} from 'react-native-paper';
+
 import {useNavigation, useRoute} from '@react-navigation/native';
+import ModalRadio from '../../components/ModalRadio';
 
 import {
   Container,
@@ -29,13 +32,14 @@ export default function Dashboard() {
   const [dataUsers, setDataUsers] = useState([]);
   const [image, setImage] = useState('');
   const [chaves, setChaves] = useState('');
+  const [checked, setChecked] = useState('first');
 
   const navigation = useNavigation();
 
   const ref = api.firestore().collection('dados');
 
   useEffect(() => {
-    async function loadDados() {
+    async function loadData() {
       const name = await AsyncStorage.getItem('@login:name');
       const email = await AsyncStorage.getItem('@login:email');
       const photo = await AsyncStorage.getItem('@login:photo');
@@ -43,7 +47,7 @@ export default function Dashboard() {
       console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
     }
 
-    loadDados();
+    loadData();
   }, []);
 
   // useEffect(() => {
@@ -108,7 +112,6 @@ export default function Dashboard() {
         buttonFil={true}
         buttonSerc={true}
       />
-
       {/* <InputSearch visible={visibleInput} /> */}
       <Content>
         <FlatList
