@@ -58,8 +58,21 @@ export default function RequestProfile() {
   const [visibleRele, setVisibleRele] = useState(false);
   const [dataProfile, setDataProfile] = useState([]);
   const [name, setName] = useState('');
+  const [likes, setLikes] = useState(0);
 
   const [dataComment, setDataComment] = useState([]);
+
+  useEffect(() => {
+    async function loadDataUsers() {
+      const response = await api.get(`admin/${id}`);
+
+      // setDataProfile(response.data);
+
+      setName(response.data.name);
+    }
+
+    loadDataUsers();
+  }, []);
 
   // useEffect(() => {
   //   loadProfile();
@@ -79,37 +92,16 @@ export default function RequestProfile() {
   //   loadComment();
   // }, []);
 
-  async function loadComment() {}
+  useEffect(() => {
+    loadComment();
+  }, []);
 
-  // function loadProfile() {
-  //   // .child("-Lzt7y7V0INJctWxebKn")
-  //   const exemplo = "-Lzt7y7V0INJctWxebKn";
+  async function loadComment() {
+    const response = await api.get(`comments/${id}`);
 
-  //   try {
-  //     api
-  //       .database()
-  //       .ref("users/", exemplo)
-  //       .once("value", snapshot => {
-  //         // console.log("SNAPSHOT -> ", snapshot);
-  //         // setDataProfile(snapshot);
-  //         const listUsers = [];
-  //         snapshot.forEach(childItem => {
-  //           let item = childItem.val().name;
-  //           listUsers.push(item);
-  //         });
-
-  //         console.log(listUsers);
-  //         setDataProfile(listUsers);
-  //       });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
-  // var commentsRef = firebase.database().ref('post-comments/' + postId);
-  // commentsRef.on('child_changed', function(data) {
-  //   setCommentValues(postElement, data.key, data.val().text, data.val().author);
-  // });
+    setDataComment(response.data);
+    // console.log("LOAD COMMENT -> ", response.data);
+  }
 
   function handleGoBack() {
     navigation.goBack();
@@ -136,7 +128,14 @@ export default function RequestProfile() {
     setVisible(false);
   }
 
-  console.log('NAME => ', dataComment);
+  async function handleLikeComments(id) {
+    console.log("DATA COMMENT => ",dataComment);
+    // await api
+    //   .post(`comments/${id}/like`, { })
+    //   .then(res => console.log('OK'))
+    //   .catch(err => console.log('error', err));
+  }
+
   return (
     <Container>
       {/* <Header navigation={navigation} title="Request Profile" /> */}
@@ -211,7 +210,7 @@ export default function RequestProfile() {
                 <ViewList>
                   <ListProfileStar>
                     <Stars
-                      default={item.rating}
+                      default={item.stars}
                       count={5}
                       half={true}
                       // update={val => setRating(val)}
@@ -243,7 +242,9 @@ export default function RequestProfile() {
                 </ViewList>
                 <LikeView>
                   <Icon name="thumb-up" size={25} color="#ccc" />
-                  <LikesText>25</LikesText>
+                  <LikesText onPress={() => handleLikeComments(item._id)}>
+                    {likes}
+                  </LikesText>
                 </LikeView>
               </ListProfileView>
             </ListProfile>

@@ -25,14 +25,16 @@ import api from '../../services/api';
 
 export default function ReviewsStar({navigation}) {
   const [comment, setComment] = useState('');
-  const [name, setName] = useState('');
+  const [name, setName] = useState('Thiago');
   const [email, setEmail] = useState('');
-  const [photo, setPhoto] = useState('');
+  const [photoUrl, setPhoto] = useState(
+    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fcanaltech.com.br%2Fespaco%2Ffotografo-combinou-50-mil-imagens-individuais-e-gerou-esta-incrivel-foto-da-lua-133443%2F&psig=AOvVaw0cqTkEkJCOyEOIHI-WGeDy&ust=1585313397149000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCBjY-XuOgCFQAAAAAdAAAAABAD',
+  );
 
-  const [rating, setRating] = useState(0);
+  const [stars, setRating] = useState(0);
   const routes = useRoute();
 
-  const chaves = routes.params.id;
+  const admincomment = routes.params.id;
 
   useEffect(() => {
     async function loadDados() {
@@ -44,12 +46,18 @@ export default function ReviewsStar({navigation}) {
     loadDados();
   }, []);
 
-  function handleSubmitComment() {}
+  async function handleSubmitComment() {
+    await api
+      .post('comments', {name, photoUrl, comment, stars, admincomment})
+      .then(res => console.log('OK'))
+      .catch(err => console.log('err', err));
+  }
 
   function handleClose() {
     navigation.navigate('RequestProfile');
   }
 
+  console.log('chaves', admincomment);
   return (
     <Container>
       <Header>
