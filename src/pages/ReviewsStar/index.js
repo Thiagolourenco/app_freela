@@ -39,34 +39,12 @@ export default function ReviewsStar({navigation}) {
       const name = await AsyncStorage.getItem('@login:name');
       const email = await AsyncStorage.getItem('@login:email');
       const photo = await AsyncStorage.getItem('@login:photo');
-
-      console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
-      setName(name);
-      setEmail(email);
-      setPhoto(photo);
     }
 
     loadDados();
   }, []);
 
-  function handleSubmitComment() {
-    try {
-      api
-        .firestore()
-        .collection('comments')
-        .add({
-          rating,
-          comment,
-          chaves,
-          name,
-          email,
-          photo,
-        });
-      navigation.navigate('RequestProfile');
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  function handleSubmitComment() {}
 
   function handleClose() {
     navigation.navigate('RequestProfile');

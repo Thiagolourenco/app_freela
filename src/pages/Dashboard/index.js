@@ -36,8 +36,6 @@ export default function Dashboard() {
 
   const navigation = useNavigation();
 
-  const ref = api.firestore().collection('dados');
-
   useEffect(() => {
     async function loadData() {
       const name = await AsyncStorage.getItem('@login:name');
@@ -50,39 +48,15 @@ export default function Dashboard() {
     loadData();
   }, []);
 
-  // useEffect(() => {
-  //   async function loadData() {
-  //     // const username = await AsyncStorage.getItem('@login:username');
-  //     console.log('USER => ', username);
-  //   }
-
-  //   loadData();
-  // });
   useEffect(() => {
     loadDados();
-  }, []);
+  });
 
   async function loadDados() {
-    try {
-      return ref.onSnapshot(querySnapshot => {
-        const list = [];
-        querySnapshot.forEach(doc => {
-          const {country, desc, email, name, sports, images} = doc.data();
-          list.push({
-            id: doc.id,
-            country,
-            desc,
-            email,
-            name,
-            sports,
-            images,
-          });
-        });
-        setDataUsers(list);
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    await api
+      .get('admin')
+      .then(res => setDataUsers(res.data))
+      .catch(err => console.log('Error'));
   }
   // async function dataUser() {
   //   const username = await AsyncStorage.getItem("@login:username");
@@ -102,7 +76,6 @@ export default function Dashboard() {
     navigation.navigate('RequestProfile', {id});
   }
 
-  console.log(dataUsers);
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -119,9 +92,8 @@ export default function Dashboard() {
           showsVerticalScrollIndicator={false}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <ContentListView onPress={() => handleRequestProfile(item.id)}>
-              {/* <Text>{JSON.stringify(item)}</Text> */}
-              <ContetnListImage source={{uri: item.images}} />
+            <ContentListView onPress={() => handleRequestProfile(item._id)}>
+              <ContetnListImage />
               <ContentView>
                 <Title> {item.name} </Title>
                 <ContentFooter>

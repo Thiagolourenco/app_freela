@@ -48,29 +48,22 @@ import {
 export default function Admin() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [desc, setDesc] = useState('');
+  const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [chaves, setChave] = useState(0);
   const [stars, setStars] = useState(null);
   const [comment, setComment] = useState(null);
   const [images, setImages] = useState('');
+  const [filesname, setFilesName] = useState('');
+  const [names, setNames] = useState('');
+  const [file, setFile] = useState('');
   // select
   const [country, setCountry] = useState('');
   const [sports, setSports] = useState('');
   const [example, setExample] = useState([]);
-  // const [selectSports, setSelectSports] = useState("");
 
   const navigation = useNavigation();
-
-  // const options = {
-  //   title: 'Select Avatar',
-  //   customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
-  //   storageOptions: {
-  //     skipBackup: true,
-  //     path: 'images',
-  //   },
-  // };
 
   const optionsImage = {
     title: 'Select Photo',
@@ -80,14 +73,8 @@ export default function Admin() {
     },
   };
 
-  // async function handleRegisterInfo() {
-  //   const response = await firestore().collection('users').doc('users').get()
-  // }
-
   function handleImagePicker() {
     ImagePicker.showImagePicker(optionsImage, response => {
-      console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -99,7 +86,10 @@ export default function Admin() {
         const source = {uri: response.uri};
         setImage(source);
         setImages(response.uri);
+        setFilesName(response.fileName);
+        setNames(response.path);
 
+        setFile(response);
         // handleImageUpload(response.uri)
         //   .then(res => console.log('DEU BOM', res))
         //   .catch(err => console.log('DEU RUIM', err));
@@ -107,56 +97,14 @@ export default function Admin() {
     });
   }
 
-  async function handleImageUpload(uri) {
-    console.log('URI => ', uri);
-
-    const uid = '1234';
-
-    // export const FireBaseStorage = storage();
-
-    // export const getFileLocalPath = response => {
-    //   const {path, uri} = response;
-    //   return Platform.OS === 'android' ? path : uri;
-    // };
-
-    // export const createStorageReferenceToFile = response => {
-    //   const {fileName} = response;
-    //   return FireBaseStorage.ref(fileName);
-    // };
-
-    // export const uploadFileToFireBase = imagePickerResponse => {
-    //   const fileSource = getFileLocalPath(imagePickerResponse);
-    //   const storageRef = createStorageReferenceToFile(imagePickerResponse);
-    //   return storageRef.putFile(fileSource);
-    // };
-    try {
-      const imagePath = response.path;
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      const ref = api
-        .storage()
-        .ref()
-        .child('images/');
-      return ref.put(blob);
-    } catch (err) {
-      console.log(err);
-    }
-  }
   async function handleRegister() {
     try {
-      api
-        .firestore()
-        .collection('dados')
-        .add({
-          name,
-          email,
-          desc,
-          country,
-          sports,
-          images,
-        });
+      await api
+        .post('/admin', {name, email, description, country, sports})
+        .then(res => console.log('RESPOSTA -> ', res))
+        .catch(err => console.log('error', err));
     } catch (err) {
-      console.log(err);
+      console.log('EXCEPTION => ', err);
     }
   }
 
@@ -200,8 +148,8 @@ export default function Admin() {
         <ContentInput>
           <Input
             placeholder="Description"
-            value={desc}
-            onChangeText={setDesc}
+            value={description}
+            onChangeText={setDescription}
           />
         </ContentInput>
 

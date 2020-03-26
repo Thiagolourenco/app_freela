@@ -61,46 +61,25 @@ export default function RequestProfile() {
 
   const [dataComment, setDataComment] = useState([]);
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
+  // useEffect(() => {
+  //   loadProfile();
+  // }, []);
 
-  async function loadProfile() {
-    const ref = api
-      .firestore()
-      .collection('dados')
-      .doc(id);
-    ref.get().then(doc => {
-      setName(doc.data().name);
-    });
-  }
+  // async function loadProfile() {
+  //   const ref = api
+  //     .firestore()
+  //     .collection('dados')
+  //     .doc(id);
+  //   ref.get().then(doc => {
+  //     setName(doc.data().name);
+  //   });
+  // }
 
-  useEffect(() => {
-    loadComment();
-  }, []);
+  // useEffect(() => {
+  //   loadComment();
+  // }, []);
 
-  async function loadComment() {
-    try {
-      const refe = api.firestore().collection('comments');
-
-      return refe.onSnapshot(querySnapshot => {
-        const list = [];
-        querySnapshot.forEach(doc => {
-          const {comment, rating, photo, name} = doc.data();
-          list.push({
-            id: doc.id,
-            comment,
-            rating,
-            photo,
-            name,
-          });
-        });
-        setDataComment(list);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  async function loadComment() {}
 
   // function loadProfile() {
   //   // .child("-Lzt7y7V0INJctWxebKn")
@@ -133,7 +112,7 @@ export default function RequestProfile() {
   // });
 
   function handleGoBack() {
-    navigation.navigate('DashboardDrawer');
+    navigation.goBack();
   }
 
   function handleInfoModal() {
