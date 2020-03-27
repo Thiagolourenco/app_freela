@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import api from '../../services/api';
 
 import {
   Container,
@@ -27,7 +28,8 @@ export default function HeaderComponent({
 }) {
   const [visible, setVisible] = useState(false);
   const [visibleInput, setVisibleInput] = useState(false);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
+  const [name, setName] = useState('');
 
   function handleMenuDrawer() {
     navigation.openDrawer();
@@ -44,6 +46,7 @@ export default function HeaderComponent({
   function handleInputSearch() {
     setVisibleInput(true);
   }
+
   return (
     <>
       <Header>
@@ -63,7 +66,6 @@ export default function HeaderComponent({
             </ButtonSearch>
           )}
         </HeaderView>
-        <InputSearch visible={visibleInput} />
       </Header>
     </>
   );

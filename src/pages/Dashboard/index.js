@@ -34,6 +34,10 @@ export default function Dashboard() {
   const [chaves, setChaves] = useState('');
   const [checked, setChecked] = useState('first');
 
+  const [dataSearch, setDataSearch] = useState([]);
+
+  const [name, setName] = useState('');
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -50,7 +54,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     loadDados();
-  });
+  }, []);
 
   async function loadDados() {
     await api
@@ -58,24 +62,23 @@ export default function Dashboard() {
       .then(res => setDataUsers(res.data))
       .catch(err => console.log('Error'));
   }
-  // async function dataUser() {
-  //   const username = await AsyncStorage.getItem("@login:username");
-  //   const email = await AsyncStorage.getItem("@login:email");
-  //   const photoUrl = await AsyncStorage.getItem("@login:imageUrl");
-
-  //   console.log(" nome -> ", username);
-  //   console.log("email -> ", email);
-  //   console.log("photo -> ", photoUrl);
-  // }
-
-  // useEffect(() => {
-  //   dataUser();
-  // }, []);
 
   async function handleRequestProfile(id) {
     navigation.navigate('RequestProfile', {id});
   }
 
+  async function searchList() {
+    // const response = await api.get(`admin/${name}`);
+    await api
+      .get(`admin/${name}`)
+      .then(res => setDataSearch(res.data))
+      .catch(err => console.log(err));
+    // console.log('search => ', response.data);
+
+    setVisibleInput(false);
+  }
+
+  console.log('DATA SEARCH => ', dataSearch);
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -84,6 +87,12 @@ export default function Dashboard() {
         title="RANKING GENERAL"
         buttonFil={true}
         buttonSerc={true}
+      />
+      <InputSearch
+        visible={true}
+        value={name}
+        onChangeText={setName}
+        onSubmitEditing={searchList}
       />
       {/* <InputSearch visible={visibleInput} /> */}
       <Content>

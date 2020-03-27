@@ -74,31 +74,12 @@ export default function RequestProfile() {
     loadDataUsers();
   }, []);
 
-  // useEffect(() => {
-  //   loadProfile();
-  // }, []);
-
-  // async function loadProfile() {
-  //   const ref = api
-  //     .firestore()
-  //     .collection('dados')
-  //     .doc(id);
-  //   ref.get().then(doc => {
-  //     setName(doc.data().name);
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   loadComment();
-  // }, []);
-
   useEffect(() => {
     loadComment();
   }, []);
 
   async function loadComment() {
     const response = await api.get(`comments/${id}`);
-
     setDataComment(response.data);
     // console.log("LOAD COMMENT -> ", response.data);
   }
@@ -129,7 +110,14 @@ export default function RequestProfile() {
   }
 
   async function handleLikeComments(id) {
-    console.log("DATA COMMENT => ",dataComment);
+    const {name, photoUrl, comment, stars} = dataComment;
+
+    // setLikes(++);
+    await api
+      .post(`comments/${id}/like`, {name, photoUrl, comment, likes, stars})
+      .then(res => console.log('OK'))
+      .catch(err => console.log('ERRO => ', err));
+    console.log('DATA COMMENT => ', dataComment);
     // await api
     //   .post(`comments/${id}/like`, { })
     //   .then(res => console.log('OK'))
@@ -241,10 +229,10 @@ export default function RequestProfile() {
                   <ListProfileComent> {item.comment}</ListProfileComent>
                 </ViewList>
                 <LikeView>
-                  <Icon name="thumb-up" size={25} color="#ccc" />
-                  <LikesText onPress={() => handleLikeComments(item._id)}>
-                    {likes}
-                  </LikesText>
+                  <RectButton onPress={() => handleLikeComments(item._id)}>
+                    <Icon name="thumb-up" size={25} color="#ccc" />
+                    <LikesText>{item.likes}</LikesText>
+                  </RectButton>
                 </LikeView>
               </ListProfileView>
             </ListProfile>
