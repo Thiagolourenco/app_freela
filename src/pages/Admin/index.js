@@ -83,26 +83,43 @@ export default function Admin() {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = {uri: response.uri};
+        const source = {uri: `data:image/jpeg;base64,${response.data}`};
         setImage(source);
-        setImages(response.uri);
-        setFilesName(response.fileName);
-        setNames(response.path);
 
-        setFile(response);
-        // handleImageUpload(response.uri)
-        //   .then(res => console.log('DEU BOM', res))
-        //   .catch(err => console.log('DEU RUIM', err));
+        let prefix;
+        let ext;
+
+        if (response.fileName) {
+          [prefix, ext] = response.fileName.split('.');
+          ext = ext.toLocaleLowerCase() === 'heic' ? 'jpg' : ext;
+        } else {
+          prefix = new Date().getTime();
+          ext = 'jpg';
+        }
+
+        const image = {
+          uri: response.uri,
+          type: response.type,
+          name: `${prefix}.${ext}`,
+        };
+
+        setFile(image);
       }
     });
   }
 
   async function handleRegister() {
     try {
-      await api
-        .post('/admin', {name, email, description, country, sports})
-        .then(res => console.log('RESPOSTA -> ', res))
-        .catch(err => console.log('error', err));
+      const data = new FormData();
+
+      data.append('file', file);
+      data.append('name', name);
+      data.append('email', email);
+      data.append('description', description);
+      data.append('country', country);
+      data.append('sports', sports);
+
+      await api.post('admin', data);
     } catch (err) {
       console.log('EXCEPTION => ', err);
     }

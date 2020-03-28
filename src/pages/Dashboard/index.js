@@ -102,7 +102,9 @@ export default function Dashboard() {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <ContentListView onPress={() => handleRequestProfile(item._id)}>
-              <ContetnListImage />
+              <ContetnListImage
+                source={{uri: `http://10.0.2.2:3333/files/${item.file}`}}
+              />
               <ContentView>
                 <Title> {item.name} </Title>
                 <ContentFooter>
