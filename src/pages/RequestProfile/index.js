@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {FlatList, Text, Modal} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 // import CircleCheckBox from "react-native-circle-checkbox";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import socketio from 'socket.io-client';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import api from '../../services/api';
 import Stars from 'react-native-stars';
@@ -62,6 +63,19 @@ export default function RequestProfile() {
 
   const [dataComment, setDataComment] = useState([]);
 
+  const socket = useMemo(
+    () => socketio('http://10.0.2.2:3333', {query: {comment: id}}),
+    [id],
+  );
+
+  useEffect(() => {
+    socket.on('like', like => {
+      setDataComment(
+        dataComment.map(comment => (comment._id === like._id ? like : comment)),
+      );
+    });
+  }, [socket, dataComment]);
+
   useEffect(() => {
     async function loadDataUsers() {
       const response = await api.get(`admin/${id}`);
@@ -75,14 +89,19 @@ export default function RequestProfile() {
   }, []);
 
   useEffect(() => {
+    async function loadComment() {
+      const response = await api.get(`comments/${id}`);
+      setDataComment(response.data);
+    }
+
     loadComment();
   }, []);
 
-  async function loadComment() {
-    const response = await api.get(`comments/${id}`);
-    setDataComment(response.data);
-    // console.log("LOAD COMMENT -> ", response.data);
-  }
+  // async function loadComment() {
+  //   // console.log("LOAD COMMENT -> ", response.data);
+  // }
+
+  // const socket = useMemo(() =>
 
   function handleGoBack() {
     navigation.goBack();

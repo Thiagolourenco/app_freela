@@ -67,18 +67,17 @@ export default function Dashboard() {
     navigation.navigate('RequestProfile', {id});
   }
 
-  async function searchList() {
-    // const response = await api.get(`admin/${name}`);
-    await api
-      .get(`admin/${name}`)
-      .then(res => setDataSearch(res.data))
-      .catch(err => console.log(err));
-    // console.log('search => ', response.data);
+  // async function searchList() {
+  //   // const response = await api.get(`admin/${name}`);
+  //   await api
+  //     .get(`admin/${name}`)
+  //     .then(res => setDataSearch(res.data), console.log('RES => ', res))
+  //     .catch(err => console.log(err));
+  //   // console.log('search => ', response.data);
 
-    setVisibleInput(false);
-  }
+  //   setVisibleInput(false);
+  // }
 
-  console.log('DATA SEARCH => ', dataSearch);
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -88,12 +87,12 @@ export default function Dashboard() {
         buttonFil={true}
         buttonSerc={true}
       />
-      <InputSearch
+      {/* <InputSearch
         visible={true}
         value={name}
         onChangeText={setName}
         onSubmitEditing={searchList}
-      />
+      /> */}
       {/* <InputSearch visible={visibleInput} /> */}
       <Content>
         <FlatList
