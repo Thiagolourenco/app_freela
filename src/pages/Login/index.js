@@ -36,7 +36,9 @@ export default function Login({navigation}) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [photo, setPhoto] = useState('');
+  const [photoUrl, setPhoto] = useState('');
+  const [idToken, setIdToken] = useState('');
+
   const [userLoading, setUserLoading] = useState(false);
 
   useEffect(() => {
@@ -64,32 +66,6 @@ export default function Login({navigation}) {
   // useEffect(() => {
   //   _getCurrentUserInfo();
   // });
-
-  // async function isSignedIn() {
-  //   const isSignedIn = await GoogleSignin.isSignedIn();
-  //   console.log('IsSignedIn => ', isSignedIn);
-  //   if (isSignedIn) {
-  //     console.log('User is already signed in');
-  //     _getCurrentUserInfo();
-  //   } else {
-  //     console.log('eror');
-  //   }
-  // }
-
-  // async function _getCurrentUserInfo() {
-  //   try {
-  //     const userInfo = await GoogleSignin.signInSilently();
-  //     console.log('User Info => ', userInfo);
-  //     setUserInfo(userInfo);
-  //   } catch (err) {
-  //     if (err.code === statusCodes.SIGN_IN_REQUIRED) {
-  //       console.log('User has not signed in yet');
-  //     } else {
-  //       console.log("Something went wrong. Unable to get user's  info");
-  //     }
-  //     console.log(err);
-  //   }
-  // }
 
   async function signIns() {
     try {
@@ -119,70 +95,91 @@ export default function Login({navigation}) {
   }
 
   async function handleNavigate() {
-    // await GoogleSignin.hasPlayServices();
-    // const userInfo = await GoogleSignin.signIn();
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
 
-    // setName(userInfo.user.name);
-    // setEmail(userInfo.user.email);
-    // setEmail(userInfo.user.photo);
-
-    // navigation.navigate('DashboardDrawer');
-
-    // try {
-    //   await AsyncStorage.setItem('@login:name', userInfo.user.name);
-    //   await AsyncStorage.setItem('@login:email', userInfo.user.email);
-    //   await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    GoogleSignin.hasPlayServices();
-    GoogleSignin.signIn()
-      .then(response => {
-        setName(response.user.name);
-        setEmail(response.user.email);
-        setPhoto(response.user.photo);
-      })
-      .catch(err => console.log(err));
+    setIdToken(userInfo.idToken);
+    setName(userInfo.user.name);
+    setEmail(userInfo.user.email);
+    setPhoto(userInfo.user.photo);
 
     navigation.navigate('DashboardDrawer');
+
+    try {
+      await AsyncStorage.setItem('@login:name', userInfo.user.name);
+      await AsyncStorage.setItem('@login:email', userInfo.user.email);
+      await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+    } catch (err) {
+      console.log(err);
+    }
+
+    await api
+      .post('users', {
+        idToken: userInfo.idToken,
+        email: userInfo.user.email,
+        photoUrl: userInfo.user.photo,
+        name: userInfo.user.name,
+      })
+      .then(res => console.log('OK'))
+      .catch(err => console.log('ERRO'));
+    // GoogleSignin.hasPlayServices();
+    // GoogleSignin.signIn()
+    //   .then(response => {
+    //     setName(response.user.name);
+    //     setEmail(response.user.email);
+    //     setPhoto(response.user.photo);
+    //   })
+    //   .catch(err => console.log(err));
+
+    // navigation.navigate('DashboardDrawer');
   }
 
   async function signIn() {
-    navigation.navigate('DashboardDrawer');
-    // try {
-    //   GoogleSignin.signIn()
-    //     .then(res => {
-    //       setName(res.user.name);
-    //       setEmail(res.user.email);
-    //       setPhoto(res.user.photo);
-    //       setUserLoading(true);
-    //       // navigation.navigate('DashboardDrawer');
-    //     })
-    //     .catch(err => console.log(err));
-    //   // this.setState({ userInfo });
-    //   // setName(userInfo.user.name);
-    //   // setEmail(userInfo.user.email);
-    //   // setPhoto(userInfo.user.photo);
-    //   // navigation.navigate('DashboardDrawer');
-    // } catch (error) {
-    //   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    //     // user cancelled the login flow
-    //   } else if (error.code === statusCodes.IN_PROGRESS) {
-    //     // operation (e.g. sign in) is in progress already
-    //   } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-    //     // play services not available or outdated
-    //   } else {
-    //     // some other error happened
-    //     console.log(error);
-    //   }
-    // }
+    try {
+      GoogleSignin.signIn()
+        .then(res => {
+          setName(res.user.name);
+          setEmail(res.user.email);
+          setPhoto(res.user.photo);
+          setUserLoading(true);
+          setIdToken(res.idToken);
+          // console.log('response token', res.idToken);
+
+          //         try {
+          //   await AsyncStorage.setItem('@login:name', userInfo.user.name);
+          //   await AsyncStorage.setItem('@login:email', userInfo.user.email);
+          //   await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
+          // } catch (err) {
+          //   console.log(err);
+          // }
+          navigation.navigate('DashboardDrawer');
+        })
+        .catch(err => console.log(err));
+
+      // this.setState({ userInfo });
+      // setName(userInfo.user.name);
+      // setEmail(userInfo.user.email);
+      // setPhoto(userInfo.user.photo);
+      // navigation.navigate('DashboardDrawer');
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+        console.log(error);
+      }
+    }
   }
 
   return (
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView source={logotipo} />
-      <ButtonSignIn onPress={signIn}>
+      <ButtonSignIn onPress={handleNavigate}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>

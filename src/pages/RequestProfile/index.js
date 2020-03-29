@@ -60,6 +60,7 @@ export default function RequestProfile() {
   const [dataProfile, setDataProfile] = useState([]);
   const [name, setName] = useState('');
   const [likes, setLikes] = useState(0);
+  const [file, setFile] = useState('');
 
   const [dataComment, setDataComment] = useState([]);
 
@@ -69,6 +70,10 @@ export default function RequestProfile() {
   );
 
   useEffect(() => {
+    socket.on('comment', newComment => {
+      setDataComment([newComment, ...dataComment]);
+    });
+
     socket.on('like', like => {
       setDataComment(
         dataComment.map(comment => (comment._id === like._id ? like : comment)),
@@ -79,10 +84,12 @@ export default function RequestProfile() {
   useEffect(() => {
     async function loadDataUsers() {
       const response = await api.get(`admin/${id}`);
-
       // setDataProfile(response.data);
 
       setName(response.data.name);
+      setFile(response.data.file);
+
+      console.log('NAME => ', response.data.file);
     }
 
     loadDataUsers();
@@ -175,7 +182,9 @@ export default function RequestProfile() {
             </ButtonInfo>
           </ModalFilterProfile>
         </HeaderView>
-        <ContetnListImage />
+        <ContetnListImage
+          source={{uri: `http://10.0.2.2:3333/files/${file}`}}
+        />
         <Stars
           default={5}
           count={5}
@@ -212,7 +221,7 @@ export default function RequestProfile() {
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
             <ListProfile key={item._id}>
-              <ListProfileImage source={{uri: item.photo}} />
+              <ListProfileImage source={{uri: item.photoUrl}} />
               <ListProfileView>
                 <ViewList>
                   <ListProfileStar>

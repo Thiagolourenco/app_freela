@@ -22,7 +22,7 @@ export const Title = styled.Text`
   margin-left: 110px;
 `;
 
-export const ContetnListImage = styled.View`
+export const ContetnListImage = styled.Image`
   height: 100px;
   width: 100px;
   border-radius: 50px;

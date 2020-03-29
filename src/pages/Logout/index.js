@@ -18,9 +18,7 @@ export default function Logout() {
         navigation.navigate('Login');
       }, 3000);
 
-      await AsyncStorage.removeItem('@login:name');
-      await AsyncStorage.removeItem('@login:email');
-      await AsyncStorage.removeItem('@login:photo');
+      await AsyncStorage.clear();
 
       setLoading(false);
     }
