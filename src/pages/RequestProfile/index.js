@@ -65,7 +65,8 @@ export default function RequestProfile() {
   const [dataComment, setDataComment] = useState([]);
 
   const socket = useMemo(
-    () => socketio('http://10.0.2.2:3333', {query: {comment: id}}),
+    () =>
+      socketio('https://upload-freela.herokuapp.com', {query: {comment: id}}),
     [id],
   );
 
@@ -183,7 +184,7 @@ export default function RequestProfile() {
           </ModalFilterProfile>
         </HeaderView>
         <ContetnListImage
-          source={{uri: `http://10.0.2.2:3333/files/${file}`}}
+          source={{uri: `https://upload-freela.herokuapp.com/files/${file}`}}
         />
         <Stars
           default={5}
