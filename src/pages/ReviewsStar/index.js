@@ -25,9 +25,11 @@ import api from '../../services/api';
 
 export default function ReviewsStar() {
   const [comment, setComment] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [photoUrl, setPhoto] = useState('');
+  const [name, setName] = useState('Julen');
+  const [email, setEmail] = useState('julen@gmail.com');
+  const [photoUrl, setPhoto] = useState(
+    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.aficionados.com.br%2Fnaruto-shippuden-fillers%2F&psig=AOvVaw2TFPrV6214WIk61TVjVMrc&ust=1585657575518000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPCav_uYwugCFQAAAAAdAAAAABAD',
+  );
 
   const [stars, setRating] = useState(0);
   const routes = useRoute();
@@ -42,9 +44,9 @@ export default function ReviewsStar() {
       const email = await AsyncStorage.getItem('@login:email');
       const photo = await AsyncStorage.getItem('@login:photo');
 
-      setName(name);
-      setEmail(email);
-      setPhoto(photo);
+      // setName(name);
+      // setEmail(email);
+      // setPhoto(photo);
     }
 
     loadDados();

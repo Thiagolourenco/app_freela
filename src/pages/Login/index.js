@@ -175,11 +175,15 @@ export default function Login({navigation}) {
     }
   }
 
+  function loginNavigate() {
+    navigation.navigate('DashboardDrawer');
+  }
+
   return (
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView source={logotipo} />
-      <ButtonSignIn onPress={handleNavigate}>
+      <ButtonSignIn onPress={loginNavigate}>
         <ButtonImage source={logoGoogle} />
         <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>
