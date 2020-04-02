@@ -150,6 +150,8 @@ export default function RequestProfile() {
     //   .then(res => console.log('OK'))
     //   .catch(err => console.log('error', err));
   }
+ 
+  console.log("FILE => ", file);
 
   return (
     <Container>

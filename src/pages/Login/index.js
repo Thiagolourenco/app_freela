@@ -12,7 +12,10 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-community/google-signin';
+import {useDispatch, useSelector} from 'react-redux';
+
 import api from '../../services/api';
+import {userRequest} from '../../store/modules/user/actions';
 
 import {
   Container,
@@ -33,13 +36,16 @@ export default function Login({navigation}) {
   const [error, setError] = useState('');
   const [userInfo, setUserInfo] = useState('');
   const [user, setUser] = useState('');
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [photoUrl, setPhoto] = useState('');
   const [idToken, setIdToken] = useState('');
 
   const [userLoading, setUserLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.user.loading);
 
   useEffect(() => {
     async function loadGoogle() {
@@ -62,10 +68,6 @@ export default function Login({navigation}) {
     }
     loadGoogle();
   });
-
-  // useEffect(() => {
-  //   _getCurrentUserInfo();
-  // });
 
   async function signIns() {
     try {
@@ -103,7 +105,9 @@ export default function Login({navigation}) {
     setEmail(userInfo.user.email);
     setPhoto(userInfo.user.photo);
 
-    navigation.navigate('DashboardDrawer');
+    if (loading === false) {
+      navigation.navigate('DashboardDrawer');
+    }
 
     try {
       await AsyncStorage.setItem('@login:name', userInfo.user.name);
@@ -113,25 +117,14 @@ export default function Login({navigation}) {
       console.log(err);
     }
 
-    await api
-      .post('users', {
-        idToken: userInfo.idToken,
-        email: userInfo.user.email,
-        photoUrl: userInfo.user.photo,
-        name: userInfo.user.name,
-      })
-      .then(res => console.log('OK'))
-      .catch(err => console.log('ERRO'));
-    // GoogleSignin.hasPlayServices();
-    // GoogleSignin.signIn()
-    //   .then(response => {
-    //     setName(response.user.name);
-    //     setEmail(response.user.email);
-    //     setPhoto(response.user.photo);
-    //   })
-    //   .catch(err => console.log(err));
-
-    // navigation.navigate('DashboardDrawer');
+    dispatch(
+      userRequest(
+        userInfo.idToken,
+        userInfo.user.email,
+        userInfo.user.name,
+        userInfo.user.phot,
+      ),
+    );
   }
 
   async function signIn() {
@@ -143,24 +136,10 @@ export default function Login({navigation}) {
           setPhoto(res.user.photo);
           setUserLoading(true);
           setIdToken(res.idToken);
-          // console.log('response token', res.idToken);
 
-          //         try {
-          //   await AsyncStorage.setItem('@login:name', userInfo.user.name);
-          //   await AsyncStorage.setItem('@login:email', userInfo.user.email);
-          //   await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
-          // } catch (err) {
-          //   console.log(err);
-          // }
           navigation.navigate('DashboardDrawer');
         })
         .catch(err => console.log(err));
-
-      // this.setState({ userInfo });
-      // setName(userInfo.user.name);
-      // setEmail(userInfo.user.email);
-      // setPhoto(userInfo.user.photo);
-      // navigation.navigate('DashboardDrawer');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -183,9 +162,12 @@ export default function Login({navigation}) {
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView source={logotipo} />
-      <ButtonSignIn onPress={loginNavigate}>
-        <ButtonImage source={logoGoogle} />
-        <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
+      <ButtonSignIn onPress={handleNavigate}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
+        )}
       </ButtonSignIn>
     </Container>
   );
