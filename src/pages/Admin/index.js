@@ -111,6 +111,7 @@ export default function Admin() {
   async function handleRegister() {
     try {
       const data = new FormData();
+      setLoading(true);
 
       data.append('file', file);
       data.append('name', name);
@@ -120,6 +121,11 @@ export default function Admin() {
       data.append('sports', sports);
 
       await api.post('admin', data);
+
+      setTimeout(() => {
+        setLoading(false);
+        navigation.navigate('Dashboard');
+      }, 3000);
     } catch (err) {
       console.log('EXCEPTION => ', err);
     }
@@ -174,38 +180,6 @@ export default function Admin() {
           style={pickerSelectStyles}
           onValueChange={value => setCountry(value)}
           items={[
-            {label: 'Fútbol', value: 'Fútbol'},
-            {label: 'Baloncesto', value: 'Baloncesto'},
-            {label: 'Tenis', value: 'Tenis'},
-            {label: 'Balonmano', value: 'Balonmano'},
-            {label: 'Fútbol americano', value: 'Fútbol americano '},
-            {label: 'Rugby', value: 'Rugby'},
-            {label: 'Fútbol sala', value: 'Fútbol sala'},
-            {label: 'Boxeo', value: 'Boxeo'},
-            {label: 'UFC', value: 'UFC'},
-            {label: 'Béisbol', value: 'Béisbol'},
-            {label: 'Hockey', value: 'Hockey'},
-            {label: 'Golf', value: 'Golf'},
-            {label: 'Caballos', value: 'Caballos'},
-            {label: 'Ciclismo', value: 'Ciclismo'},
-            {label: 'Motor', value: 'Motor'},
-            {label: 'Dardos', value: 'Dardos'},
-            {label: 'Voleibol', value: 'Voleibol'},
-            {label: 'Waterpolo', value: 'Waterpolo'},
-            {label: 'eSports', value: 'eSports'},
-          ]}
-          placeholder={{
-            label: 'Select Country',
-            value: null,
-            color: '#000000',
-          }}
-          useNativeAndroidPickerStyle={false}
-        />
-
-        <RNPickerSelect
-          style={pickerSelectStyles}
-          onValueChange={value => setSports(value)}
-          items={[
             {label: 'Argentina', value: 'Argentina'},
             {label: 'Bolivia', value: 'Bolivia'},
             {label: 'Chile', value: 'Chile'},
@@ -226,6 +200,38 @@ export default function Admin() {
             {label: 'República dominicana', value: 'República dominicana'},
             {label: 'Uruguay', value: 'Uruguay'},
             {label: 'Venezuela', value: 'Venezuela'},
+          ]}
+          placeholder={{
+            label: 'Select Country',
+            value: null,
+            color: '#000000',
+          }}
+          useNativeAndroidPickerStyle={false}
+        />
+
+        <RNPickerSelect
+          style={pickerSelectStyles}
+          onValueChange={value => setSports(value)}
+          items={[
+            {label: 'Fútbol', value: 'Fútbol'},
+            {label: 'Baloncesto', value: 'Baloncesto'},
+            {label: 'Tenis', value: 'Tenis'},
+            {label: 'Balonmano', value: 'Balonmano'},
+            {label: 'Fútbol americano', value: 'Fútbol americano '},
+            {label: 'Rugby', value: 'Rugby'},
+            {label: 'Fútbol sala', value: 'Fútbol sala'},
+            {label: 'Boxeo', value: 'Boxeo'},
+            {label: 'UFC', value: 'UFC'},
+            {label: 'Béisbol', value: 'Béisbol'},
+            {label: 'Hockey', value: 'Hockey'},
+            {label: 'Golf', value: 'Golf'},
+            {label: 'Caballos', value: 'Caballos'},
+            {label: 'Ciclismo', value: 'Ciclismo'},
+            {label: 'Motor', value: 'Motor'},
+            {label: 'Dardos', value: 'Dardos'},
+            {label: 'Voleibol', value: 'Voleibol'},
+            {label: 'Waterpolo', value: 'Waterpolo'},
+            {label: 'eSports', value: 'eSports'},
           ]}
           placeholder={{
             label: 'Select Sports',

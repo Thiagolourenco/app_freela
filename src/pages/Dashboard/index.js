@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text, AsyncStorage} from 'react-native';
+import {FlatList, Text, AsyncStorage, ActivityIndicator} from 'react-native';
 // import Icon from '@expo/vector-icons/MaterialIcons';
 import {RadioButton} from 'react-native-paper';
-
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
+
 import ModalRadio from '../../components/ModalRadio';
 
 import {
@@ -23,6 +24,8 @@ import {
 import api from '../../services/api';
 import Header from '../../components/Header';
 
+import {getAdminRequest} from '../../store/modules/admin/actions';
+
 export default function Dashboard() {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
@@ -34,6 +37,11 @@ export default function Dashboard() {
   const [chaves, setChaves] = useState('');
   const [checked, setChecked] = useState('first');
 
+  const dispatch = useDispatch();
+
+  const adminUser = useSelector(state => state.admin.adminUser);
+  const loadingGet = useSelector(state => state.admin.loadingGet);
+
   const [dataSearch, setDataSearch] = useState([]);
 
   const [name, setName] = useState('');
@@ -41,27 +49,31 @@ export default function Dashboard() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    async function loadData() {
-      const name = await AsyncStorage.getItem('@login:name');
-      const email = await AsyncStorage.getItem('@login:email');
-      const photo = await AsyncStorage.getItem('@login:photo');
+    dispatch(getAdminRequest());
+  }, [dispatch]);
 
-      console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
-    }
+  // useEffect(() => {
+  //   async function loadData() {
+  //     const name = await AsyncStorage.getItem('@login:name');
+  //     const email = await AsyncStorage.getItem('@login:email');
+  //     const photo = await AsyncStorage.getItem('@login:photo');
 
-    loadData();
-  }, []);
+  //     // console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
+  //   }
 
-  useEffect(() => {
-    loadDados();
-  }, []);
+  //   loadData();
+  // }, []);
 
-  async function loadDados() {
-    await api
-      .get('admin')
-      .then(res => setDataUsers(res.data))
-      .catch(err => console.log('Error'));
-  }
+  // useEffect(() => {
+  //   loadDados();
+  // }, []);
+
+  // async function loadDados() {
+  //   await api
+  //     .get('admin')
+  //     .then(res => setDataUsers(res.data))
+  //     .catch(err => console.log('Error'));
+  // }
 
   async function handleRequestProfile(id) {
     navigation.navigate('RequestProfile', {id});
@@ -77,6 +89,9 @@ export default function Dashboard() {
 
   //   setVisibleInput(false);
   // }
+
+  console.log('DATAUSER => ', adminUser);
+  console.log('LOADING => ', !loadingGet);
 
   return (
     <Container>
@@ -94,27 +109,18 @@ export default function Dashboard() {
         onSubmitEditing={searchList}
       /> */}
       {/* <InputSearch visible={visibleInput} /> */}
-      <Content>
-        <FlatList
-          data={dataUsers}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={item => String(item)}
-          renderItem={({item}) => (
-            <ContentListView onPress={() => handleRequestProfile(item._id)}>
-              <ContetnListImage
-                source={{uri: `http://10.0.2.2:3333/files/${item.file}`}}
-              />
-              <ContentView>
-                <Title> {item.name} </Title>
-                <ContentFooter>
-                  <ContentFooterTextValue>9.6/10</ContentFooterTextValue>
-                  <ContentFooterReviews>365 Reviews</ContentFooterReviews>
-                </ContentFooter>
-              </ContentView>
-            </ContentListView>
-          )}
-        />
-      </Content>
+      {!loadingGet ? (
+        <ActivityIndicator size={50} color="#222" />
+      ) : (
+        <Content>
+          <FlatList
+            data={adminUser}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={item => String(item)}
+            renderItem={({item}) => <Text>{JSON.stringify(item)}</Text>}
+          />
+        </Content>
+      )}
     </Container>
   );
 }
