@@ -36,11 +36,12 @@ export default function Dashboard() {
   const [image, setImage] = useState('');
   const [chaves, setChaves] = useState('');
   const [checked, setChecked] = useState('first');
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
-  const adminUser = useSelector(state => state.admin.adminUser);
-  const loadingGet = useSelector(state => state.admin.loadingGet);
+  // const adminUser = useSelector(state => state.admin.adminUser);
+  // const loadingGet = useSelector(state => state.admin.loadingGet);
 
   const [dataSearch, setDataSearch] = useState([]);
 
@@ -48,9 +49,9 @@ export default function Dashboard() {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    dispatch(getAdminRequest());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getAdminRequest());
+  // }, [dispatch]);
 
   // useEffect(() => {
   //   async function loadData() {
@@ -64,16 +65,21 @@ export default function Dashboard() {
   //   loadData();
   // }, []);
 
-  // useEffect(() => {
-  //   loadDados();
-  // }, []);
+  useEffect(() => {
+    loadDados();
+  }, []);
 
-  // async function loadDados() {
-  //   await api
-  //     .get('admin')
-  //     .then(res => setDataUsers(res.data))
-  //     .catch(err => console.log('Error'));
-  // }
+  async function loadDados() {
+    setLoading(true);
+    await api
+      .get('admin')
+      .then(res => setDataUsers(res.data))
+      .catch(err => console.log('Error'));
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }
 
   async function handleRequestProfile(id) {
     navigation.navigate('RequestProfile', {id});
@@ -90,8 +96,8 @@ export default function Dashboard() {
   //   setVisibleInput(false);
   // }
 
-  console.log('DATAUSER => ', adminUser);
-  console.log('LOADING => ', !loadingGet);
+  // console.log('DATAUSER => ', adminUser.data);
+  // console.log('LOADING => ', !loadingGet);
 
   return (
     <Container>
@@ -109,15 +115,32 @@ export default function Dashboard() {
         onSubmitEditing={searchList}
       /> */}
       {/* <InputSearch visible={visibleInput} /> */}
-      {!loadingGet ? (
+      {loading ? (
         <ActivityIndicator size={50} color="#222" />
       ) : (
         <Content>
           <FlatList
-            data={adminUser}
+            data={dataUsers}
             showsVerticalScrollIndicator={false}
             keyExtractor={item => String(item)}
-            renderItem={({item}) => <Text>{JSON.stringify(item)}</Text>}
+            renderItem={({item}) => (
+              <ContentListView onPress={() => handleRequestProfile(item._id)}>
+                <ContetnListImage
+                  source={{
+                    uri: `https://upload-freela.herokuapp.com/admin/${
+                      item.file
+                    }`,
+                  }}
+                />
+                <ContentView>
+                  <Title> {item.name} </Title>
+                  <ContentFooter>
+                    <ContentFooterTextValue>9.6/10</ContentFooterTextValue>
+                    <ContentFooterReviews>365 Reviews</ContentFooterReviews>
+                  </ContentFooter>
+                </ContentView>
+              </ContentListView>
+            )}
           />
         </Content>
       )}

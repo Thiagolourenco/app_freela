@@ -162,7 +162,7 @@ export default function Login({navigation}) {
     <Container>
       <TextInit>Welcome Message</TextInit>
       <ImageView source={logotipo} />
-      <ButtonSignIn onPress={handleNavigate}>
+      <ButtonSignIn onPress={loginNavigate}>
         {loading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
