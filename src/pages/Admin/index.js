@@ -12,6 +12,10 @@ import ImagePicker from 'react-native-image-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MultiSelect from 'react-native-multiple-select';
+import SearchableDropdown from 'react-native-searchable-dropdown';
+import {RectButton} from 'react-native-gesture-handler';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 // Firebase API
 import api from '../../services/api';
@@ -45,6 +49,8 @@ import {
 // window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 // window.Blob = RNFetchBlob.polyfill.Blob;
 
+Icon.loadFont();
+
 export default function Admin() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -61,7 +67,145 @@ export default function Admin() {
   // select
   const [country, setCountry] = useState('');
   const [sports, setSports] = useState('');
-  const [example, setExample] = useState([]);
+  const [selectMulti, setSelectMulti] = useState([]);
+  const items = [
+    // this is the parent or 'item'
+    {
+      name: 'Sports',
+      id: 0,
+      // these are the children or 'sub items'
+      children: [
+        {
+          name: 'Fútbol',
+          id: 10,
+        },
+        {
+          name: 'Baloncesto',
+          id: 17,
+        },
+        {
+          name: 'Tenis',
+          id: 13,
+        },
+        {
+          name: 'Balonmano',
+          id: 14,
+        },
+        {
+          name: 'Fútbol americano',
+          id: 15,
+        },
+        {
+          name: 'Rugby',
+          id: 16,
+        },
+
+        {
+          name: 'Fútbol sala',
+          id: 16,
+        },
+
+        {
+          name: 'Boxeo',
+          id: 16,
+        },
+
+        {
+          name: 'UFC',
+          id: 16,
+        },
+
+        {
+          name: 'Béisbol',
+          id: 16,
+        },
+
+        {
+          name: 'Hockey',
+          id: 16,
+        },
+
+        {
+          name: 'Golf',
+          id: 16,
+        },
+
+        {
+          name: 'Caballos',
+          id: 16,
+        },
+
+        {
+          name: 'Ciclismo',
+          id: 16,
+        },
+
+        {
+          name: 'Motor',
+          id: 16,
+        },
+
+        {
+          name: 'Dardos',
+          id: 16,
+        },
+
+        {
+          name: 'Voleibol',
+          id: 16,
+        },
+
+        {
+          name: 'Waterpolo',
+          id: 16,
+        },
+
+        {
+          name: 'eSports',
+          id: 16,
+        },
+      ],
+    },
+  ];
+
+  const itemsss = [
+    {
+      id: 'Ondo',
+      name: 'Ondo',
+    },
+    {
+      id: 'Ogun',
+      name: 'Ogun',
+    },
+    {
+      id: 'Calabar',
+      name: 'Calabar',
+    },
+    {
+      id: 'Lagos',
+      name: 'Lagos',
+    },
+    {
+      id: 'Maiduguri',
+      name: 'Maiduguri',
+    },
+    {
+      id: 'Anambra',
+      name: 'Anambra',
+    },
+    {
+      id: 'Benue',
+      name: 'Benue',
+    },
+    {
+      id: 'Kaduna',
+      name: 'Kaduna',
+    },
+    {
+      id: 'Abuja',
+      name: 'Abuja',
+    },
+  ];
 
   const navigation = useNavigation();
 
@@ -135,6 +279,28 @@ export default function Admin() {
     navigation.openDrawer();
   }
 
+  function onSelectedItemsChange(selectItems) {
+    // console.log('SELECT ITEMS => ', selectItems);
+    setSelectMulti(selectItems);
+  }
+
+  function removeArrayIndex(id) {
+    // const novo = selectMulti.slice(id);
+    // // const arrayIndex = items.indexOf(id);
+    // console.log('NOVE => ', novo);
+    // console.log('ID => ', id);
+    const itemsSelect = selectMulti.filter(sitem => sitem !== id);
+    
+    setSelectMulti(itemsSelect)
+    // this.setState({ selectedItems: items });
+    // setSelectMulti(items);
+    // if (arrayIndex > -1) {
+    //   items.slice(arrayIndex, 1);
+    //   console.log('Oj');
+    // }
+  }
+
+  // console.log('ID => ', selectMulti);
   return (
     <Container>
       {/* <Header
@@ -209,7 +375,7 @@ export default function Admin() {
           useNativeAndroidPickerStyle={false}
         />
 
-        <RNPickerSelect
+        {/* <RNPickerSelect
           style={pickerSelectStyles}
           onValueChange={value => setSports(value)}
           items={[
@@ -239,8 +405,129 @@ export default function Admin() {
             color: '#000000',
           }}
           useNativeAndroidPickerStyle={false}
+        /> */}
+
+        <MultiSelect
+          hideTags
+          items={itemsss}
+          uniqueKey="id"
+          // ref={(component) => { this.multiSelect = component }}
+          onSelectedItemsChange={onSelectedItemsChange}
+          selectedItems={selectMulti}
+          selectText="Pick Items"
+          searchInputPlaceholderText="Search Items..."
+          onChangeInput={text => console.log(text)}
+          altFontFamily="ProximaNova-Light"
+          tagRemoveIconColor="#222"
+          tagBorderColor="#222"
+          tagTextColor="#2222"
+          selectedItemTextColor="#222"
+          selectedItemIconColor="#222"
+          itemTextColor="#000"
+          displayKey="name"
+          searchInputStyle={{color: '#222'}}
+          submitButtonColor="#222"
+          submitButtonText="Submit"
         />
 
+        <View style={{flexDirection: 'row'}}>
+          {selectMulti.map(item => (
+            <View
+              style={{
+                height: 30,
+                width: 80,
+                borderRadius: 20,
+                backgroundColor: '#eee',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: 10,
+                flexDirection: 'row',
+              }}>
+              <Text style={{fontSize: 10, color: '#222'}}>{item}</Text>
+              <RectButton
+                style={{
+                  height: 15,
+                  width: 15,
+                  backgroundColor: '#e74c3c',
+                  borderRadius: 8,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 10,
+                }}
+                onPress={() => removeArrayIndex(item)}>
+                <Icon name="close" size={10} color="#fff" />
+              </RectButton>
+            </View>
+          ))}
+        </View>
+        {/* <SearchableDropdown
+          multi={true}
+          selectedItems={selectMulti}
+          onItemSelect={item => {
+            const items = selectMulti;
+            items.push(item);
+            setSelectMulti(items);
+            // this.setState({ selectedItems: items });
+          }}
+          containerStyle={{padding: 5}}
+          onRemoveItem={(item, index) => {
+            const items = selectMulti.filter(sitem => sitem.id !== item.id);
+            // this.setState({ selectedItems: items });
+            setSelectMulti(items);
+          }}
+          itemStyle={{
+            padding: 10,
+            marginTop: 2,
+            backgroundColor: '#ddd',
+            borderColor: '#bbb',
+            borderWidth: 1,
+            borderRadius: 5,
+          }}
+          itemTextStyle={{color: '#222'}}
+          itemsContainerStyle={{maxHeight: 140}}
+          items={itemsss}
+          defaultIndex={2}
+          chip={true}
+          resetValue={false}
+          textInputProps={{
+            placeholder: 'placeholder',
+            underlineColorAndroid: 'transparent',
+            style: {
+              padding: 12,
+              borderWidth: 1,
+              borderColor: '#ccc',
+              borderRadius: 5,
+            },
+            onTextChange: text => alert(text),
+          }}
+          listProps={{
+            nestedScrollEnabled: true,
+          }}
+        />
+        <SectionedMultiSelect
+          items={items}
+          uniqueKey="id"
+          subKey="children"
+          selectText="Select Sports"
+          showDropDowns={true}
+          readOnlyHeadings={true}
+          onSelectedItemsChange={onSelectedItemsChange}
+          selectedItems={selectMulti}
+          style={{
+            fontSize: 16,
+            paddingHorizontal: 8,
+            // marginHorizontal: 5,
+            marginTop: 30,
+            paddingVertical: 8,
+            height: 50,
+            borderWidth: 0.5,
+            borderColor: '#ccc',
+            borderRadius: 5,
+            color: '#000',
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            paddingRight: 30,
+          }}
+        /> */}
         <ButtonRegister onPress={handleRegister}>
           {loading ? (
             <ActivityIndicator size={25} color="#fff" />

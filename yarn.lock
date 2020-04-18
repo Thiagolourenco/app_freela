@@ -6522,6 +6522,13 @@ react-native-iphone-x-helper@^1.2.1:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
 
+react-native-multiple-select@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/react-native-multiple-select/-/react-native-multiple-select-0.5.5.tgz#5bafdd3e66a42dbb600da7ebf0bd8a46a0437012"
+  integrity sha512-mkBqv6spOWrq3RBANnwfRHLqGITW99xpNZL07tMW4XXeEtOXSCgvjML+z0RIeOJKUUtbqCZA3cFigS5hSfCENQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-paper@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-3.6.0.tgz#9f8452387bc6e6dae84db90c9c4715af5c7bd142"
@@ -6561,6 +6568,16 @@ react-native-screens@^2.0.0-beta.4:
   integrity sha512-wrbhTSNVcgdNcdby3h4CzrYKAA3bf/86UR2vEUIcp8gydzVxi2FQiopBavIrcwFJ9PvwXrERB5rF0VYUkzHpIw==
   dependencies:
     debounce "^1.2.0"
+
+react-native-searchable-dropdown@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-searchable-dropdown/-/react-native-searchable-dropdown-1.1.1.tgz#73d2cdd71b82af1299b2fe280ce4b7102797e826"
+  integrity sha512-A7vGyOlYGpXyMws71qwVuYwPzr7CXFDZfVFVhm44r3yxbohzpAC8PnoA644S6yUloyj9NauVNDcZTrVlcHVxcw==
+
+react-native-sectioned-multi-select@^0.7.6:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/react-native-sectioned-multi-select/-/react-native-sectioned-multi-select-0.7.6.tgz#d45f067a29b0200a481812b6a255a996adeb3897"
+  integrity sha512-XO4cxYN6s1Dfi28GI3aIruZbNWkS02S7GB99A1biu6BQlZWvvKAnnglhlvhqElkLyIhMMfLCsAf4e5pWBfWOqA==
 
 react-native-stars@^1.1.6:
   version "1.1.6"
