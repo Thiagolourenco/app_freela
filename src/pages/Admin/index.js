@@ -19,6 +19,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 // Firebase API
 import api from '../../services/api';
+import user from '../../assets/user.png';
 
 import {
   imagePickerOptions,
@@ -316,9 +317,16 @@ export default function Admin() {
       </Header>
       <Content>
         {/* <Title>ADD USER</Title> */}
-        <ImageProfile onPress={handleImagePicker}>
-          {image && <ImageView source={image} />}
-        </ImageProfile>
+        {image ? (
+          <ImageProfile onPress={handleImagePicker}>
+            <ImageView source={image} />
+          </ImageProfile>
+        ) : (
+          <ImageProfile onPress={handleImagePicker}>
+            <ImageView source={user} />
+          </ImageProfile>
+        )}
+
         <ContentInput>
           <Input
             placeholder="name of the profile"
@@ -375,66 +383,68 @@ export default function Admin() {
           useNativeAndroidPickerStyle={false}
         />
 
-        <MultiSelect
-          hideTags
-          items={itemsss}
-          uniqueKey="id"
-          // ref={(component) => { this.multiSelect = component }}
-          onSelectedItemsChange={onSelectedItemsChange}
-          selectedItems={selectMulti}
-          selectText="Pick Items"
-          searchInputPlaceholderText="Search Items..."
-          onChangeInput={text => console.log(text)}
-          altFontFamily="ProximaNova-Light"
-          tagRemoveIconColor="#222"
-          tagBorderColor="#222"
-          tagTextColor="#222222"
-          selectedItemTextColor="#222"
-          selectedItemIconColor="#222"
-          itemTextColor="#000"
-          displayKey="name"
-          searchInputStyle={{
-            color: '#222',
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            borderRadius: 5,
-          }}
-          styleInputGroup={{
-            backgroundColor: '#000',
-            borderRadius: 5,
-          }}
-          submitButtonColor="#222"
-          submitButtonText="Submit"
-        />
+        <View style={{marginTop: 30, borderRadius: 5}}>
+          <MultiSelect
+            hideTags
+            items={itemsss}
+            uniqueKey="id"
+            // ref={(component) => { this.multiSelect = component }}
+            onSelectedItemsChange={onSelectedItemsChange}
+            selectedItems={selectMulti}
+            selectText="Pick Items"
+            searchInputPlaceholderText="Search Items..."
+            onChangeInput={text => console.log(text)}
+            altFontFamily="ProximaNova-Light"
+            tagRemoveIconColor="#eee"
+            tagBorderColor="#eee"
+            tagTextColor="#222"
+            selectedItemTextColor="#222"
+            selectedItemIconColor="#222"
+            itemTextColor="#222"
+            displayKey="name"
+            searchInputStyle={{
+              color: '#222',
+              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              borderRadius: 5,
+            }}
+            styleInputGroup={{
+              backgroundColor: '#eee',
+              borderRadius: 5,
+            }}
+            submitButtonColor="#1a9ae2"
+            submitButtonText="Submit"
+          />
 
-        <View style={{flexDirection: 'row', marginTop: 10}}>
-          {selectMulti.map(item => (
-            <View
-              style={{
-                height: 30,
-                width: 80,
-                borderRadius: 20,
-                backgroundColor: '#eee',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: 10,
-                flexDirection: 'row',
-              }}>
-              <Text style={{fontSize: 10, color: '#222'}}>{item}</Text>
-              <RectButton
+          <View style={{flexDirection: 'row', marginTop: 10}}>
+            {selectMulti.map(item => (
+              <View
                 style={{
-                  height: 15,
-                  width: 15,
-                  backgroundColor: '#e74c3c',
-                  borderRadius: 8,
+                  height: 30,
+                  width: 80,
+                  borderRadius: 20,
+                  backgroundColor: '#eee',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginLeft: 10,
-                }}
-                onPress={() => removeArrayIndex(item)}>
-                <Icon name="close" size={10} color="#fff" />
-              </RectButton>
-            </View>
-          ))}
+                  marginRight: 10,
+                  flexDirection: 'row',
+                }}>
+                <Text style={{fontSize: 10, color: '#222'}}>{item}</Text>
+                <RectButton
+                  style={{
+                    height: 15,
+                    width: 15,
+                    backgroundColor: '#e74c3c',
+                    borderRadius: 8,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginLeft: 10,
+                  }}
+                  onPress={() => removeArrayIndex(item)}>
+                  <Icon name="close" size={10} color="#fff" />
+                </RectButton>
+              </View>
+            ))}
+          </View>
         </View>
 
         <ButtonRegister onPress={handleRegister}>
