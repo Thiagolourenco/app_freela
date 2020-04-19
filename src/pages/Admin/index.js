@@ -290,8 +290,8 @@ export default function Admin() {
     // console.log('NOVE => ', novo);
     // console.log('ID => ', id);
     const itemsSelect = selectMulti.filter(sitem => sitem !== id);
-    
-    setSelectMulti(itemsSelect)
+
+    setSelectMulti(itemsSelect);
     // this.setState({ selectedItems: items });
     // setSelectMulti(items);
     // if (arrayIndex > -1) {
@@ -375,38 +375,6 @@ export default function Admin() {
           useNativeAndroidPickerStyle={false}
         />
 
-        {/* <RNPickerSelect
-          style={pickerSelectStyles}
-          onValueChange={value => setSports(value)}
-          items={[
-            {label: 'Fútbol', value: 'Fútbol'},
-            {label: 'Baloncesto', value: 'Baloncesto'},
-            {label: 'Tenis', value: 'Tenis'},
-            {label: 'Balonmano', value: 'Balonmano'},
-            {label: 'Fútbol americano', value: 'Fútbol americano '},
-            {label: 'Rugby', value: 'Rugby'},
-            {label: 'Fútbol sala', value: 'Fútbol sala'},
-            {label: 'Boxeo', value: 'Boxeo'},
-            {label: 'UFC', value: 'UFC'},
-            {label: 'Béisbol', value: 'Béisbol'},
-            {label: 'Hockey', value: 'Hockey'},
-            {label: 'Golf', value: 'Golf'},
-            {label: 'Caballos', value: 'Caballos'},
-            {label: 'Ciclismo', value: 'Ciclismo'},
-            {label: 'Motor', value: 'Motor'},
-            {label: 'Dardos', value: 'Dardos'},
-            {label: 'Voleibol', value: 'Voleibol'},
-            {label: 'Waterpolo', value: 'Waterpolo'},
-            {label: 'eSports', value: 'eSports'},
-          ]}
-          placeholder={{
-            label: 'Select Sports',
-            value: null,
-            color: '#000000',
-          }}
-          useNativeAndroidPickerStyle={false}
-        /> */}
-
         <MultiSelect
           hideTags
           items={itemsss}
@@ -420,17 +388,25 @@ export default function Admin() {
           altFontFamily="ProximaNova-Light"
           tagRemoveIconColor="#222"
           tagBorderColor="#222"
-          tagTextColor="#2222"
+          tagTextColor="#222222"
           selectedItemTextColor="#222"
           selectedItemIconColor="#222"
           itemTextColor="#000"
           displayKey="name"
-          searchInputStyle={{color: '#222'}}
+          searchInputStyle={{
+            color: '#222',
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            borderRadius: 5,
+          }}
+          styleInputGroup={{
+            backgroundColor: '#000',
+            borderRadius: 5,
+          }}
           submitButtonColor="#222"
           submitButtonText="Submit"
         />
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginTop: 10}}>
           {selectMulti.map(item => (
             <View
               style={{
@@ -460,74 +436,7 @@ export default function Admin() {
             </View>
           ))}
         </View>
-        {/* <SearchableDropdown
-          multi={true}
-          selectedItems={selectMulti}
-          onItemSelect={item => {
-            const items = selectMulti;
-            items.push(item);
-            setSelectMulti(items);
-            // this.setState({ selectedItems: items });
-          }}
-          containerStyle={{padding: 5}}
-          onRemoveItem={(item, index) => {
-            const items = selectMulti.filter(sitem => sitem.id !== item.id);
-            // this.setState({ selectedItems: items });
-            setSelectMulti(items);
-          }}
-          itemStyle={{
-            padding: 10,
-            marginTop: 2,
-            backgroundColor: '#ddd',
-            borderColor: '#bbb',
-            borderWidth: 1,
-            borderRadius: 5,
-          }}
-          itemTextStyle={{color: '#222'}}
-          itemsContainerStyle={{maxHeight: 140}}
-          items={itemsss}
-          defaultIndex={2}
-          chip={true}
-          resetValue={false}
-          textInputProps={{
-            placeholder: 'placeholder',
-            underlineColorAndroid: 'transparent',
-            style: {
-              padding: 12,
-              borderWidth: 1,
-              borderColor: '#ccc',
-              borderRadius: 5,
-            },
-            onTextChange: text => alert(text),
-          }}
-          listProps={{
-            nestedScrollEnabled: true,
-          }}
-        />
-        <SectionedMultiSelect
-          items={items}
-          uniqueKey="id"
-          subKey="children"
-          selectText="Select Sports"
-          showDropDowns={true}
-          readOnlyHeadings={true}
-          onSelectedItemsChange={onSelectedItemsChange}
-          selectedItems={selectMulti}
-          style={{
-            fontSize: 16,
-            paddingHorizontal: 8,
-            // marginHorizontal: 5,
-            marginTop: 30,
-            paddingVertical: 8,
-            height: 50,
-            borderWidth: 0.5,
-            borderColor: '#ccc',
-            borderRadius: 5,
-            color: '#000',
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            paddingRight: 30,
-          }}
-        /> */}
+
         <ButtonRegister onPress={handleRegister}>
           {loading ? (
             <ActivityIndicator size={25} color="#fff" />

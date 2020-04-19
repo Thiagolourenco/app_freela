@@ -99,6 +99,7 @@ export const ButtonContentRNPicker = styled(RNPickerSelect)`
   width: 100%;
   flex: 1;
   border-radius: 5px;
+  margin-bottom: 20px;
 `;
 
 export const ButtonArrowLeft = styled(RectButton)``;

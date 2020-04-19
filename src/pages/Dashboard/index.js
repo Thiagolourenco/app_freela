@@ -4,6 +4,8 @@ import {FlatList, Text, AsyncStorage, ActivityIndicator} from 'react-native';
 import {RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import Stars from 'react-native-stars';
+import Iconss from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ModalRadio from '../../components/ModalRadio';
 
@@ -138,6 +140,33 @@ export default function Dashboard() {
                     <ContentFooterTextValue>9.6/10</ContentFooterTextValue>
                     <ContentFooterReviews>365 Reviews</ContentFooterReviews>
                   </ContentFooter>
+
+                  <Stars
+                    default={5}
+                    count={5}
+                    half={true}
+                    // update={val => setRating(val)}
+                    // starSize={50}
+                    fullStar={
+                      <Iconss name={'star'} size={35} color="#D3CD38" />
+                    }
+                    emptyStar={
+                      <Iconss
+                        name={'star-outline'}
+                        size={35}
+                        color="#D3CD38"
+                        // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
+                      />
+                    }
+                    halfStar={
+                      <Iconss
+                        name={'star-half'}
+                        color="#D3CD38"
+                        size={35}
+                        // style={[styles.myStarStyle]}
+                      />
+                    }
+                  />
                 </ContentView>
               </ContentListView>
             )}
