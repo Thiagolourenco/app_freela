@@ -22,6 +22,7 @@ import {
   ContentFooterReviews,
   InputSearch,
 } from './styles';
+import user from '../../assets/user.png';
 
 import api from '../../services/api';
 import Header from '../../components/Header';
@@ -127,13 +128,24 @@ export default function Dashboard() {
             keyExtractor={item => String(item)}
             renderItem={({item}) => (
               <ContentListView onPress={() => handleRequestProfile(item._id)}>
-                <ContetnListImage
+                {item.file === '' ? (
+                  <ContetnListImage source={user} />
+                ) : (
+                  <ContetnListImage
+                    source={{
+                      uri: `https://upload-freela.herokuapp.com/admin/${
+                        item.file
+                      }`,
+                    }}
+                  />
+                )}
+                {/* <ContetnListImage
                   source={{
                     uri: `https://upload-freela.herokuapp.com/admin/${
                       item.file
                     }`,
                   }}
-                />
+                /> */}
                 <ContentView>
                   <Title> {item.name} </Title>
                   <ContentFooter>

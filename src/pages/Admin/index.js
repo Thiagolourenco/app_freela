@@ -69,142 +69,96 @@ export default function Admin() {
   const [country, setCountry] = useState('');
   const [sports, setSports] = useState('');
   const [selectMulti, setSelectMulti] = useState([]);
-  const items = [
-    // this is the parent or 'item'
-    {
-      name: 'Sports',
-      id: 0,
-      // these are the children or 'sub items'
-      children: [
-        {
-          name: 'Fútbol',
-          id: 10,
-        },
-        {
-          name: 'Baloncesto',
-          id: 17,
-        },
-        {
-          name: 'Tenis',
-          id: 13,
-        },
-        {
-          name: 'Balonmano',
-          id: 14,
-        },
-        {
-          name: 'Fútbol americano',
-          id: 15,
-        },
-        {
-          name: 'Rugby',
-          id: 16,
-        },
-
-        {
-          name: 'Fútbol sala',
-          id: 16,
-        },
-
-        {
-          name: 'Boxeo',
-          id: 16,
-        },
-
-        {
-          name: 'UFC',
-          id: 16,
-        },
-
-        {
-          name: 'Béisbol',
-          id: 16,
-        },
-
-        {
-          name: 'Hockey',
-          id: 16,
-        },
-
-        {
-          name: 'Golf',
-          id: 16,
-        },
-
-        {
-          name: 'Caballos',
-          id: 16,
-        },
-
-        {
-          name: 'Ciclismo',
-          id: 16,
-        },
-
-        {
-          name: 'Motor',
-          id: 16,
-        },
-
-        {
-          name: 'Dardos',
-          id: 16,
-        },
-
-        {
-          name: 'Voleibol',
-          id: 16,
-        },
-
-        {
-          name: 'Waterpolo',
-          id: 16,
-        },
-
-        {
-          name: 'eSports',
-          id: 16,
-        },
-      ],
-    },
-  ];
 
   const itemsss = [
     {
-      id: 'Ondo',
-      name: 'Ondo',
+      name: 'Fútbol',
+      id: 'Fútbol',
     },
     {
-      id: 'Ogun',
-      name: 'Ogun',
+      name: 'Baloncesto',
+      id: 'Baloncesto',
     },
     {
-      id: 'Calabar',
-      name: 'Calabar',
+      name: 'Tenis',
+      id: 'Tenis',
     },
     {
-      id: 'Lagos',
-      name: 'Lagos',
+      name: 'Balonmano',
+      id: 'Balonmano',
     },
     {
-      id: 'Maiduguri',
-      name: 'Maiduguri',
+      name: 'Fútbol americano',
+      id: 'Fútbol americano',
     },
     {
-      id: 'Anambra',
-      name: 'Anambra',
+      name: 'Rugby',
+      id: 'Rugby',
     },
+
     {
-      id: 'Benue',
-      name: 'Benue',
+      name: 'Fútbol sala',
+      id: 'Fútbol sala',
     },
+
     {
-      id: 'Kaduna',
-      name: 'Kaduna',
+      name: 'Boxeo',
+      id: 'Boxeo',
     },
+
     {
-      id: 'Abuja',
-      name: 'Abuja',
+      name: 'UFC',
+      id: 'UFC',
+    },
+
+    {
+      name: 'Béisbol',
+      id: 'Béisbol',
+    },
+
+    {
+      name: 'Hockey',
+      id: 'Hockey',
+    },
+
+    {
+      name: 'Golf',
+      id: 'Golf',
+    },
+
+    {
+      name: 'Caballos',
+      id: 'Caballos',
+    },
+
+    {
+      name: 'Ciclismo',
+      id: 'Ciclismo',
+    },
+
+    {
+      name: 'Motor',
+      id: 'Motor',
+    },
+
+    {
+      name: 'Dardos',
+      id: 'Dardos',
+    },
+
+    {
+      name: 'Voleibol',
+      id: 'Voleibol',
+    },
+
+    {
+      name: 'Waterpolo',
+      id: 'Waterpolo',
+    },
+
+    {
+      name: 'eSports',
+      id: 'eSports',
     },
   ];
 
