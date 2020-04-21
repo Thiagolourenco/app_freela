@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useMemo} from 'react';
-import {FlatList, Text, Modal} from 'react-native';
+import {
+  FlatList,
+  Text,
+  Modal,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 // import CircleCheckBox from "react-native-circle-checkbox";
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -112,7 +119,7 @@ export default function RequestProfile() {
   // const socket = useMemo(() =>
 
   function handleGoBack() {
-    navigation.goBack();
+    navigation.navigate('Dashboard');
   }
 
   function handleInfoModal() {
@@ -150,24 +157,28 @@ export default function RequestProfile() {
     //   .then(res => console.log('OK'))
     //   .catch(err => console.log('error', err));
   }
- 
-  console.log("FILE => ", file);
+
+  console.log('FILE => ', file);
 
   return (
     <Container>
       {/* <Header navigation={navigation} title="Request Profile" /> */}
 
-      <Header>
+      {/* <Header>
         <ButtonArrowLeft onPress={handleGoBack}>
           <Icon name="arrow-back" size={30} color="#fff" />
         </ButtonArrowLeft>
-      </Header>
+      </Header> */}
       <Content>
         <HeaderView>
+          <ButtonArrowLeft onPress={handleGoBack}>
+            <Icon name="arrow-back" size={30} color="#222" />
+          </ButtonArrowLeft>
           <Title>{name}</Title>
           <Icons
             name="more-vert"
             size={30}
+            style={{marginRight: 10}}
             color="#000"
             onPress={handleInfoModal}
           />
@@ -214,7 +225,7 @@ export default function RequestProfile() {
         />
         <ContentFooter>
           <ValueNote>9.6/10</ValueNote>
-          <ReviewsText>5.425 reviews</ReviewsText>
+          <ReviewsText>650 valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Text>asd</Text>
           </RectButton>
@@ -223,50 +234,76 @@ export default function RequestProfile() {
           data={dataComment}
           keyExtractor={item => String(item)}
           renderItem={({item}) => (
-            <ListProfile key={item._id}>
-              <ListProfileImage source={{uri: item.photoUrl}} />
-              <ListProfileView>
-                <ViewList>
-                  <ListProfileStar>
-                    <Stars
-                      default={item.stars}
-                      count={5}
-                      half={true}
-                      // update={val => setRating(val)}
-                      // starSize={50}
-                      fullStar={
-                        <Iconss name={'star'} size={35} color="#D3CD38" />
-                      }
-                      emptyStar={
-                        <Iconss
-                          name={'star-outline'}
-                          size={35}
-                          color="#D3CD38"
-                          // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
-                        />
-                      }
-                      halfStar={
-                        <Iconss
-                          name={'star-half'}
-                          color="#D3CD38"
-                          size={35}
-                          // style={[styles.myStarStyle]}
-                        />
-                      }
-                    />
-                  </ListProfileStar>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignSelf: 'center',
+                // width: '100%',
+                marginTop: 30,
+                marginLeft: 20,
+                height: 80,
+                width: '80%',
+              }}>
+              <Image
+                style={{
+                  height: 30,
+                  width: 30,
+                  backgroundColor: '#ccc',
+                  borderRadius: 15,
+                  margin: 5,
+                }}
+                source={{uri: item.photoUrl}}
+              />
+              <View style={{flexDirection: 'column', marginLeft: 10}}>
+                <Text style={{fontSize: 11, fontWeight: '600'}}>
+                  {item.name}
+                </Text>
 
-                  <ListProfileName> {item.name} </ListProfileName>
-                  <ListProfileComent> {item.comment}</ListProfileComent>
-                </ViewList>
-                <LikeView>
-                  <RectButton onPress={() => handleLikeComments(item._id)}>
-                    <Icon name="thumb-up" size={25} color="#ccc" />
-                    <LikesText>{item.likes}</LikesText>
-                  </RectButton>
-                </LikeView>
-              </ListProfileView>
-            </ListProfile>
+                <Stars
+                  default={item.stars}
+                  count={5}
+                  half={true}
+                  // update={val => setRating(val)}
+                  // starSize={50}
+                  fullStar={<Iconss name={'star'} size={20} color="#ffd203" />}
+                  emptyStar={
+                    <Iconss
+                      name={'star-outline'}
+                      size={20}
+                      color=" #ffd203"
+                      // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
+                    />
+                  }
+                  halfStar={
+                    <Iconss
+                      name={'star-half'}
+                      color="#ffd203"
+                      size={20}
+                      // style={[styles.myStarStyle]}
+                    />
+                  }
+                />
+
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: '#222',
+                    fontWeight: '600',
+                    width: '80%',
+                  }}
+                  numberOfLines={10}>
+                  {item.comment}
+                </Text>
+              </View>
+              <View style={{left: '140%'}}>
+                <TouchableOpacity
+                  onPress={() => handleLikeComments(item._id)}
+                  style={{alignSelf: 'flex-end'}}>
+                  <Icon name="thumb-up" size={20} color="#ccc" />
+                  <LikesText>{item.likes}</LikesText>
+                </TouchableOpacity>
+              </View>
+            </View>
           )}
         />
       </Content>

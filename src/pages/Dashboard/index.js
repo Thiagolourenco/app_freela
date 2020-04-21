@@ -69,8 +69,11 @@ export default function Dashboard() {
   // }, []);
 
   useEffect(() => {
-    loadDados();
-  }, []);
+    navigation.addListener('focus', () => {
+      loadDados();
+    });
+    // loadDados();
+  }, [navigation]);
 
   async function loadDados() {
     setLoading(true);
@@ -154,7 +157,7 @@ export default function Dashboard() {
                   </ContentFooter>
 
                   <Stars
-                    default={5}
+                    default={item.stars}
                     count={5}
                     half={true}
                     // update={val => setRating(val)}

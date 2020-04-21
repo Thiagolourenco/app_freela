@@ -9,7 +9,7 @@ export const Container = styled.SafeAreaView`
 
 export const Content = styled.View`
   flex: 1;
-  background: #f1f1f1;
+  background: #fff;
   margin: 5px 20px;
   border-radius: 5px;
 `;
@@ -19,7 +19,9 @@ export const Title = styled.Text`
   color: #000;
   font-weight: bold;
   text-align: center;
-  margin-left: 110px;
+  align-self: center;
+  margin-left: 15%;
+  /* margin-left: 110px; */
 `;
 
 export const ContetnListImage = styled.Image`
@@ -78,6 +80,7 @@ export const ListProfileStar = styled.View`
 export const ListProfileView = styled.View`
   margin-left: 10px;
   flex-direction: row;
+  /* width: 100%; */
 `;
 
 export const ListProfileName = styled.Text`
@@ -103,12 +106,13 @@ export const LikeView = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  align-self: flex-end;
   margin-top: 10px;
 `;
 
 export const HeaderView = styled.View`
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
   margin-top: 20px;
 `;
 
@@ -119,7 +123,9 @@ export const Header = styled.SafeAreaView`
   /* margin: 0px; */
 `;
 
-export const ButtonArrowLeft = styled(RectButton)``;
+export const ButtonArrowLeft = styled(RectButton)`
+  margin-left: 20px;
+`;
 
 export const ButtonInfo = styled(RectButton)`
   margin: 5px;

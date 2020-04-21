@@ -16,6 +16,7 @@ import MultiSelect from 'react-native-multiple-select';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import {RectButton} from 'react-native-gesture-handler';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import {showMessage} from 'react-native-flash-message';
 
 // Firebase API
 import api from '../../services/api';
@@ -224,6 +225,12 @@ export default function Admin() {
       setTimeout(() => {
         setLoading(false);
         navigation.navigate('Dashboard');
+
+        showMessage({
+          message: 'user successfully added',
+          type: 'success',
+        });
+        
       }, 3000);
     } catch (err) {
       console.log('EXCEPTION => ', err);

@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
+import FlashMessage from 'react-native-flash-message';
 
 import './src/config/ReactotronConfig';
 
@@ -17,6 +18,7 @@ export default function App() {
       <NavigationContainer>
         <PersistGate persistor={persistor}>
           <Index />
+          <FlashMessage position="top" floating={true} />
         </PersistGate>
       </NavigationContainer>
     </Provider>
