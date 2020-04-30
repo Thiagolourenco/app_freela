@@ -40,6 +40,7 @@ export default function Dashboard() {
   const [chaves, setChaves] = useState('');
   const [checked, setChecked] = useState('first');
   const [loading, setLoading] = useState(false);
+  const [dataComment, setDataComment] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -91,6 +92,22 @@ export default function Dashboard() {
     navigation.navigate('RequestProfile', {id});
   }
 
+  useEffect(() => {
+    async function loadComment() {
+      dataUsers.map(
+        async item =>
+          await api
+            .get(`comments/${item._id}`)
+            .then(response => setDataComment(response.data))
+            .catch(err => console.log('err', err)),
+      );
+      // const response = await api.get(`comments/${id}`);
+      // setDataComment(response.data);
+    }
+
+    loadComment();
+  }, [dataUsers]);
+
   // async function searchList() {
   //   // const response = await api.get(`admin/${name}`);
   //   await api
@@ -104,7 +121,6 @@ export default function Dashboard() {
 
   // console.log('DATAUSER => ', adminUser.data);
   // console.log('LOADING => ', !loadingGet);
-
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -153,22 +169,25 @@ export default function Dashboard() {
                   <Title> {item.name} </Title>
                   <ContentFooter>
                     <ContentFooterTextValue>9.6/10</ContentFooterTextValue>
-                    <ContentFooterReviews>365 Reviews</ContentFooterReviews>
+                    <ContentFooterReviews>
+                      {dataComment.length} valoraciones
+                    </ContentFooterReviews>
                   </ContentFooter>
 
                   <Stars
                     default={item.stars}
                     count={5}
                     half={true}
+                    disabled={true}
                     // update={val => setRating(val)}
                     // starSize={50}
                     fullStar={
-                      <Iconss name={'star'} size={35} color="#D3CD38" />
+                      <Iconss name={'star'} size={30} color="#D3CD38" />
                     }
                     emptyStar={
                       <Iconss
                         name={'star-outline'}
-                        size={35}
+                        size={30}
                         color="#D3CD38"
                         // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
                       />
@@ -177,7 +196,7 @@ export default function Dashboard() {
                       <Iconss
                         name={'star-half'}
                         color="#D3CD38"
-                        size={35}
+                        size={30}
                         // style={[styles.myStarStyle]}
                       />
                     }

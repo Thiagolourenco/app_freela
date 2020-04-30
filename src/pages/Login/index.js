@@ -137,6 +137,7 @@ export default function Login({navigation}) {
           setUserLoading(true);
           setIdToken(res.idToken);
 
+          console.log('RES =< ', res);
           navigation.navigate('DashboardDrawer');
         })
         .catch(err => console.log(err));
@@ -155,7 +156,7 @@ export default function Login({navigation}) {
   }
 
   function loginNavigate() {
-    navigation.navigate('DashboardDrawer');
+    navigation.navigate('DashboardTe');
   }
 
   return (

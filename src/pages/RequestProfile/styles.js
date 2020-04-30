@@ -183,3 +183,11 @@ export const Icons = styled(Icon)`
   align-self: flex-start;
   margin-left: 40px;
 `;
+
+export const ContainerModalCommet = styled.View`
+  margin-top: 280px;
+  width: 270px;
+  height: 200px;
+  align-self: center;
+  background: #ddd;
+`;

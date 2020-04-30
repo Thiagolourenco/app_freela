@@ -21,64 +21,41 @@ import Admin from '../pages/Admin';
 import Logout from '../pages/Logout';
 // Custom Drawer
 import CustomDrawerNavigator from '../components/CustomDrawerNavigator';
+import CustomDrawer from './CustomDrawer';
+import Screens from './Stack';
 
 const Drawer = createDrawerNavigator();
 
 // Variaveis de Navegação
 const Stack = createStackNavigator();
 
-enableScreens();
+// enableScreens();
 
 export default function Routes() {
   return (
-    <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        headerShown: false,
-        headerTintColor: 'white',
-        headerStyle: {backgroundColor: 'tomato'},
-      }}>
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="DashboardDrawer">
-        {() => (
-          <Drawer.Navigator
-            initialRouteName="Home"
-            drawerContent={CustomDrawerNavigator}>
-            <Drawer.Screen
-              name="Dashboard"
-              component={Dashboard}
-              options={{
-                drawerIcon: () => <Icon name="home" size={30} color="#000" />,
-              }}
-            />
-            <Drawer.Screen
-              name="Contact"
-              component={Contact}
-              options={{drawerIcon: () => <Icon name="send" size={30} />}}
-              color="#000"
-            />
-            <Drawer.Screen
-              name="Admin"
-              component={Admin}
-              options={{
-                drawerIcon: () => (
-                  <Icon name="assignment-ind" size={30} color="#000" />
-                ),
-              }}
-            />
-            <Drawer.Screen
-              name="Logout"
-              component={Logout}
-              options={{
-                drawerIcon: () => <Icon name="input" size={30} color="#000" />,
-              }}
-            />
-            {/* <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
-          </Drawer.Navigator>
-        )}
-      </Stack.Screen>
-      <Stack.Screen name="RequestProfile" component={RequestProfile} />
-      <Stack.Screen name="ReviewsStar" component={ReviewsStar} />
-    </Stack.Navigator>
+    // <Stack.Navigator
+    //   initialRouteName="Screens"
+    //   screenOptions={{
+    //     headerShown: false,
+    //     headerTintColor: 'white',
+    //     headerStyle: {backgroundColor: 'tomato'},
+    //   }}>
+    //   <Stack.Screen name="Login" component={Login} />
+    //   <Stack.Screen name="DashboardTe">
+    //     {() => (
+    <Drawer.Navigator drawerContent={CustomDrawer}>
+      <Drawer.Screen name="Screens">
+        {props => <Screens {...props} />}
+      </Drawer.Screen>
+      {/* <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
+    </Drawer.Navigator>
   );
 }
+
+// )}
+// </Stack.Screen>
+{
+  /* <Stack.Screen name="RequestProfile" component={RequestProfile} />
+      <Stack.Screen name="ReviewsStar" component={ReviewsStar} /> */
+}
+// </Stack.Navigator>

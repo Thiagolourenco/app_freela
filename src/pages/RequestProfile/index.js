@@ -12,9 +12,10 @@ import {RectButton} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import socketio from 'socket.io-client';
 import {useRoute, useNavigation} from '@react-navigation/native';
+import Iconss from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import api from '../../services/api';
 import Stars from 'react-native-stars';
-import Iconss from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
   Container,
@@ -47,9 +48,12 @@ import {
   ButtonText,
   ButtonCheckCircle,
   CircleCheck,
+  ContainerModalCommet,
 } from './styles';
 
 import ModalFilterProfile from '../../components/ModalFileProfile';
+import RadioButton from '../../components/RadioButton';
+// import
 // // import Header from "../;../components/Header";
 // import ModalFilterProfile from "../../components/ModalFilterProfile";
 // import ModalFilterProfileComment from "../../components/ModalFilterProfileComment";
@@ -195,6 +199,82 @@ export default function RequestProfile() {
               <ButtonInfoText>Ir al canal</ButtonInfoText>
             </ButtonInfo>
           </ModalFilterProfile>
+          <Modal visible={true} transparent={true}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                width: '80%',
+                height: 200,
+                marginTop: 200,
+                backgroundColor: '#ccc',
+              }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: '#000',
+                  fontWeight: '600',
+                  marginBottom: 20,
+                  marginLeft: 10,
+                  alignSelf: 'flex-start',
+                }}>
+                Ordenar reseñas por
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  width: 150,
+                  justifyContent: 'center',
+                }}>
+                <RadioButton checked={true} onPress={() => {}} />
+                <Text>Más relevantes</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  width: 150,
+                }}>
+                <RadioButton checked={true} onPress={() => {}} />
+                <Text>Más recientes</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                  width: 150,
+                }}>
+                <RadioButton checked={true} onPress={() => {}} />
+                <Text>Valoraciones positivas</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginTop: 15,
+                  alignSelf: 'flex-end',
+                }}>
+                <TouchableOpacity>
+                  <Text
+                    style={{fontSize: 16, color: '#4834d4', marginRight: 15}}>
+                    CANCELAR
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text
+                    style={{fontSize: 16, color: '#4834d4', marginRight: 20}}>
+                    APLICAR
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </HeaderView>
         <ContetnListImage
           source={{uri: `https://upload-freela.herokuapp.com/files/${file}`}}
@@ -225,7 +305,7 @@ export default function RequestProfile() {
         />
         <ContentFooter>
           <ValueNote>9.6/10</ValueNote>
-          <ReviewsText>650 valoraciones</ReviewsText>
+          <ReviewsText>{dataComment.length} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Text>asd</Text>
           </RectButton>
