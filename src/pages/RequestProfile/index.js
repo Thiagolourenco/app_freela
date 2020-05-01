@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import {
   FlatList,
   Text,
@@ -6,6 +6,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 // import CircleCheckBox from "react-native-circle-checkbox";
@@ -71,7 +72,11 @@ export default function RequestProfile() {
   const [dataProfile, setDataProfile] = useState([]);
   const [name, setName] = useState('');
   const [likes, setLikes] = useState(0);
+  const [link, setLink] = useState('');
+  const [imageProfile, setImageProfie] = useState('');
+
   const [file, setFile] = useState('');
+  const [visibleOrdernar, setVisibleOrdernar] = useState(false);
 
   const [dataComment, setDataComment] = useState([]);
 
@@ -100,6 +105,8 @@ export default function RequestProfile() {
 
       setName(response.data.name);
       setFile(response.data.file);
+      setLink(response.data.link);
+      setImageProfie(response.data.urls);
 
       console.log('NAME => ', response.data.file);
     }
@@ -135,11 +142,11 @@ export default function RequestProfile() {
   }
 
   function handleFilter() {
-    setVisibleRele(true);
+    setVisibleOrdernar(true);
   }
   //
   function closeModalFilter() {
-    setVisibleRele(false);
+    setVisibleOrdernar(false);
   }
 
   function handleNavigateReviewStar() {
@@ -155,14 +162,30 @@ export default function RequestProfile() {
       .post(`comments/${id}/like`, {name, photoUrl, comment, likes, stars})
       .then(res => console.log('OK'))
       .catch(err => console.log('ERRO => ', err));
-    console.log('DATA COMMENT => ', dataComment);
-    // await api
-    //   .post(`comments/${id}/like`, { })
-    //   .then(res => console.log('OK'))
-    //   .catch(err => console.log('error', err));
   }
 
-  console.log('FILE => ', file);
+  async function handleLink() {
+    await Linking.openURL(link);
+    handleCloseModal();
+  }
+  // const OpenURLButton = ({ url, children }) => {
+  //   const handlePress = useCallback(async () => {
+  //     // Checking if the link is supported for links with custom URL scheme.
+  //     const supported = await Linking.canOpenURL(url);
+
+  //     if (supported) {
+  //       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+  //       // by some browser in the mobile
+  //       await Linking.openURL(url);
+  //     } else {
+  //       alert(`Don't know how to open this URL: ${url}`);
+  //     }
+  //   }, [url]);
+
+  //   return <ButtonInfo onPress={onPress}>
+  //   <ButtonInfoText>Ir al canal</ButtonInfoText>
+  // </ButtonInfo>
+  // };
 
   return (
     <Container>
@@ -195,11 +218,11 @@ export default function RequestProfile() {
                 Dar valoración
               </ButtonInfoText>
             </ButtonInfo>
-            <ButtonInfo onPress={handleCloseModal}>
+            <ButtonInfo onPress={handleLink}>
               <ButtonInfoText>Ir al canal</ButtonInfoText>
             </ButtonInfo>
           </ModalFilterProfile>
-          <Modal visible={true} transparent={true}>
+          <Modal visible={visibleOrdernar} transparent={true}>
             <View
               style={{
                 justifyContent: 'center',
@@ -260,7 +283,7 @@ export default function RequestProfile() {
                   marginTop: 15,
                   alignSelf: 'flex-end',
                 }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={closeModalFilter}>
                   <Text
                     style={{fontSize: 16, color: '#4834d4', marginRight: 15}}>
                     CANCELAR
@@ -276,9 +299,7 @@ export default function RequestProfile() {
             </View>
           </Modal>
         </HeaderView>
-        <ContetnListImage
-          source={{uri: `https://upload-freela.herokuapp.com/files/${file}`}}
-        />
+        <ContetnListImage source={{uri: imageProfile}} />
         <Stars
           default={5}
           count={5}
@@ -307,7 +328,7 @@ export default function RequestProfile() {
           <ValueNote>9.6/10</ValueNote>
           <ReviewsText>{dataComment.length} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
-            <Text>asd</Text>
+            <Icon name="sort" size={20} color="#000" />
           </RectButton>
         </ContentFooter>
         <FlatList

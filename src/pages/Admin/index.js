@@ -21,6 +21,7 @@ import {showMessage} from 'react-native-flash-message';
 // Firebase API
 import api from '../../services/api';
 import user from '../../assets/user.png';
+import RadioButton from '../../components/RadioButton';
 
 import {
   imagePickerOptions,
@@ -67,6 +68,12 @@ export default function Admin() {
   const [names, setNames] = useState('');
   const [file, setFile] = useState('');
   // select
+  const [si, setSi] = useState(true);
+  const [no, setNo] = useState(false);
+  const [textSi, setTextSi] = useState('SI');
+  const [textNo, setTextNo] = useState('NO');
+  const [link, setLink] = useState('');
+
   const [country, setCountry] = useState('');
   const [sports, setSports] = useState('');
   const [selectMulti, setSelectMulti] = useState([]);
@@ -219,6 +226,7 @@ export default function Admin() {
       data.append('description', description);
       data.append('country', country);
       data.append('sports', sports);
+      data.append('link', link);
 
       await api.post('admin', data);
 
@@ -230,7 +238,6 @@ export default function Admin() {
           message: 'user successfully added',
           type: 'success',
         });
-        
       }, 3000);
     } catch (err) {
       console.log('EXCEPTION => ', err);
@@ -262,6 +269,28 @@ export default function Admin() {
     // }
   }
 
+  function handleSiChecked() {
+    if (no) {
+      // console.log("SI")
+      setSi(true);
+      setNo(false);
+      setTextSi('SI');
+    } else {
+      setSi(true);
+      setTextSi('SI');
+    }
+  }
+
+  function handleNoChecked() {
+    if (si) {
+      setSi(false);
+      setNo(true);
+      setTextNo('NO');
+    } else {
+      setNo(false);
+      setTextNo('NO');
+    }
+  }
   // console.log('ID => ', selectMulti);
   return (
     <Container>
@@ -406,6 +435,26 @@ export default function Admin() {
               </View>
             ))}
           </View>
+
+          <Text style={{fontSize: 16, color: '#000', fontWeight: '600'}}>
+            Estadísticas verificadas
+          </Text>
+
+          <View style={{flexDirection: 'row', marginTop: 8}}>
+            <RadioButton checked={si} onPress={handleSiChecked} />
+            <Text style={{fontSize: 14, color: '#000', fontWeight: 'bold'}}>
+              SÍ
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row', marginTop: 5}}>
+            <RadioButton checked={no} onPress={handleNoChecked} />
+            <Text style={{fontSize: 14, color: '#000', fontWeight: 'bold'}}>
+              NO
+            </Text>
+          </View>
+          <ContentInput>
+            <Input placeholder="Link" value={link} onChangeText={setLink} />
+          </ContentInput>
         </View>
 
         <ButtonRegister onPress={handleRegister}>

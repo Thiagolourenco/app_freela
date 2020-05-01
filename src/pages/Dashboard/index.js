@@ -150,13 +150,7 @@ export default function Dashboard() {
                 {item.file === '' ? (
                   <ContetnListImage source={user} />
                 ) : (
-                  <ContetnListImage
-                    source={{
-                      uri: `https://upload-freela.herokuapp.com/admin/${
-                        item.file
-                      }`,
-                    }}
-                  />
+                  <ContetnListImage source={{uri: item.urls}} />
                 )}
                 {/* <ContetnListImage
                   source={{

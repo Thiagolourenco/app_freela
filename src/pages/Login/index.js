@@ -156,7 +156,7 @@ export default function Login({navigation}) {
   }
 
   function loginNavigate() {
-    navigation.navigate('DashboardTe');
+    navigation.navigate('Dashboard');
   }
 
   return (

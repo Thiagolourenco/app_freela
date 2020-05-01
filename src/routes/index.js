@@ -9,7 +9,7 @@ import RequestProfile from '../pages/RequestProfile';
 import ReviewsStar from '../pages/ReviewsStar';
 import SignIn from '../pages/SignIn';
 
-import DashboardDrawer from './dashboard.routes';
+// import DashboardDrawer from './dashboard.routes';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
@@ -33,29 +33,17 @@ const Stack = createStackNavigator();
 
 export default function Routes() {
   return (
-    // <Stack.Navigator
-    //   initialRouteName="Screens"
-    //   screenOptions={{
-    //     headerShown: false,
-    //     headerTintColor: 'white',
-    //     headerStyle: {backgroundColor: 'tomato'},
-    //   }}>
+    // <Stack.Navigator>
     //   <Stack.Screen name="Login" component={Login} />
-    //   <Stack.Screen name="DashboardTe">
+    //   <Stack.Screen name="Home" options={{headerShown: false}}>
     //     {() => (
     <Drawer.Navigator drawerContent={CustomDrawer}>
       <Drawer.Screen name="Screens">
         {props => <Screens {...props} />}
       </Drawer.Screen>
-      {/* <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
     </Drawer.Navigator>
+    //     )}
+    //   </Stack.Screen>
+    // </Stack.Navigator>
   );
 }
-
-// )}
-// </Stack.Screen>
-{
-  /* <Stack.Screen name="RequestProfile" component={RequestProfile} />
-      <Stack.Screen name="ReviewsStar" component={ReviewsStar} /> */
-}
-// </Stack.Navigator>

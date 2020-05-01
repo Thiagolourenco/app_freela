@@ -124,6 +124,7 @@ export default function ReviewsStar() {
           onChangeText={setComment}
           onSubmitEditing={handleSubmitComment}
           returnKeyType="send"
+          multiline={true}
         />
       </InputView>
     </Container>
