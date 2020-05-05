@@ -187,6 +187,7 @@ export default function RequestProfile() {
   // </ButtonInfo>
   // };
 
+  console.log('dataComment', dataComment);
   return (
     <Container>
       {/* <Header navigation={navigation} title="Request Profile" /> */}
@@ -361,7 +362,7 @@ export default function RequestProfile() {
                 </Text>
 
                 <Stars
-                  default={item.stars}
+                  default={item.rating}
                   count={5}
                   half={true}
                   // update={val => setRating(val)}

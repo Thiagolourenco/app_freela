@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, AsyncStorage} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  AsyncStorage,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Stars from 'react-native-stars';
@@ -22,16 +29,22 @@ import {
   StarView,
 } from './styles';
 import api from '../../services/api';
+import Star from '../../components/Star';
+
+const numStars = 5;
 
 export default function ReviewsStar() {
   const [comment, setComment] = useState('');
+  const [rating, setRating] = useState(0);
   const [name, setName] = useState('Julen');
   const [email, setEmail] = useState('julen@gmail.com');
   const [photoUrl, setPhoto] = useState(
     'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.aficionados.com.br%2Fnaruto-shippuden-fillers%2F&psig=AOvVaw2TFPrV6214WIk61TVjVMrc&ust=1585657575518000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPCav_uYwugCFQAAAAAdAAAAABAD',
   );
 
-  const [stars, setRating] = useState(0);
+  let stars = [];
+
+  // const [stars, setRating] = useState(0);
   const routes = useRoute();
 
   const navigation = useNavigation();
@@ -54,7 +67,7 @@ export default function ReviewsStar() {
 
   async function handleSubmitComment() {
     await api
-      .post('comments', {name, photoUrl, comment, stars, admincomment})
+      .post('comments', {name, photoUrl, comment, rating, admincomment})
       .then(res => console.log('OK'))
       .catch(err => console.log('err', err));
 
@@ -67,13 +80,32 @@ export default function ReviewsStar() {
     navigation.navigate('RequestProfile');
   }
 
-  console.log('chaves', admincomment);
+  function rate(star) {
+    setRating(star);
+    // console.log('STAR', star);
+  }
+
+  for (let x = 1; x <= numStars; x++) {
+    stars.push(
+      <TouchableOpacity key={x} onPress={() => rate(x)} activeOpacity={0.9}>
+        <Star filled={x <= rating ? true : false} />
+      </TouchableOpacity>,
+    );
+  }
+
+  console.log('RATIONG -> ', rating);
   return (
     <Container>
       <Header>
         <ViewHeader>
           <ButtonArrowBack>
-            <Icon name="clear" size={30} color="#fff" onPress={handleClose} />
+            <Icon
+              name="clear"
+              size={30}
+              color="#fff"
+              onPress={handleClose}
+              style={{marginTop: 5}}
+            />
           </ButtonArrowBack>
           <ProfileView>
             <ViewProfileE />
@@ -89,33 +121,17 @@ export default function ReviewsStar() {
           </ButtonPublicText>
         </ButtonPublic>
       </Header>
-
-      <StarView>
-        <Stars
-          default={0}
-          count={5}
-          half={true}
-          update={val => setRating(val)}
-          // starSize={50}
-          fullStar={<Icons name={'star'} size={35} color="#D3CD38" />}
-          emptyStar={
-            <Icons
-              name={'star-outline'}
-              size={35}
-              color="#D3CD38"
-              // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
-            />
-          }
-          halfStar={
-            <Icons
-              name={'star-half'}
-              color="#D3CD38"
-              size={35}
-              // style={[styles.myStarStyle]}
-            />
-          }
-        />
-      </StarView>
+      <Text
+        style={{
+          fontSize: 20,
+          color: '#ffd203',
+          fontWeight: '600',
+          alignSelf: 'center',
+          marginTop: 10,
+        }}>
+        Rating <Text style={{fontSize: 25}}>{rating}</Text>/5
+      </Text>
+      <StarView>{stars}</StarView>
 
       <InputView>
         <InputComment

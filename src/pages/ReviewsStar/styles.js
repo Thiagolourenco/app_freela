@@ -61,7 +61,7 @@ export const ViewHeader = styled.View`
 
 export const InputView = styled.View`
   height: 60px;
-  width: 365px;
+  width: 95%;
   background: #ddd;
   align-self: center;
   /* flex: 1; */
@@ -78,4 +78,6 @@ export const InputComment = styled.TextInput.attrs({
 
 export const StarView = styled.View`
   margin-top: 15px;
+  flex-direction: row;
+  align-self: center;
 `;
