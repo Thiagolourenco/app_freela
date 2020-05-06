@@ -59,6 +59,8 @@ import RadioButton from '../../components/RadioButton';
 // import ModalFilterProfile from "../../components/ModalFilterProfile";
 // import ModalFilterProfileComment from "../../components/ModalFilterProfileComment";
 
+const numStart = 5;
+
 export default function RequestProfile() {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
@@ -72,8 +74,10 @@ export default function RequestProfile() {
   const [dataProfile, setDataProfile] = useState([]);
   const [name, setName] = useState('');
   const [likes, setLikes] = useState(0);
-  const [link, setLink] = useState('');
+  const [link, setLink] = useState('http://www.google.com');
   const [imageProfile, setImageProfie] = useState('');
+  const [valoracioness, setValoracioness] = useState(0);
+  const [medias, setMedias] = useState(0);
 
   const [file, setFile] = useState('');
   const [visibleOrdernar, setVisibleOrdernar] = useState(false);
@@ -85,6 +89,24 @@ export default function RequestProfile() {
       socketio('https://upload-freela.herokuapp.com', {query: {comment: id}}),
     [id],
   );
+
+  useEffect(() => {
+    async function updateLoading() {
+      const media = numStart / dataComment.length;
+
+      // console.log('MEDIA', dataComment.length, parseInt(media));
+      await api
+        .put(`admin/${id}`, {
+          rating: 2,
+          valoricienes: dataComment.length,
+          media: media,
+        })
+        .then(res => console.log('OK'))
+        .catch(err => console.log('ERRO', err));
+    }
+
+    updateLoading();
+  }, [numStart, dataComment]);
 
   useEffect(() => {
     socket.on('comment', newComment => {
@@ -105,7 +127,9 @@ export default function RequestProfile() {
 
       setName(response.data.name);
       setFile(response.data.file);
-      setLink(response.data.link);
+      setMedias(response.data.media);
+      setValoracioness(response.data.valoricienes);
+      // setLink(response.data.link);
       setImageProfie(response.data.urls);
 
       console.log('NAME => ', response.data.file);
@@ -164,9 +188,10 @@ export default function RequestProfile() {
       .catch(err => console.log('ERRO => ', err));
   }
 
-  async function handleLink() {
-    await Linking.openURL(link);
-    handleCloseModal();
+  function handleLink(url) {
+    // await Linking.openURL(link);
+    console.log('URL', url);
+    // Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   }
   // const OpenURLButton = ({ url, children }) => {
   //   const handlePress = useCallback(async () => {
@@ -187,7 +212,6 @@ export default function RequestProfile() {
   // </ButtonInfo>
   // };
 
-  console.log('dataComment', dataComment);
   return (
     <Container>
       {/* <Header navigation={navigation} title="Request Profile" /> */}
@@ -219,7 +243,7 @@ export default function RequestProfile() {
                 Dar valoración
               </ButtonInfoText>
             </ButtonInfo>
-            <ButtonInfo onPress={handleLink}>
+            <ButtonInfo onPress={() => handleLink(link)}>
               <ButtonInfoText>Ir al canal</ButtonInfoText>
             </ButtonInfo>
           </ModalFilterProfile>
@@ -326,7 +350,7 @@ export default function RequestProfile() {
           }
         />
         <ContentFooter>
-          <ValueNote>9.6/10</ValueNote>
+          <ValueNote>{parseInt(medias)}/10</ValueNote>
           <ReviewsText>{dataComment.length} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Icon name="sort" size={20} color="#000" />

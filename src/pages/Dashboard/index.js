@@ -29,6 +29,8 @@ import Header from '../../components/Header';
 
 import {getAdminRequest} from '../../store/modules/admin/actions';
 
+const numStars = 5;
+
 export default function Dashboard() {
   const data = [1, 2, 3, 4, 5];
   const dataList = [1, 2, 3];
@@ -162,9 +164,11 @@ export default function Dashboard() {
                 <ContentView>
                   <Title> {item.name} </Title>
                   <ContentFooter>
-                    <ContentFooterTextValue>9.6/10</ContentFooterTextValue>
+                    <ContentFooterTextValue>
+                      {item.media}/10
+                    </ContentFooterTextValue>
                     <ContentFooterReviews>
-                      {dataComment.length} valoraciones
+                      {item.valoricienes} valoraciones
                     </ContentFooterReviews>
                   </ContentFooter>
 
