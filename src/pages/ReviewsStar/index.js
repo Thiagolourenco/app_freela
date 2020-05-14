@@ -88,7 +88,7 @@ export default function ReviewsStar() {
   for (let x = 1; x <= numStars; x++) {
     stars.push(
       <TouchableOpacity key={x} onPress={() => rate(x)} activeOpacity={0.9}>
-        <Star filled={x <= rating ? true : false} />
+        <Star filled={x <= rating ? true : false} size={35} />
       </TouchableOpacity>,
     );
   }

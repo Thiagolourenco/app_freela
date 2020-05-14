@@ -4,4 +4,8 @@ const api = axios.create({
   baseURL: 'https://upload-freela.herokuapp.com/',
 });
 
+// const api = axios.create({
+//   baseURL: 'http://localhost:3333/'
+// });
+
 export default api;

@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, Text, AsyncStorage, ActivityIndicator} from 'react-native';
+import {
+  FlatList,
+  Text,
+  AsyncStorage,
+  ActivityIndicator,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 // import Icon from '@expo/vector-icons/MaterialIcons';
 import {RadioButton} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
@@ -8,6 +15,8 @@ import Stars from 'react-native-stars';
 import Iconss from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ModalRadio from '../../components/ModalRadio';
+import Star from '../../components/Star';
+import StarExample from '../../components/StarExample';
 
 import {
   Container,
@@ -43,7 +52,9 @@ export default function Dashboard() {
   const [checked, setChecked] = useState('first');
   const [loading, setLoading] = useState(false);
   const [dataComment, setDataComment] = useState([]);
+  const [ratingData, setRatingData] = useState(0);
 
+  let rating = [];
   const dispatch = useDispatch();
 
   // const adminUser = useSelector(state => state.admin.adminUser);
@@ -123,6 +134,16 @@ export default function Dashboard() {
 
   // console.log('DATAUSER => ', adminUser.data);
   // console.log('LOADING => ', !loadingGet);
+
+  for (let x = 1; x <= numStars; x++) {
+    rating.push(
+      <TouchableOpacity key={x} activeOpacity={0.9}>
+        <Star filled={x <= ratingData ? true : false} size={18} />
+      </TouchableOpacity>,
+    );
+  }
+
+  // console.log("APP", dataUsers)
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -171,34 +192,8 @@ export default function Dashboard() {
                       {item.valoricienes} valoraciones
                     </ContentFooterReviews>
                   </ContentFooter>
-
-                  <Stars
-                    default={item.stars}
-                    count={5}
-                    half={true}
-                    disabled={true}
-                    // update={val => setRating(val)}
-                    // starSize={50}
-                    fullStar={
-                      <Iconss name={'star'} size={30} color="#D3CD38" />
-                    }
-                    emptyStar={
-                      <Iconss
-                        name={'star-outline'}
-                        size={30}
-                        color="#D3CD38"
-                        // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
-                      />
-                    }
-                    halfStar={
-                      <Iconss
-                        name={'star-half'}
-                        color="#D3CD38"
-                        size={30}
-                        // style={[styles.myStarStyle]}
-                      />
-                    }
-                  />
+                  {/* <View style={{flexDirection: 'row'}}>{rating}</View> */}
+                  <StarExample rating={item.rating} size={20} />
                 </ContentView>
               </ContentListView>
             )}

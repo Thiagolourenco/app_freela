@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  ActivityIndicator,
 } from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 // import CircleCheckBox from "react-native-circle-checkbox";
@@ -54,35 +55,39 @@ import {
 
 import ModalFilterProfile from '../../components/ModalFileProfile';
 import RadioButton from '../../components/RadioButton';
+import Star from '../../components/Star';
+import StarExample from '../../components/StarExample';
 // import
 // // import Header from "../;../components/Header";
 // import ModalFilterProfile from "../../components/ModalFilterProfile";
 // import ModalFilterProfileComment from "../../components/ModalFilterProfileComment";
 
-const numStart = 5;
+const numStars = 5;
 
 export default function RequestProfile() {
-  const data = [1, 2, 3, 4, 5];
-  const dataList = [1, 2, 3];
   const routes = useRoute();
   const navigation = useNavigation();
+  let stars = [];
 
   const id = routes.params.id;
 
   const [visible, setVisible] = useState(false);
-  const [visibleRele, setVisibleRele] = useState(false);
-  const [dataProfile, setDataProfile] = useState([]);
   const [name, setName] = useState('');
   const [likes, setLikes] = useState(0);
-  const [link, setLink] = useState('http://www.google.com');
+  const [link, setLink] = useState('');
   const [imageProfile, setImageProfie] = useState('');
   const [valoracioness, setValoracioness] = useState(0);
   const [medias, setMedias] = useState(0);
-
+  const [rating, setRating] = useState(0);
   const [file, setFile] = useState('');
   const [visibleOrdernar, setVisibleOrdernar] = useState(false);
+  const [description, setDescription] = useState('');
 
+  const [mediaRating, setMediaRating] = useState(0);
+
+  const [totalMedia, setTotalMedia] = useState(0);
   const [dataComment, setDataComment] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const socket = useMemo(
     () =>
@@ -91,22 +96,76 @@ export default function RequestProfile() {
   );
 
   useEffect(() => {
-    async function updateLoading() {
-      const media = numStart / dataComment.length;
+    async function loadDataUsers() {
+      setLoading(true);
 
-      // console.log('MEDIA', dataComment.length, parseInt(media));
+      const response = await api.get(`admin/${id}`);
+      // setDataProfile(response.data);
+
+      setName(response.data.name);
+      setFile(response.data.file);
+      setMedias(response.data.media);
+      setValoracioness(response.data.valoricienes);
+      setLink(response.data.link);
+      setImageProfie(response.data.urls);
+      setDescription(response.data.description);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+    }
+
+    loadDataUsers();
+  }, []);
+
+  useEffect(() => {
+    async function updateuser() {
+      const totalComment = dataComment.length;
+      const totalSubTotal = dataComment.reduce(
+        (total, valor) => total + parseFloat(valor.rating),
+        0,
+      );
+
+      const calc = (totalSubTotal / totalComment) * 2;
+
+      if (calc >= 3 && calc <= 4.9) {
+        setMediaRating(2);
+      } else if (calc >= 5 && calc <= 6.4) {
+        setMediaRating(3);
+      } else if (calc >= 6.5 && calc <= 8) {
+        setMediaRating(4);
+      } else if (calc >= 8.1 && calc <= 10) {
+        setMediaRating(5);
+      }
+
+      setTotalMedia(calc);
+
       await api
         .put(`admin/${id}`, {
-          rating: 2,
-          valoricienes: dataComment.length,
-          media: media,
+          mediaRating,
+          totalComment,
         })
-        .then(res => console.log('OK'))
+        .then(res => console.log('OK', res.data))
+        .catch(err => console.log('ERRO', err));
+    }
+
+    updateuser();
+  }, [dataComment]);
+
+  useEffect(() => {
+    async function updateLoading() {
+      await api
+        .put(`admin/${id}`, {
+          rating: mediaRating,
+          valoricienes: dataComment.length,
+          media: totalMedia.toFixed(1),
+        })
+        .then(res => console.log('OK', res.data))
         .catch(err => console.log('ERRO', err));
     }
 
     updateLoading();
-  }, [numStart, dataComment]);
+  }, [numStars, dataComment]);
 
   useEffect(() => {
     socket.on('comment', newComment => {
@@ -121,24 +180,6 @@ export default function RequestProfile() {
   }, [socket, dataComment]);
 
   useEffect(() => {
-    async function loadDataUsers() {
-      const response = await api.get(`admin/${id}`);
-      // setDataProfile(response.data);
-
-      setName(response.data.name);
-      setFile(response.data.file);
-      setMedias(response.data.media);
-      setValoracioness(response.data.valoricienes);
-      // setLink(response.data.link);
-      setImageProfie(response.data.urls);
-
-      console.log('NAME => ', response.data.file);
-    }
-
-    loadDataUsers();
-  }, []);
-
-  useEffect(() => {
     async function loadComment() {
       const response = await api.get(`comments/${id}`);
       setDataComment(response.data);
@@ -146,12 +187,6 @@ export default function RequestProfile() {
 
     loadComment();
   }, []);
-
-  // async function loadComment() {
-  //   // console.log("LOAD COMMENT -> ", response.data);
-  // }
-
-  // const socket = useMemo(() =>
 
   function handleGoBack() {
     navigation.navigate('Dashboard');
@@ -173,6 +208,11 @@ export default function RequestProfile() {
     setVisibleOrdernar(false);
   }
 
+  function handleNavigationDescri() {
+    navigation.navigate('Description', {description});
+    setVisible(false);
+  }
+
   function handleNavigateReviewStar() {
     navigation.navigate('ReviewsStar', {id});
     setVisible(false);
@@ -181,36 +221,26 @@ export default function RequestProfile() {
   async function handleLikeComments(id) {
     const {name, photoUrl, comment, stars} = dataComment;
 
-    // setLikes(++);
     await api
       .post(`comments/${id}/like`, {name, photoUrl, comment, likes, stars})
       .then(res => console.log('OK'))
       .catch(err => console.log('ERRO => ', err));
   }
 
-  function handleLink(url) {
+  function handleLink() {
     // await Linking.openURL(link);
-    console.log('URL', url);
-    // Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+
+    Linking.openURL(link).catch(err => console.log("Couldn't load page", err));
+    setVisible(false);
   }
-  // const OpenURLButton = ({ url, children }) => {
-  //   const handlePress = useCallback(async () => {
-  //     // Checking if the link is supported for links with custom URL scheme.
-  //     const supported = await Linking.canOpenURL(url);
 
-  //     if (supported) {
-  //       // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-  //       // by some browser in the mobile
-  //       await Linking.openURL(url);
-  //     } else {
-  //       alert(`Don't know how to open this URL: ${url}`);
-  //     }
-  //   }, [url]);
-
-  //   return <ButtonInfo onPress={onPress}>
-  //   <ButtonInfoText>Ir al canal</ButtonInfoText>
-  // </ButtonInfo>
-  // };
+  for (let x = 1; x <= numStars; x++) {
+    stars.push(
+      <TouchableOpacity key={x} activeOpacity={0.9}>
+        <Star filled={x <= mediaRating ? true : false} size={30} />
+      </TouchableOpacity>,
+    );
+  }
 
   return (
     <Container>
@@ -236,15 +266,17 @@ export default function RequestProfile() {
           />
           <ModalFilterProfile visible={visible}>
             <ButtonInfo>
-              <ButtonInfoText>Informaciõn</ButtonInfoText>
+              <ButtonInfoText onPress={handleNavigationDescri}>
+                Informaciõn
+              </ButtonInfoText>
             </ButtonInfo>
             <ButtonInfo>
               <ButtonInfoText onPress={handleNavigateReviewStar}>
                 Dar valoración
               </ButtonInfoText>
             </ButtonInfo>
-            <ButtonInfo onPress={() => handleLink(link)}>
-              <ButtonInfoText>Ir al canal</ButtonInfoText>
+            <ButtonInfo>
+              <ButtonInfoText onPress={handleLink}>Ir al canal</ButtonInfoText>
             </ButtonInfo>
           </ModalFilterProfile>
           <Modal visible={visibleOrdernar} transparent={true}>
@@ -324,33 +356,13 @@ export default function RequestProfile() {
             </View>
           </Modal>
         </HeaderView>
+
         <ContetnListImage source={{uri: imageProfile}} />
-        <Stars
-          default={5}
-          count={5}
-          half={true}
-          // update={val => setRating(val)}
-          // starSize={50}
-          fullStar={<Iconss name={'star'} size={35} color="#D3CD38" />}
-          emptyStar={
-            <Iconss
-              name={'star-outline'}
-              size={35}
-              color="#D3CD38"
-              // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
-            />
-          }
-          halfStar={
-            <Iconss
-              name={'star-half'}
-              color="#D3CD38"
-              size={35}
-              // style={[styles.myStarStyle]}
-            />
-          }
-        />
+        <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 8}}>
+          {stars}
+        </View>
         <ContentFooter>
-          <ValueNote>{parseInt(medias)}/10</ValueNote>
+          <ValueNote>{totalMedia.toFixed(1)}/10</ValueNote>
           <ReviewsText>{dataComment.length} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Icon name="sort" size={20} color="#000" />
@@ -384,31 +396,7 @@ export default function RequestProfile() {
                 <Text style={{fontSize: 11, fontWeight: '600'}}>
                   {item.name}
                 </Text>
-
-                <Stars
-                  default={item.rating}
-                  count={5}
-                  half={true}
-                  // update={val => setRating(val)}
-                  // starSize={50}
-                  fullStar={<Iconss name={'star'} size={20} color="#ffd203" />}
-                  emptyStar={
-                    <Iconss
-                      name={'star-outline'}
-                      size={20}
-                      color=" #ffd203"
-                      // style={[styles.myStarStyle, styles.myEmptyStarStyle]}
-                    />
-                  }
-                  halfStar={
-                    <Iconss
-                      name={'star-half'}
-                      color="#ffd203"
-                      size={20}
-                      // style={[styles.myStarStyle]}
-                    />
-                  }
-                />
+                <StarExample rating={item.rating} size={18} />
 
                 <Text
                   style={{
@@ -421,7 +409,7 @@ export default function RequestProfile() {
                   {item.comment}
                 </Text>
               </View>
-              <View style={{left: '140%'}}>
+              <View style={{left: '70%'}}>
                 <TouchableOpacity
                   onPress={() => handleLikeComments(item._id)}
                   style={{alignSelf: 'flex-end'}}>

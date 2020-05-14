@@ -9,6 +9,7 @@ import Logout from '../pages/Logout';
 
 import RequestProfile from '../pages/RequestProfile';
 import ReviewsStar from '../pages/ReviewsStar';
+import Description from '../pages/Description';
 
 const Stack = createStackNavigator();
 
@@ -17,13 +18,40 @@ export default function StackDrawer(props) {
     <Stack.Navigator
       initialRouteName="Dashboard"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Dashboard" component={Dashboard} />
-      <Stack.Screen name="Admin" component={Admin} />
-      <Stack.Screen name="Contact" component={Contact} />
-      <Stack.Screen name="Logout" component={Logout} />
+      <Stack.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Admin"
+        component={Admin}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Contact"
+        component={Contact}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Logout"
+        component={Logout}
+        options={{headerShown: false}}
+      />
 
-      <Stack.Screen name="RequestProfile" component={RequestProfile} />
-      <Stack.Screen name="ReviewsStar" component={ReviewsStar} />
+      <Stack.Screen
+        name="RequestProfile"
+        component={RequestProfile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ReviewsStar"
+        component={ReviewsStar}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="Description" component={Description} />
     </Stack.Navigator>
   );
 }
