@@ -264,7 +264,9 @@ export default function RequestProfile() {
             color="#000"
             onPress={handleInfoModal}
           />
-          <ModalFilterProfile visible={visible}>
+          <ModalFilterProfile
+            visible={visible}
+            onRequestClose={() => setVisible(false)}>
             <ButtonInfo>
               <ButtonInfoText onPress={handleNavigationDescri}>
                 Informaciõn
