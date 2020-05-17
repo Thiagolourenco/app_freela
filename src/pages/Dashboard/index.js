@@ -57,44 +57,25 @@ export default function Dashboard() {
   let rating = [];
   const dispatch = useDispatch();
 
-  // const adminUser = useSelector(state => state.admin.adminUser);
-  // const loadingGet = useSelector(state => state.admin.loadingGet);
-
   const [dataSearch, setDataSearch] = useState([]);
 
   const [name, setName] = useState('');
 
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   dispatch(getAdminRequest());
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   async function loadData() {
-  //     const name = await AsyncStorage.getItem('@login:name');
-  //     const email = await AsyncStorage.getItem('@login:email');
-  //     const photo = await AsyncStorage.getItem('@login:photo');
-
-  //     // console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
-  //   }
-
-  //   loadData();
-  // }, []);
-
   useEffect(() => {
     navigation.addListener('focus', () => {
       loadDados();
     });
-    // loadDados();
-  }, [navigation]);
+    loadDados();
+  }, []);
 
   async function loadDados() {
     setLoading(true);
     await api
-      .get('admin')
+      .get('root')
       .then(res => setDataUsers(res.data))
-      .catch(err => console.log('Error'));
+      .catch(err => console.log('Error', err));
 
     setTimeout(() => {
       setLoading(false);
@@ -105,36 +86,6 @@ export default function Dashboard() {
     navigation.navigate('RequestProfile', {id});
   }
 
-  useEffect(() => {
-    async function loadComment() {
-      dataUsers.map(
-        async item =>
-          await api
-            .get(`comments/${item._id}`)
-            .then(response => setDataComment(response.data))
-            .catch(err => console.log('err', err)),
-      );
-      // const response = await api.get(`comments/${id}`);
-      // setDataComment(response.data);
-    }
-
-    loadComment();
-  }, [dataUsers]);
-
-  // async function searchList() {
-  //   // const response = await api.get(`admin/${name}`);
-  //   await api
-  //     .get(`admin/${name}`)
-  //     .then(res => setDataSearch(res.data), console.log('RES => ', res))
-  //     .catch(err => console.log(err));
-  //   // console.log('search => ', response.data);
-
-  //   setVisibleInput(false);
-  // }
-
-  // console.log('DATAUSER => ', adminUser.data);
-  // console.log('LOADING => ', !loadingGet);
-
   for (let x = 1; x <= numStars; x++) {
     rating.push(
       <TouchableOpacity key={x} activeOpacity={0.9}>
@@ -143,7 +94,7 @@ export default function Dashboard() {
     );
   }
 
-  // console.log("APP", dataUsers)
+  console.log('APP', dataUsers);
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -173,7 +124,7 @@ export default function Dashboard() {
                 {item.file === '' ? (
                   <ContetnListImage source={user} />
                 ) : (
-                  <ContetnListImage source={{uri: item.urls}} />
+                  <ContetnListImage source={{uri: item.url}} />
                 )}
                 {/* <ContetnListImage
                   source={{
@@ -193,7 +144,7 @@ export default function Dashboard() {
                     </ContentFooterReviews>
                   </ContentFooter>
                   {/* <View style={{flexDirection: 'row'}}>{rating}</View> */}
-                  <StarExample rating={item.rating} size={20} />
+                  <StarExample rating={item.stars} size={20} />
                 </ContentView>
               </ContentListView>
             )}

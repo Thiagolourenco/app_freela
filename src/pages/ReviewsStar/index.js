@@ -93,7 +93,6 @@ export default function ReviewsStar() {
     );
   }
 
-  console.log('RATIONG -> ', rating);
   return (
     <Container>
       <Header>

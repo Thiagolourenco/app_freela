@@ -18,6 +18,7 @@ import Iconss from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import api from '../../services/api';
 import Stars from 'react-native-stars';
+import DateFormated from '../../components/DateFormated';
 
 import {
   Container,
@@ -99,7 +100,7 @@ export default function RequestProfile() {
     async function loadDataUsers() {
       setLoading(true);
 
-      const response = await api.get(`admin/${id}`);
+      const response = await api.get(`root/${id}`);
       // setDataProfile(response.data);
 
       setName(response.data.name);
@@ -107,7 +108,7 @@ export default function RequestProfile() {
       setMedias(response.data.media);
       setValoracioness(response.data.valoricienes);
       setLink(response.data.link);
-      setImageProfie(response.data.urls);
+      setImageProfie(response.data.url);
       setDescription(response.data.description);
 
       setTimeout(() => {
@@ -141,31 +142,32 @@ export default function RequestProfile() {
       setTotalMedia(calc);
 
       await api
-        .put(`admin/${id}`, {
-          mediaRating,
-          totalComment,
+        .put(`root/${id}`, {
+          stars: mediaRating,
+          media: calc,
+          valoricienes: totalComment,
         })
-        .then(res => console.log('OK', res.data))
+        .then(res => console.log('OK'))
         .catch(err => console.log('ERRO', err));
     }
 
     updateuser();
   }, [dataComment]);
 
-  useEffect(() => {
-    async function updateLoading() {
-      await api
-        .put(`admin/${id}`, {
-          rating: mediaRating,
-          valoricienes: dataComment.length,
-          media: totalMedia.toFixed(1),
-        })
-        .then(res => console.log('OK', res.data))
-        .catch(err => console.log('ERRO', err));
-    }
+  // useEffect(() => {
+  //   async function updateLoading() {
+  //     await api
+  //       .put(`admin/${id}`, {
+  //         rating: mediaRating,
+  //         valoricienes: dataComment.length,
+  //         media: totalMedia.toFixed(1),
+  //       })
+  //       .then(res => console.log('OK', res.data))
+  //       .catch(err => console.log('ERRO', err));
+  //   }
 
-    updateLoading();
-  }, [numStars, dataComment]);
+  //   updateLoading();
+  // }, [numStars, dataComment]);
 
   useEffect(() => {
     socket.on('comment', newComment => {
@@ -244,13 +246,6 @@ export default function RequestProfile() {
 
   return (
     <Container>
-      {/* <Header navigation={navigation} title="Request Profile" /> */}
-
-      {/* <Header>
-        <ButtonArrowLeft onPress={handleGoBack}>
-          <Icon name="arrow-back" size={30} color="#fff" />
-        </ButtonArrowLeft>
-      </Header> */}
       <Content>
         <HeaderView>
           <ButtonArrowLeft onPress={handleGoBack}>
@@ -364,7 +359,9 @@ export default function RequestProfile() {
           {stars}
         </View>
         <ContentFooter>
-          <ValueNote>{totalMedia.toFixed(1)}/10</ValueNote>
+          <ValueNote>
+            {totalMedia === NaN ? 0 : totalMedia.toFixed(1)}/10
+          </ValueNote>
           <ReviewsText>{dataComment.length} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Icon name="sort" size={20} color="#000" />
@@ -382,7 +379,7 @@ export default function RequestProfile() {
                 marginTop: 30,
                 marginLeft: 20,
                 height: 80,
-                width: '80%',
+                width: '100%',
               }}>
               <Image
                 style={{
@@ -395,10 +392,20 @@ export default function RequestProfile() {
                 source={{uri: item.photoUrl}}
               />
               <View style={{flexDirection: 'column', marginLeft: 10}}>
-                <Text style={{fontSize: 11, fontWeight: '600'}}>
-                  {item.name}
-                </Text>
-                <StarExample rating={item.rating} size={18} />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={{fontSize: 11, fontWeight: '600'}}>
+                    {item.name}
+                  </Text>
+                </View>
+
+                <View style={{flexDirection: 'row'}}>
+                  <StarExample rating={item.rating} size={15} />
+                  <DateFormated data={item.createdAt} />
+                </View>
 
                 <Text
                   style={{
@@ -411,7 +418,7 @@ export default function RequestProfile() {
                   {item.comment}
                 </Text>
               </View>
-              <View style={{left: '70%'}}>
+              <View style={{left: '45%'}}>
                 <TouchableOpacity
                   onPress={() => handleLikeComments(item._id)}
                   style={{alignSelf: 'flex-end'}}>

@@ -224,11 +224,11 @@ export default function Admin() {
       data.append('name', name);
       data.append('email', email);
       data.append('description', description);
-      data.append('country', country);
+      // data.append('country', country);
       data.append('sports', sports);
       data.append('link', link);
 
-      await api.post('admin', data);
+      await api.post('root', data);
 
       setTimeout(() => {
         setLoading(false);
