@@ -17,7 +17,7 @@ export default function DateFormated({data}) {
 
 const styles = StyleSheet.create({
   dateText: {
-    fontSize: 10,
+    fontSize: 12,
     marginLeft: 5,
     color: '#ccc',
     fontWeight: '800',

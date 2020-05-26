@@ -224,7 +224,7 @@ export default function Admin() {
       data.append('name', name);
       data.append('email', email);
       data.append('description', description);
-      // data.append('country', country);
+      data.append('country', country);
       data.append('sports', sports);
       data.append('link', link);
 

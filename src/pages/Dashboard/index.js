@@ -94,7 +94,6 @@ export default function Dashboard() {
     );
   }
 
-  console.log('APP', dataUsers);
   return (
     <Container>
       {/* Header da Aplicação */}
@@ -137,7 +136,7 @@ export default function Dashboard() {
                   <Title> {item.name} </Title>
                   <ContentFooter>
                     <ContentFooterTextValue>
-                      {item.media}/10
+                      {parseFloat(item.media).toFixed(1)}/10
                     </ContentFooterTextValue>
                     <ContentFooterReviews>
                       {item.valoricienes} valoraciones

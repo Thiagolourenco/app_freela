@@ -81,14 +81,21 @@ export default function RequestProfile() {
   const [medias, setMedias] = useState(0);
   const [rating, setRating] = useState(0);
   const [file, setFile] = useState('');
+  const [mediaTeste, setMediaTest] = useState(0);
+  const [estrelas, setEstrelas] = useState(0);
+
   const [visibleOrdernar, setVisibleOrdernar] = useState(false);
   const [description, setDescription] = useState('');
 
   const [mediaRating, setMediaRating] = useState(0);
-
   const [totalMedia, setTotalMedia] = useState(0);
   const [dataComment, setDataComment] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // valores testes
+  const [valorTotalMediaTest, setValorTotalMediaTest] = useState(0);
+  const [valorRatingTest, setValorRatingTest] = useState(0);
+  const [valorValoraciones, setValorValoraciones] = useState(0);
 
   const socket = useMemo(
     () =>
@@ -97,12 +104,21 @@ export default function RequestProfile() {
   );
 
   useEffect(() => {
+    if (isNaN(valorTotalMediaTest)) {
+      setValorTotalMediaTest(0);
+    } else {
+      console.log('FALSE');
+    }
+  }, [valorTotalMediaTest]);
+
+  useEffect(() => {
     async function loadDataUsers() {
       setLoading(true);
 
       const response = await api.get(`root/${id}`);
       // setDataProfile(response.data);
 
+      console.log('RESPONSE => ', response.data);
       setName(response.data.name);
       setFile(response.data.file);
       setMedias(response.data.media);
@@ -110,6 +126,7 @@ export default function RequestProfile() {
       setLink(response.data.link);
       setImageProfie(response.data.url);
       setDescription(response.data.description);
+      setEstrelas(response.data.stars);
 
       setTimeout(() => {
         setLoading(false);
@@ -118,56 +135,6 @@ export default function RequestProfile() {
 
     loadDataUsers();
   }, []);
-
-  useEffect(() => {
-    async function updateuser() {
-      const totalComment = dataComment.length;
-      const totalSubTotal = dataComment.reduce(
-        (total, valor) => total + parseFloat(valor.rating),
-        0,
-      );
-
-      const calc = (totalSubTotal / totalComment) * 2;
-
-      if (calc >= 3 && calc <= 4.9) {
-        setMediaRating(2);
-      } else if (calc >= 5 && calc <= 6.4) {
-        setMediaRating(3);
-      } else if (calc >= 6.5 && calc <= 8) {
-        setMediaRating(4);
-      } else if (calc >= 8.1 && calc <= 10) {
-        setMediaRating(5);
-      }
-
-      setTotalMedia(calc);
-
-      await api
-        .put(`root/${id}`, {
-          stars: mediaRating,
-          media: calc,
-          valoricienes: totalComment,
-        })
-        .then(res => console.log('OK'))
-        .catch(err => console.log('ERRO', err));
-    }
-
-    updateuser();
-  }, [dataComment]);
-
-  // useEffect(() => {
-  //   async function updateLoading() {
-  //     await api
-  //       .put(`admin/${id}`, {
-  //         rating: mediaRating,
-  //         valoricienes: dataComment.length,
-  //         media: totalMedia.toFixed(1),
-  //       })
-  //       .then(res => console.log('OK', res.data))
-  //       .catch(err => console.log('ERRO', err));
-  //   }
-
-  //   updateLoading();
-  // }, [numStars, dataComment]);
 
   useEffect(() => {
     socket.on('comment', newComment => {
@@ -189,6 +156,97 @@ export default function RequestProfile() {
 
     loadComment();
   }, []);
+
+  useEffect(() => {
+    const totalComment = dataComment.length;
+    const totalSubTotal = dataComment.reduce(
+      (total, valor) => total + parseFloat(valor.rating),
+      0,
+    );
+
+    const calc = (totalSubTotal / totalComment) * 2;
+
+    //   const [valorTotalMediaTest, setValorTotalMediaTest] = useState(0);
+    // const [valorRatingTest, setValorRatingTest] = useState(0);
+    // const [valorValoraciones, setValorValoraciones] = useState(0);
+    setValorTotalMediaTest(calc);
+    setValorValoraciones(totalComment);
+
+    if (calc >= 3 && calc <= 4.9) {
+      setValorRatingTest(2);
+    } else if (calc >= 5 && calc <= 6.4) {
+      setValorRatingTest(3);
+    } else if (calc >= 6.5 && calc <= 8) {
+      setValorRatingTest(4);
+    } else if (calc >= 8.1 && calc <= 10) {
+      setValorRatingTest(5);
+    } else {
+      console.log('CANcEL');
+    }
+  }, [dataComment]);
+
+  useEffect(() => {
+    if (dataComment.length == valoracioness) {
+      console.log('VERDADE');
+    } else {
+      handleUpdate();
+    }
+  }, [dataComment]);
+  // useEffect(() => {
+  //   async function loadUserUpdate() {
+
+  //   console.log("VALORACIONES ",valoracioness )
+  //   if (dataComment.length === valoracioness) {
+  //     console.log("OK")
+  //   } else {
+  //     console.log("DATA COMMENT => ",dataComment.length  )
+  //     const totalComment = dataComment.length;
+  //     const totalSubTotal = dataComment.reduce(
+  //       (total, valor) => total + parseFloat(valor.rating),
+  //       0,
+  //     );
+
+  //     const calc = (totalSubTotal / totalComment) * 2;
+
+  //     console.log('CALC => ', calc);
+  //     console.log("TOTAL SUBT", totalSubTotal)
+  //     console.log("TtotalComment", totalComment)
+
+  //     setMediaTest(calc);
+  //     setTotalMedia(calc);
+
+  //     let a = 0;
+  //     if (calc >= 3 && calc <= 4.9) {
+  //       setMediaRating(2);
+  //       a = 2;
+  //     } else if (calc >= 5 && calc <= 6.4) {
+  //       setMediaRating(3);
+  //       a = 3;
+  //     } else if (calc >= 6.5 && calc <= 8) {
+  //       setMediaRating(4);
+  //       a = 4;
+  //     } else if (calc >= 8.1 && calc <= 10) {
+  //       setMediaRating(5);
+  //       a = 5
+  //     }else {
+  //       console.log("CANcEL")
+  //     }
+
+  //     console.log("MEDIA", a);
+
+  //     await api
+  //       .put(`root/${id}`, {
+  //         stars: a,
+  //         media: calc,
+  //         valoricienes: totalComment,
+  //       })
+  //       .then(res => console.log('OK UPDATE'))
+  //       .catch(err => console.log('ERRO', err));
+
+  //   }
+  // }
+  // loadUserUpdate()
+  // }, [valoracioness, dataComment]);
 
   function handleGoBack() {
     navigation.navigate('Dashboard');
@@ -236,13 +294,31 @@ export default function RequestProfile() {
     setVisible(false);
   }
 
+  async function handleUpdate() {
+    await api
+      .put(`root/${id}`, {
+        stars: valorRatingTest,
+        media: valorTotalMediaTest,
+        valoricienes: valorValoraciones,
+      })
+      .then(res => console.log('OK UPDATE'))
+      .catch(err => console.log('ERRO', err));
+  }
+
   for (let x = 1; x <= numStars; x++) {
     stars.push(
       <TouchableOpacity key={x} activeOpacity={0.9}>
-        <Star filled={x <= mediaRating ? true : false} size={30} />
+        <Star filled={x <= valorRatingTest ? true : false} size={30} />
       </TouchableOpacity>,
     );
   }
+
+  // if (dataComment.length === valoracioness) {
+  //   console.log("TRUE");
+  // } else {
+  //   console.log("FALSE")
+  //   handleUpdate();
+  // }
 
   return (
     <Container>
@@ -359,10 +435,8 @@ export default function RequestProfile() {
           {stars}
         </View>
         <ContentFooter>
-          <ValueNote>
-            {totalMedia === NaN ? 0 : totalMedia.toFixed(1)}/10
-          </ValueNote>
-          <ReviewsText>{dataComment.length} valoraciones</ReviewsText>
+          <ValueNote>{valorTotalMediaTest.toFixed(1)}/10</ValueNote>
+          <ReviewsText>{valorValoraciones} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Icon name="sort" size={20} color="#000" />
           </RectButton>

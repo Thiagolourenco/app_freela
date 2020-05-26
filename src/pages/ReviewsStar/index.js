@@ -30,12 +30,15 @@ import {
 } from './styles';
 import api from '../../services/api';
 import Star from '../../components/Star';
+import ModalLoading from '../../components/ModalLoading';
 
 const numStars = 5;
 
 export default function ReviewsStar() {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
+  const [visible, setVisible] = useState(false);
+
   const [name, setName] = useState('Julen');
   const [email, setEmail] = useState('julen@gmail.com');
   const [photoUrl, setPhoto] = useState(
@@ -66,12 +69,19 @@ export default function ReviewsStar() {
   }, []);
 
   async function handleSubmitComment() {
+    setVisible(true);
+
     await api
       .post('comments', {name, photoUrl, comment, rating, admincomment})
       .then(res => console.log('OK'))
       .catch(err => console.log('err', err));
 
+    // setTimeout(() => {
+    //   setVisible(false)
+    // }, 1800)
+
     setTimeout(() => {
+      setVisible(false)
       navigation.navigate('RequestProfile');
     }, 2000);
   }
@@ -142,6 +152,11 @@ export default function ReviewsStar() {
           multiline={true}
         />
       </InputView>
+
+      <ModalLoading
+        visible={visible}
+        onRequestClose={() => setVisible(false)}
+      />
     </Container>
   );
 }
