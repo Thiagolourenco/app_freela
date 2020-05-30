@@ -91,6 +91,7 @@ export default function RequestProfile() {
   const [totalMedia, setTotalMedia] = useState(0);
   const [dataComment, setDataComment] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [updateTest, setUpdateTest] = useState([])
 
   // valores testes
   const [valorTotalMediaTest, setValorTotalMediaTest] = useState(0);
@@ -127,7 +128,7 @@ export default function RequestProfile() {
       setImageProfie(response.data.url);
       setDescription(response.data.description);
       setEstrelas(response.data.stars);
-
+      
       setTimeout(() => {
         setLoading(false);
       }, 3000);
@@ -146,6 +147,8 @@ export default function RequestProfile() {
         dataComment.map(comment => (comment._id === like._id ? like : comment)),
       );
     });
+    
+    
   }, [socket, dataComment]);
 
   useEffect(() => {
@@ -158,40 +161,79 @@ export default function RequestProfile() {
   }, []);
 
   useEffect(() => {
-    const totalComment = dataComment.length;
-    const totalSubTotal = dataComment.reduce(
-      (total, valor) => total + parseFloat(valor.rating),
-      0,
-    );
-
-    const calc = (totalSubTotal / totalComment) * 2;
-
-    //   const [valorTotalMediaTest, setValorTotalMediaTest] = useState(0);
-    // const [valorRatingTest, setValorRatingTest] = useState(0);
-    // const [valorValoraciones, setValorValoraciones] = useState(0);
-    setValorTotalMediaTest(calc);
-    setValorValoraciones(totalComment);
-
-    if (calc >= 3 && calc <= 4.9) {
-      setValorRatingTest(2);
-    } else if (calc >= 5 && calc <= 6.4) {
-      setValorRatingTest(3);
-    } else if (calc >= 6.5 && calc <= 8) {
-      setValorRatingTest(4);
-    } else if (calc >= 8.1 && calc <= 10) {
-      setValorRatingTest(5);
-    } else {
-      console.log('CANcEL');
+    async function updateLoad() {
+      const totalComment = dataComment.length;
+      const totalSubTotal = dataComment.reduce(
+        (total, valor) => total + parseFloat(valor.rating),
+        0,
+      );
+  
+      const calc = (totalSubTotal / totalComment) * 2;
+  
+      //   const [valorTotalMediaTest, setValorTotalMediaTest] = useState(0);
+      // const [valorRatingTest, setValorRatingTest] = useState(0);
+      // const [valorValoraciones, setValorValoraciones] = useState(0);
+      setValorTotalMediaTest(calc);
+      setValorValoraciones(totalComment);
+  
+      if (calc >= 3 && calc <= 4.9) {
+        setValorRatingTest(2);
+      } else if (calc >= 5 && calc <= 6.4) {
+        setValorRatingTest(3);
+      } else if (calc >= 6.5 && calc <= 8) {
+        setValorRatingTest(4);
+      } else if (calc >= 8.1 && calc <= 10) {
+        setValorRatingTest(5);
+      } else {
+        console.log('CANcEL');
+      }
+  
+      const obj = {
+        stars: valorRatingTest,
+        media: valorTotalMediaTest,
+        valoricienes: valorValoraciones,
+      };
+      await api
+        .put(`root/${id}`, obj)
+        .then(res => console.log('OK UPDATE'))
+        .catch(err => console.log('ERRO', err));
+  
     }
-  }, [dataComment]);
+
+    updateLoad()
+    
+  }, [dataComment,valorRatingTest,valorTotalMediaTest,valorValoraciones]);
 
   useEffect(() => {
-    if (dataComment.length == valoracioness) {
-      console.log('VERDADE');
-    } else {
-      handleUpdate();
+    async function updateProfile() {
+      if (dataComment.length == valoracioness) {
+        console.log('VERDADE');
+      } else {
+        const obj = {
+          stars: valorRatingTest,
+          media: valorTotalMediaTest,
+          valoricienes: valorValoraciones,
+        };
+        await api
+          .put(`root/${id}`, obj)
+          .then(res => console.log('OK UPDATE'))
+          .catch(err => console.log('ERRO', err));
+      }
     }
-  }, [dataComment]);
+    // console.log('COMENT => ', dataComment.length);
+    // console.log('VALORACIONES => ', valoracioness);
+    // console.log('DATA COMMENT  =>', dataComment.length == valoracioness);
+    // if (dataComment.length === valoracioness) {
+    //   console.log('VERDADE');
+    // } else {
+    //   handleUpdate();
+    // }
+    updateProfile();
+  }); 
+
+  // useEffect(() => {
+  //   console.log("TESTe")
+  // }, [dataComment])
   // useEffect(() => {
   //   async function loadUserUpdate() {
 
