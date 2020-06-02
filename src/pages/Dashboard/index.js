@@ -58,6 +58,7 @@ export default function Dashboard() {
   const dispatch = useDispatch();
 
   const [dataSearch, setDataSearch] = useState([]);
+  const [usersList] = dataUsers;
 
   const [name, setName] = useState('');
 
@@ -125,25 +126,18 @@ export default function Dashboard() {
                 ) : (
                   <ContetnListImage source={{uri: item.url}} />
                 )}
-                {/* <ContetnListImage
-                  source={{
-                    uri: `https://upload-freela.herokuapp.com/admin/${
-                      item.file
-                    }`,
-                  }}
-                /> */}
+
                 <ContentView>
                   <Title> {item.name} </Title>
                   <ContentFooter>
                     <ContentFooterTextValue>
-                      {parseFloat(item.media).toFixed(1)}/10
+                      {parseFloat(item.avaliacao.media).toFixed(1)}/10
                     </ContentFooterTextValue>
                     <ContentFooterReviews>
-                      {item.valoricienes} valoraciones
+                      {item.avaliacao.quantity} valoraciones
                     </ContentFooterReviews>
                   </ContentFooter>
-                  {/* <View style={{flexDirection: 'row'}}>{rating}</View> */}
-                  <StarExample rating={item.stars} size={20} />
+                  <StarExample rating={item.avaliacao.rating} size={20} />
                 </ContentView>
               </ContentListView>
             )}
@@ -153,7 +147,3 @@ export default function Dashboard() {
     </Container>
   );
 }
-
-// Dashboard.navigationOptions = {
-// //   drawerIcon: ({tintColor}) => <Icon name="home" size={30} color="#000" />,,
-// // };

@@ -79,19 +79,25 @@ export default function RequestProfile() {
   const [imageProfile, setImageProfie] = useState('');
   const [valoracioness, setValoracioness] = useState(0);
   const [medias, setMedias] = useState(0);
-  const [rating, setRating] = useState(0);
+  // const [rating, setRating] = useState(0);
   const [file, setFile] = useState('');
   const [mediaTeste, setMediaTest] = useState(0);
   const [estrelas, setEstrelas] = useState(0);
 
+  const [datass, setDatass] = useState([]);
+
   const [visibleOrdernar, setVisibleOrdernar] = useState(false);
   const [description, setDescription] = useState('');
+
+  const [mediaTestde, setMediaTestde] = useState(8);
+  const [valorComentario, setValorComentario] = useState(3);
+  const [starsTett, setStarsTett] = useState(3);
 
   const [mediaRating, setMediaRating] = useState(0);
   const [totalMedia, setTotalMedia] = useState(0);
   const [dataComment, setDataComment] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [updateTest, setUpdateTest] = useState([])
+  const [updateTest, setUpdateTest] = useState([]);
 
   // valores testes
   const [valorTotalMediaTest, setValorTotalMediaTest] = useState(0);
@@ -116,26 +122,18 @@ export default function RequestProfile() {
     async function loadDataUsers() {
       setLoading(true);
 
-      const response = await api.get(`root/${id}`);
-      // setDataProfile(response.data);
+      await api
+        .get(`root/${id}`)
+        .then(res => setDatass(res.data))
+        .catch(err => console.log('REROR'));
 
-      console.log('RESPONSE => ', response.data);
-      setName(response.data.name);
-      setFile(response.data.file);
-      setMedias(response.data.media);
-      setValoracioness(response.data.valoricienes);
-      setLink(response.data.link);
-      setImageProfie(response.data.url);
-      setDescription(response.data.description);
-      setEstrelas(response.data.stars);
-      
       setTimeout(() => {
         setLoading(false);
       }, 3000);
     }
 
     loadDataUsers();
-  }, []);
+  }, [datass]);
 
   useEffect(() => {
     socket.on('comment', newComment => {
@@ -147,8 +145,6 @@ export default function RequestProfile() {
         dataComment.map(comment => (comment._id === like._id ? like : comment)),
       );
     });
-    
-    
   }, [socket, dataComment]);
 
   useEffect(() => {
@@ -159,136 +155,6 @@ export default function RequestProfile() {
 
     loadComment();
   }, []);
-
-  useEffect(() => {
-    async function updateLoad() {
-      const totalComment = dataComment.length;
-      const totalSubTotal = dataComment.reduce(
-        (total, valor) => total + parseFloat(valor.rating),
-        0,
-      );
-  
-      const calc = (totalSubTotal / totalComment) * 2;
-  
-      //   const [valorTotalMediaTest, setValorTotalMediaTest] = useState(0);
-      // const [valorRatingTest, setValorRatingTest] = useState(0);
-      // const [valorValoraciones, setValorValoraciones] = useState(0);
-      setValorTotalMediaTest(calc);
-      setValorValoraciones(totalComment);
-  
-      if (calc >= 3 && calc <= 4.9) {
-        setValorRatingTest(2);
-      } else if (calc >= 5 && calc <= 6.4) {
-        setValorRatingTest(3);
-      } else if (calc >= 6.5 && calc <= 8) {
-        setValorRatingTest(4);
-      } else if (calc >= 8.1 && calc <= 10) {
-        setValorRatingTest(5);
-      } else {
-        console.log('CANcEL');
-      }
-  
-      const obj = {
-        stars: valorRatingTest,
-        media: valorTotalMediaTest,
-        valoricienes: valorValoraciones,
-      };
-      await api
-        .put(`root/${id}`, obj)
-        .then(res => console.log('OK UPDATE'))
-        .catch(err => console.log('ERRO', err));
-  
-    }
-
-    updateLoad()
-    
-  }, [dataComment,valorRatingTest,valorTotalMediaTest,valorValoraciones]);
-
-  useEffect(() => {
-    async function updateProfile() {
-      if (dataComment.length == valoracioness) {
-        console.log('VERDADE');
-      } else {
-        const obj = {
-          stars: valorRatingTest,
-          media: valorTotalMediaTest,
-          valoricienes: valorValoraciones,
-        };
-        await api
-          .put(`root/${id}`, obj)
-          .then(res => console.log('OK UPDATE'))
-          .catch(err => console.log('ERRO', err));
-      }
-    }
-    // console.log('COMENT => ', dataComment.length);
-    // console.log('VALORACIONES => ', valoracioness);
-    // console.log('DATA COMMENT  =>', dataComment.length == valoracioness);
-    // if (dataComment.length === valoracioness) {
-    //   console.log('VERDADE');
-    // } else {
-    //   handleUpdate();
-    // }
-    updateProfile();
-  }); 
-
-  // useEffect(() => {
-  //   console.log("TESTe")
-  // }, [dataComment])
-  // useEffect(() => {
-  //   async function loadUserUpdate() {
-
-  //   console.log("VALORACIONES ",valoracioness )
-  //   if (dataComment.length === valoracioness) {
-  //     console.log("OK")
-  //   } else {
-  //     console.log("DATA COMMENT => ",dataComment.length  )
-  //     const totalComment = dataComment.length;
-  //     const totalSubTotal = dataComment.reduce(
-  //       (total, valor) => total + parseFloat(valor.rating),
-  //       0,
-  //     );
-
-  //     const calc = (totalSubTotal / totalComment) * 2;
-
-  //     console.log('CALC => ', calc);
-  //     console.log("TOTAL SUBT", totalSubTotal)
-  //     console.log("TtotalComment", totalComment)
-
-  //     setMediaTest(calc);
-  //     setTotalMedia(calc);
-
-  //     let a = 0;
-  //     if (calc >= 3 && calc <= 4.9) {
-  //       setMediaRating(2);
-  //       a = 2;
-  //     } else if (calc >= 5 && calc <= 6.4) {
-  //       setMediaRating(3);
-  //       a = 3;
-  //     } else if (calc >= 6.5 && calc <= 8) {
-  //       setMediaRating(4);
-  //       a = 4;
-  //     } else if (calc >= 8.1 && calc <= 10) {
-  //       setMediaRating(5);
-  //       a = 5
-  //     }else {
-  //       console.log("CANcEL")
-  //     }
-
-  //     console.log("MEDIA", a);
-
-  //     await api
-  //       .put(`root/${id}`, {
-  //         stars: a,
-  //         media: calc,
-  //         valoricienes: totalComment,
-  //       })
-  //       .then(res => console.log('OK UPDATE'))
-  //       .catch(err => console.log('ERRO', err));
-
-  //   }
-  // }
-  // loadUserUpdate()
-  // }, [valoracioness, dataComment]);
 
   function handleGoBack() {
     navigation.navigate('Dashboard');
@@ -336,31 +202,15 @@ export default function RequestProfile() {
     setVisible(false);
   }
 
-  async function handleUpdate() {
-    await api
-      .put(`root/${id}`, {
-        stars: valorRatingTest,
-        media: valorTotalMediaTest,
-        valoricienes: valorValoraciones,
-      })
-      .then(res => console.log('OK UPDATE'))
-      .catch(err => console.log('ERRO', err));
-  }
-
   for (let x = 1; x <= numStars; x++) {
     stars.push(
       <TouchableOpacity key={x} activeOpacity={0.9}>
-        <Star filled={x <= valorRatingTest ? true : false} size={30} />
+        <Star filled={x <= 5 ? true : false} size={30} />
       </TouchableOpacity>,
     );
   }
 
-  // if (dataComment.length === valoracioness) {
-  //   console.log("TRUE");
-  // } else {
-  //   console.log("FALSE")
-  //   handleUpdate();
-  // }
+  console.log('RATING', datass.avaliacao);
 
   return (
     <Container>
@@ -369,7 +219,7 @@ export default function RequestProfile() {
           <ButtonArrowLeft onPress={handleGoBack}>
             <Icon name="arrow-back" size={30} color="#222" />
           </ButtonArrowLeft>
-          <Title>{name}</Title>
+          <Title>{datass.name}</Title>
           <Icons
             name="more-vert"
             size={30}
@@ -477,8 +327,8 @@ export default function RequestProfile() {
           {stars}
         </View>
         <ContentFooter>
-          <ValueNote>{valorTotalMediaTest.toFixed(1)}/10</ValueNote>
-          <ReviewsText>{valorValoraciones} valoraciones</ReviewsText>
+          <ValueNote>{10}/10</ValueNote>
+          <ReviewsText>{5} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Icon name="sort" size={20} color="#000" />
           </RectButton>
