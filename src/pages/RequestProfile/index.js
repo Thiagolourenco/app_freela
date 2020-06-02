@@ -104,6 +104,17 @@ export default function RequestProfile() {
   const [valorRatingTest, setValorRatingTest] = useState(0);
   const [valorValoraciones, setValorValoraciones] = useState(0);
 
+  // Valores Names Profile
+  const [nameProfile, setNameProfile] = useState('');
+  const [urlProfile, setUrlProfile] = useState('');
+  const [linkProfile, setLinkProfile] = useState('');
+  const [mediaProfile, setMediaProfile] = useState(0);
+  const [valoracionesProfile, setValoracionesProfile] = useState(0);
+  const [ratingProfile, setRatingProfile] = useState(0);
+  const [descriptionProfile, setDescriptionProfile] = useState('');
+
+  const [dataProfile, setDataProfile] = useState([]);
+
   const socket = useMemo(
     () =>
       socketio('https://upload-freela.herokuapp.com', {query: {comment: id}}),
@@ -120,20 +131,30 @@ export default function RequestProfile() {
 
   useEffect(() => {
     async function loadDataUsers() {
-      setLoading(true);
 
-      await api
-        .get(`root/${id}`)
-        .then(res => setDatass(res.data))
-        .catch(err => console.log('REROR'));
+      const response = await api.get(`root/${id}`);
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      setNameProfile(response.data.name);
+      setUrlProfile(response.data.url);
+      setLinkProfile(response.data.link);
+      setMediaProfile(response.data.avaliacao.media);
+      setValoracionesProfile(response.data.avaliacao.quantity);
+      setRatingProfile(response.data.avaliacao.rating);
+      setDescriptionProfile(response.data.description);
+
+      // await api
+      //   .get(`root/${id}`)
+      //   .then(res => setDatass(res.data))
+      //   .catch(err => console.log('REROR'));
+
+  
     }
+    navigation.addListener('focus', () => {
+      loadDataUsers();
+    });
 
     loadDataUsers();
-  }, [datass]);
+  }, []);
 
   useEffect(() => {
     socket.on('comment', newComment => {
@@ -145,7 +166,9 @@ export default function RequestProfile() {
         dataComment.map(comment => (comment._id === like._id ? like : comment)),
       );
     });
-  }, [socket, dataComment]);
+    
+
+  }, [socket, dataComment, dataProfile]);
 
   useEffect(() => {
     async function loadComment() {
@@ -177,7 +200,7 @@ export default function RequestProfile() {
   }
 
   function handleNavigationDescri() {
-    navigation.navigate('Description', {description});
+    navigation.navigate('Description', {descriptionProfile});
     setVisible(false);
   }
 
@@ -198,20 +221,21 @@ export default function RequestProfile() {
   function handleLink() {
     // await Linking.openURL(link);
 
-    Linking.openURL(link).catch(err => console.log("Couldn't load page", err));
+    Linking.openURL(linkProfile).catch(err =>
+      console.log("Couldn't load page", err),
+    );
     setVisible(false);
   }
 
   for (let x = 1; x <= numStars; x++) {
     stars.push(
       <TouchableOpacity key={x} activeOpacity={0.9}>
-        <Star filled={x <= 5 ? true : false} size={30} />
+        <Star filled={x <= ratingProfile ? true : false} size={30} />
       </TouchableOpacity>,
     );
   }
 
-  console.log('RATING', datass.avaliacao);
-
+  console.log("DATA COMMENT ", valoracionesProfile)
   return (
     <Container>
       <Content>
@@ -219,7 +243,7 @@ export default function RequestProfile() {
           <ButtonArrowLeft onPress={handleGoBack}>
             <Icon name="arrow-back" size={30} color="#222" />
           </ButtonArrowLeft>
-          <Title>{datass.name}</Title>
+          <Title>{nameProfile}</Title>
           <Icons
             name="more-vert"
             size={30}
@@ -322,13 +346,14 @@ export default function RequestProfile() {
           </Modal>
         </HeaderView>
 
-        <ContetnListImage source={{uri: imageProfile}} />
+        <ContetnListImage source={{uri: urlProfile}} />
+
         <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: 8}}>
           {stars}
         </View>
         <ContentFooter>
-          <ValueNote>{10}/10</ValueNote>
-          <ReviewsText>{5} valoraciones</ReviewsText>
+          <ValueNote>{mediaProfile.toFixed(1)}/10</ValueNote>
+          <ReviewsText>{valoracionesProfile} valoraciones</ReviewsText>
           <RectButton onPress={handleFilter}>
             <Icon name="sort" size={20} color="#000" />
           </RectButton>

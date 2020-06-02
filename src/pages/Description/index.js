@@ -11,7 +11,7 @@ export default function Description() {
   const routes = useRoute();
   const navigation = useNavigation();
 
-  const description = routes.params.description;
+  const description = routes.params.descriptionProfile;
 
   function handleGoBack() {
     navigation.goBack();
