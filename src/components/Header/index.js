@@ -25,6 +25,7 @@ export default function HeaderComponent({
   title,
   buttonFil,
   buttonSerc,
+  nav,
 }) {
   const [visible, setVisible] = useState(false);
   const [visibleInput, setVisibleInput] = useState(false);
@@ -47,6 +48,10 @@ export default function HeaderComponent({
     setVisibleInput(true);
   }
 
+  function handleSearch() {
+    nav.navigate('Search');
+  }
+
   return (
     <>
       <Header>
@@ -61,7 +66,7 @@ export default function HeaderComponent({
             </ButtonBurguer>
           )}
           {buttonSerc && (
-            <ButtonSearch onPress={handleInputSearch}>
+            <ButtonSearch onPress={handleSearch}>
               <Icon name="search" size={32} color="#fff" />
             </ButtonSearch>
           )}

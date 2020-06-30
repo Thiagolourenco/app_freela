@@ -16,6 +16,7 @@ export default function sendmessage(state = INITIAL_STATE, action) {
       }
       case '@user/USER_SUCCESS': {
         draft.loading = false;
+        draft.userInfo = action.payload.data;
         break;
       }
       case '@user/USER_FAILURE': {

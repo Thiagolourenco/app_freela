@@ -15,12 +15,12 @@ import {store, persistor} from './src/store';
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <PersistGate persistor={persistor}>
+      <PersistGate persistor={persistor}>
+        <NavigationContainer>
           <Index />
           <FlashMessage position="top" floating={true} />
-        </PersistGate>
-      </NavigationContainer>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }

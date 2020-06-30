@@ -9,9 +9,17 @@ export const Container = styled.SafeAreaView`
 `;
 
 export const TextInit = styled.Text`
-  font-size: 26px;
+  font-size: 40px;
   color: #fff;
   font-weight: bold;
+  font-style: italic;
+`;
+
+export const SubTitle = styled.Text`
+  font-size: 20px;
+  color: #fff;
+  font-weight: 500;
+  font-style: italic;
 `;
 
 export const ButtonSignIn = styled.TouchableOpacity.attrs({

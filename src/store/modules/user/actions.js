@@ -1,13 +1,14 @@
-export function userRequest(idToken, name, email, photoUrl) {
+export function userRequest(userInfo, navigation) {
   return {
     type: '@user/USER_REQUEST',
-    payload: {idToken, name, email, photoUrl},
+    payload: {userInfo, navigation},
   };
 }
 
-export function userSuccess() {
+export function userSuccess(data) {
   return {
     type: '@user/USER_SUCCESS',
+    payload: {data},
   };
 }
 

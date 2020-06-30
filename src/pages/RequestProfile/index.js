@@ -131,7 +131,6 @@ export default function RequestProfile() {
 
   useEffect(() => {
     async function loadDataUsers() {
-
       const response = await api.get(`root/${id}`);
 
       setNameProfile(response.data.name);
@@ -146,8 +145,6 @@ export default function RequestProfile() {
       //   .get(`root/${id}`)
       //   .then(res => setDatass(res.data))
       //   .catch(err => console.log('REROR'));
-
-  
     }
     navigation.addListener('focus', () => {
       loadDataUsers();
@@ -166,8 +163,6 @@ export default function RequestProfile() {
         dataComment.map(comment => (comment._id === like._id ? like : comment)),
       );
     });
-    
-
   }, [socket, dataComment, dataProfile]);
 
   useEffect(() => {
@@ -235,7 +230,7 @@ export default function RequestProfile() {
     );
   }
 
-  console.log("DATA COMMENT ", valoracionesProfile)
+  console.log('DATA COMMENT ', valoracionesProfile);
   return (
     <Container>
       <Content>

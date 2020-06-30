@@ -33,17 +33,21 @@ const Stack = createStackNavigator();
 
 export default function Routes() {
   return (
-    // <Stack.Navigator>
-    //   <Stack.Screen name="Login" component={Login} />
-    //   <Stack.Screen name="Home" options={{headerShown: false}}>
-    //     {() => (
-    <Drawer.Navigator drawerContent={CustomDrawer}>
-      <Drawer.Screen name="Screens">
-        {props => <Screens {...props} />}
-      </Drawer.Screen>
-    </Drawer.Navigator>
-    //     )}
-    //   </Stack.Screen>
-    // </Stack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="Home" options={{headerShown: false}}>
+        {() => (
+          <Drawer.Navigator drawerContent={CustomDrawer}>
+            <Drawer.Screen name="Screens">
+              {props => <Screens {...props} />}
+            </Drawer.Screen>
+          </Drawer.Navigator>
+        )}
+      </Stack.Screen>
+    </Stack.Navigator>
   );
 }

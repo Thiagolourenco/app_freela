@@ -5,12 +5,20 @@ import api from '../../../services/api';
 
 export function* user({payload}) {
   try {
-    const {idToken, name, email, photoUrl} = payload;
+    const {userInfo, navigation} = payload;
+    const {name, email, photo} = userInfo;
 
-    yield call(api.post, 'user', idToken, name, email, photoUrl);
+    const userInfoData = {
+      name: name,
+      email: email,
+      photo: photo,
+    };
 
-    yield put(userSuccess());
-    console.log('OK', idToken, name, email, photoUrl);
+    const response = yield call(api.post, 'users', userInfoData);
+
+    yield put(userSuccess(response.data));
+
+    navigation.navigate('Home');
   } catch (error) {
     console.log(error);
   }

@@ -103,14 +103,9 @@ export default function Dashboard() {
         title="RANKING GENERAL"
         buttonFil={true}
         buttonSerc={true}
+        nav={navigation}
       />
-      {/* <InputSearch
-        visible={true}
-        value={name}
-        onChangeText={setName}
-        onSubmitEditing={searchList}
-      /> */}
-      {/* <InputSearch visible={visibleInput} /> */}
+
       {loading ? (
         <ActivityIndicator size={50} color="#222" />
       ) : (
@@ -129,6 +124,7 @@ export default function Dashboard() {
 
                 <ContentView>
                   <Title> {item.name} </Title>
+                  <StarExample rating={item.avaliacao.rating} size={20} />
                   <ContentFooter>
                     <ContentFooterTextValue>
                       {parseFloat(item.avaliacao.media).toFixed(1)}/10
@@ -137,7 +133,6 @@ export default function Dashboard() {
                       {item.avaliacao.quantity} valoraciones
                     </ContentFooterReviews>
                   </ContentFooter>
-                  <StarExample rating={item.avaliacao.rating} size={20} />
                 </ContentView>
               </ContentListView>
             )}

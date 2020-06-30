@@ -10,6 +10,7 @@ import Logout from '../pages/Logout';
 import RequestProfile from '../pages/RequestProfile';
 import ReviewsStar from '../pages/ReviewsStar';
 import Description from '../pages/Description';
+import Search from '../pages/Search';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,11 @@ export default function StackDrawer(props) {
         options={{headerShown: false}}
       />
       <Stack.Screen name="Description" component={Description} />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 }

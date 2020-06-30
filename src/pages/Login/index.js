@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  AsyncStorage,
-  Alert,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {Text, Alert, StyleSheet, ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
   GoogleSignin,
@@ -13,6 +7,7 @@ import {
   statusCodes,
 } from '@react-native-community/google-signin';
 import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../../services/api';
 import {userRequest} from '../../store/modules/user/actions';
@@ -24,152 +19,104 @@ import {
   ButtonSignInText,
   TextInit,
   ImageView,
+  SubTitle,
 } from './styles';
 import ContextNavigator from '../../components/ContextNavigator';
 // images
 import logoGoogle from '../../assets/google-icon.png';
-import logotipo from '../../assets/icon.png';
+import logotipo from '../../assets/logo.png';
 
-export default function Login({navigation}) {
-  // const navigation = useNavigation();
+export default function Login() {
+  const [isSigninInProgress, setIsSigninInProgress] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const [error, setError] = useState('');
-  const [userInfo, setUserInfo] = useState('');
-  const [user, setUser] = useState('');
-  // const [loading, setLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [photoUrl, setPhoto] = useState('');
-  const [idToken, setIdToken] = useState('');
-
-  const [userLoading, setUserLoading] = useState(false);
-
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-  const loading = useSelector(state => state.user.loading);
+
+  const webClientId =
+    '901131651483-n0ih4imsormp63pdpsuu1bfls3bt5c53.apps.googleusercontent.com';
 
   useEffect(() => {
-    async function loadGoogle() {
-      GoogleSignin.hasPlayServices();
-      GoogleSignin.configure({
-        scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
-        webClientId:
-          '94821132195-p2m1606s1j0un9uk614d9mhkk0p6praj.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-        offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-        //   hostedDomain: '', // specifies a hosted domain restriction
-        //   loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
-        forceConsentPrompt: true, // [Android] if you want to show the authorization prompt at each login.
-        //   accountName: '', // [Android] specifies an account name on the device that should be used
-        //   iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-      });
+    GoogleSignin.configure({
+      webClientId: webClientId, // client ID of type WEB for your server(needed to verify user ID and offline access)
+      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+      forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+      accountName: '', // [Android] specifies an account name on the device that should be used
+    });
+  }, []);
 
-      if (userLoading) {
-        navigation.navigate('DashboardDrawer');
+  useEffect(() => {
+    async function navigationLoadHome() {
+      if (loggedIn === true) {
+        dispatch(userRequest(userInfo, navigation));
+
+        // await api
+        //   .post('users', userData)
+        //   .then(res => console.log('RESPONSE', res))
+        //   .catch(err => console.log('ERRO', err));
+      } else {
+        console.log('EXAMPLE');
       }
     }
-    loadGoogle();
-  });
 
-  async function signIns() {
+    navigationLoadHome();
+  }, [loggedIn]);
+
+  async function _signIn() {
     try {
       await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      const credential = api.auth.GoogleAuthProvider.credential(
-        userInfo.idToken,
-        userInfo.accessToken,
-      );
-
-      setUserInfo(userInfo);
-      navigation.navigate('DashboardDrawer');
-
-      return userInfo.accessToken;
+      const userData = await GoogleSignin.signIn();
+      console.log('USER', userData);
+      setUserInfo(userData.user);
+      setLoggedIn(true);
     } catch (error) {
+      console.log('error', error);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
+        // operation (f.e. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
       } else {
         // some other error happened
       }
-      console.log(error);
     }
   }
 
-  async function handleNavigate() {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-
-    setIdToken(userInfo.idToken);
-    setName(userInfo.user.name);
-    setEmail(userInfo.user.email);
-    setPhoto(userInfo.user.photo);
-
-    if (loading === false) {
-      navigation.navigate('DashboardDrawer');
-    }
-
+  async function getCurrentUserInfo() {
     try {
-      await AsyncStorage.setItem('@login:name', userInfo.user.name);
-      await AsyncStorage.setItem('@login:email', userInfo.user.email);
-      await AsyncStorage.setItem('@login:photo', userInfo.user.photo);
-    } catch (err) {
-      console.log(err);
-    }
+      const userData = await GoogleSignin.signInSilently();
 
-    dispatch(
-      userRequest(
-        userInfo.idToken,
-        userInfo.user.email,
-        userInfo.user.name,
-        userInfo.user.phot,
-      ),
-    );
-  }
-
-  async function signIn() {
-    try {
-      GoogleSignin.signIn()
-        .then(res => {
-          setName(res.user.name);
-          setEmail(res.user.email);
-          setPhoto(res.user.photo);
-          setUserLoading(true);
-          setIdToken(res.idToken);
-
-          console.log('RES =< ', res);
-          navigation.navigate('DashboardDrawer');
-        })
-        .catch(err => console.log(err));
+      setUserInfo(userData.user);
     } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
+      if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+        // user has not signed in yet
       } else {
-        // some other error happened
-        console.log(error);
+        // some other error
+        setLoggedIn(false);
       }
     }
   }
 
   function loginNavigate() {
-    navigation.navigate('Dashboard');
+    navigation.navigate('Home');
   }
 
   return (
     <Container>
-      <TextInit>Welcome Message</TextInit>
+      <TextInit>Tipsters Prime</TextInit>
+      <SubTitle>Discover the best tipsters</SubTitle>
       <ImageView source={logotipo} />
       <ButtonSignIn onPress={loginNavigate}>
-        {loading ? (
-          <ActivityIndicator size="small" color="#fff" />
-        ) : (
-          <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
-        )}
+        <ButtonSignInText>BEGIN SESSION</ButtonSignInText>
       </ButtonSignIn>
+      {/* <GoogleSigninButton
+        style={{width: 200, height: 48}}
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={_signIn}
+      /> */}
     </Container>
   );
 }

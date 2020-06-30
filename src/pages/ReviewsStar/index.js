@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  AsyncStorage,
   TouchableNativeFeedback,
   TouchableOpacity,
 } from 'react-native';
@@ -11,6 +10,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Stars from 'react-native-stars';
 import {useRoute, useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {useSelector} from 'react-redux';
 
 import {
   Container,
@@ -39,11 +40,9 @@ export default function ReviewsStar() {
   const [rating, setRating] = useState(0);
   const [visible, setVisible] = useState(false);
 
-  const [name, setName] = useState('Julen');
-  const [email, setEmail] = useState('julen@gmail.com');
-  const [photoUrl, setPhoto] = useState(
-    'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.aficionados.com.br%2Fnaruto-shippuden-fillers%2F&psig=AOvVaw2TFPrV6214WIk61TVjVMrc&ust=1585657575518000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPCav_uYwugCFQAAAAAdAAAAABAD',
-  );
+  // const [name, setName] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [photoUrl, setPhoto] = useState('');
 
   let stars = [];
 
@@ -54,22 +53,27 @@ export default function ReviewsStar() {
 
   const admincomment = routes.params.id;
 
-  useEffect(() => {
-    async function loadDados() {
-      const name = await AsyncStorage.getItem('@login:name');
-      const email = await AsyncStorage.getItem('@login:email');
-      const photo = await AsyncStorage.getItem('@login:photo');
+  const userD = useSelector(state => state.user.userInfo);
 
-      // setName(name);
-      // setEmail(email);
-      // setPhoto(photo);
-    }
+  // useEffect(() => {
+  //   async function loadDados() {
+  //     const username = await AsyncStorage.getItem('@userinfo:name');
+  //     const useremail = await AsyncStorage.getItem('@userinfo:email');
+  //     const userphoto = await AsyncStorage.getItem('@userinfo:photo');
 
-    loadDados();
-  }, []);
+  //     //   console.log('NAME => ', name, 'EMAIL => ', email, 'PHOTO => ', photo);
+  //     setName(username);
+  //     setEmail(useremail);
+  //     setPhoto(userphoto);
+  //   }
 
+  //   loadDados();
+  // }, []);
   async function handleSubmitComment() {
     setVisible(true);
+
+    const name = userD.name;
+    const photoUrl = userD.photoUrl;
 
     await api
       .post('comments', {name, photoUrl, comment, rating, admincomment})
@@ -81,7 +85,7 @@ export default function ReviewsStar() {
     // }, 1800)
 
     setTimeout(() => {
-      setVisible(false)
+      setVisible(false);
       navigation.navigate('RequestProfile');
     }, 2000);
   }
